@@ -28,7 +28,8 @@ const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
-
+const bookingRoute = require("./routes/booking");
+const paymentRoute = require("./routes/payment");
 
 
 const dbUrl=process.env.ATLASDB_URL;
@@ -133,7 +134,9 @@ app.use("/listings", listingRouter);
 
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/",userRouter);
+app.use("/booking", bookingRoute);
 
+app.use("/payment", paymentRoute);
 
 
 
