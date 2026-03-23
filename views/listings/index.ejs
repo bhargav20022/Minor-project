@@ -1,139 +1,806 @@
 <% layout("/layouts/boilerplate") %>
-   
-  <style>
-    #filters {
-      display: flex;
-      flex-wrap:wrap;
-      align-items: center;
-    }
 
-    .filter {
-      text-align: center;
-      margin-right: 2rem;
-      margin-top: 2rem;
-      opacity: 0.7;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
-    .filter:hover {
-      opacity: 1;
-      cursor: pointer;
-    }
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --cream: #faf7f2;
+    --sand: #f0ebe0;
+    --accent: #c9783a;
+    --accent-light: #f0dcc8;
+    --gold: #d4a843;
+    --muted: #7a7a8a;
+    --border: #e0d8cc;
+    --white: #ffffff;
+    --radius: 16px;
+  }
 
-    .filter p {
-      font-size :0.8rem;
-    }
+  /* ══════════════════════════════
+     HERO SEARCH SECTION
+  ══════════════════════════════ */
+  .hero-search-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2250 50%, #1a1a2e 100%);
+    border-radius: 28px;
+    padding: 56px 48px;
+    margin: 24px 0 36px;
+    position: relative;
+    overflow: hidden;
+  }
 
-    .tax-info {
-      display: none;
-    }
+  .hero-search-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba(201,120,58,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 80% 30%, rgba(212,168,67,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
-    .tax-toggle {
-      border: 1px solid black;
-      border-radius: 1rem;
-      height: 3.25rem;
-      padding: 1rem;
-      margin-left: 2rem;
-      display: flex;
-      align-items: center;
-    }
-  </style>
+  .hero-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
 
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
 
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
 
-    <div id="filters">
-      <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  /* Search Box */
+  .search-box {
+    max-width: 580px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .search-input-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.97);
+    border-radius: 60px;
+    padding: 6px 6px 6px 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    gap: 12px;
+  }
+
+  .search-input-wrap i {
+    color: var(--accent);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  #citySearchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    background: transparent;
+    padding: 10px 0;
+  }
+
+  #citySearchInput::placeholder { color: #aaa; }
+
+  .search-btn {
+    background: linear-gradient(135deg, var(--accent), #a85e28);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 13px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .search-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px rgba(201,120,58,0.5);
+  }
+
+  /* Autocomplete Dropdown */
+  .autocomplete-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0; right: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+    overflow: hidden;
+    display: none;
+    z-index: 999;
+    border: 1px solid var(--border);
+    animation: dropDown 0.2s ease;
+  }
+
+  @keyframes dropDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .autocomplete-dropdown.open { display: block; }
+
+  .dropdown-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 14px 18px 6px;
+  }
+
+  .suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .suggestion-item:hover,
+  .suggestion-item.highlighted { background: var(--sand); }
+
+  .suggestion-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .suggestion-text { flex: 1; }
+  .suggestion-text .city-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .suggestion-text .city-sub  { font-size: 12px; color: var(--muted); }
+  .suggestion-count {
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .dropdown-no-result {
+    padding: 20px 18px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    display: none;
+  }
+
+  /* Popular cities pills */
+  .popular-cities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 22px;
+  }
+
+  .city-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.8);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+
+  .city-pill:hover {
+    background: rgba(201,120,58,0.3);
+    border-color: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* ══════════════════════════════
+     CITY RESULTS SECTION
+  ══════════════════════════════ */
+  #cityResultsSection {
+    display: none;
+    margin-bottom: 36px;
+    animation: fadeUp 0.4s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .city-results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .city-results-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .city-results-header h3 span { color: var(--accent); font-style: italic; }
+
+  .clear-search-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .clear-search-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* City listing cards — enhanced */
+  .city-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
+
+  .city-listing-card {
+    border-radius: 18px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 20px rgba(26,26,46,0.08);
+    transition: all 0.28s ease;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .city-listing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(26,26,46,0.15);
+  }
+
+  .city-listing-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .city-listing-card:hover img { transform: scale(1.05); }
+
+  .city-card-img-wrap {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .city-card-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    background: rgba(26,26,46,0.75);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+  }
+
+  .city-card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .city-card-body .title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .city-card-body .location {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .city-card-body .price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .city-card-body .price .per-night {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .no-city-results {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    background: var(--sand);
+    border-radius: 18px;
+  }
+
+  .no-city-results i { font-size: 36px; margin-bottom: 12px; display: block; opacity: 0.4; }
+  .no-city-results p { font-size: 15px; }
+
+  /* ══════════════════════════════
+     FILTERS
+  ══════════════════════════════ */
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter {
+    text-align: center;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter:hover { opacity: 1; transform: translateY(-2px); }
+  .filter p { font-size: 0.8rem; }
+
+  .tax-info { display: none; }
+
+  .tax-toggle {
+    border: 1px solid black;
+    border-radius: 1rem;
+    height: 3.25rem;
+    padding: 1rem;
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ══════════════════════════════
+     SECTION HEADERS
+  ══════════════════════════════ */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 32px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Enhanced listing cards */
+  .listing-link { text-decoration: none; }
+
+  .listing-card {
+    border-radius: 18px !important;
+    overflow: hidden;
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(26,26,46,0.07) !important;
+    transition: all 0.28s ease !important;
+    margin-bottom: 24px;
+  }
+
+  .listing-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 14px 36px rgba(26,26,46,0.13) !important;
+  }
+
+  .listing-card img {
+    transition: transform 0.4s ease !important;
+  }
+
+  .listing-card:hover img { transform: scale(1.04) !important; }
+
+  @media (max-width: 640px) {
+    .hero-search-section { padding: 36px 20px; }
+    .search-input-wrap { padding: 6px 6px 6px 16px; }
+  }
+</style>
+
+<!-- ══════════════════════════════
+     HERO CITY SEARCH
+══════════════════════════════ -->
+<div class="hero-search-section">
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">✦ Discover the World</div>
+    <h1 class="hero-title">Find your perfect stay<br/>in any <em>city</em></h1>
+    <p class="hero-subtitle">Search from hundreds of handpicked stays across India & beyond</p>
+
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          type="text"
+          id="citySearchInput"
+          placeholder="Search by city — Mumbai, Goa, Paris…"
+          autocomplete="off"
+        />
+        <button class="search-btn" onclick="triggerCitySearch()">
+          <i class="fa-solid fa-arrow-right"></i> Explore
+        </button>
       </div>
-        <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-      </div>
 
-            <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic Cities</p>
+      <!-- Autocomplete Dropdown -->
+      <div class="autocomplete-dropdown" id="autocompleteDropdown">
+        <div class="dropdown-section-label">Suggestions</div>
+        <div id="suggestionsList"></div>
+        <div class="dropdown-no-result" id="noSuggestion">
+          <i class="fa-solid fa-map-pin" style="margin-right:6px"></i> No cities found
+        </div>
       </div>
-        <div class="filter">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountains</p>
-      </div>
-
-        <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-      </div>
-       
-
-        <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-      </div>
-
-        <div class="filter">
-        <div><i class="fa-solid fa-tractor"></i></div>
-        <p>Farms</p>
-      </div>
-        <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-      </div>
-
-
-      <div class="filter">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-      </div>
-        <div class="filter">
-        <div><i class="fa-solid fa-sailboat"></i></div>
-        <p>Boats</p>
-      </div>
-
-
-      <div class="tax-toggle">
-
-        <div class="form-check-reverse form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-  <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
-</div>
-      </div>
-
     </div>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-    <% for(let listing of allListings) { %>
-    <a href="/listings/<%= listing._id %>" class="listing-link">
-<div class="card col listing-card" >
-  <img 
-  src="<%= listing.image.url %>" 
-  class="card-img-top" 
-  alt="listing_image" 
-  style="height: 20rem">
-  <div class="card-img-overlay"></div>
-  <div class="card-body">
-    <p class="card-text">
-        <b><%= listing.title %></b> <br/>
-        &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / night
-        <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
-
-    </p>
+    <!-- Popular city pills -->
+    <div class="popular-cities" id="popularCities">
+      <span class="city-pill" onclick="quickSearch('Goa')">🏖️ Goa</span>
+      <span class="city-pill" onclick="quickSearch('Mumbai')">🌆 Mumbai</span>
+      <span class="city-pill" onclick="quickSearch('Manali')">🏔️ Manali</span>
+      <span class="city-pill" onclick="quickSearch('Jaipur')">🏰 Jaipur</span>
+      <span class="city-pill" onclick="quickSearch('Kerala')">🌴 Kerala</span>
+      <span class="city-pill" onclick="quickSearch('Delhi')">🕌 Delhi</span>
+      <span class="city-pill" onclick="quickSearch('Udaipur')">💎 Udaipur</span>
+      <span class="city-pill" onclick="quickSearch('Ooty')">🌿 Ooty</span>
+    </div>
   </div>
 </div>
-</a>
-<% } %>
+
+<!-- ══════════════════════════════
+     CITY SEARCH RESULTS
+══════════════════════════════ -->
+<div id="cityResultsSection">
+  <div class="city-results-header">
+    <h3>Places in <span id="cityResultsTitle"></span></h3>
+    <button class="clear-search-btn" onclick="clearSearch()">
+      <i class="fa-solid fa-xmark"></i> Clear search
+    </button>
+  </div>
+  <div id="cityCardsContainer"></div>
 </div>
 
+<!-- ══════════════════════════════
+     FILTERS
+══════════════════════════════ -->
+<div id="filters">
+  <div class="filter"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+  <div class="filter"><div><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
+  <div class="filter"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic Cities</p></div>
+  <div class="filter"><div><i class="fa-solid fa-mountain"></i></div><p>Mountains</p></div>
+  <div class="filter"><div><i class="fa-brands fa-fort-awesome"></i></div><p>Castles</p></div>
+  <div class="filter"><div><i class="fa-solid fa-campground"></i></div><p>Camping</p></div>
+  <div class="filter"><div><i class="fa-solid fa-tractor"></i></div><p>Farms</p></div>
+  <div class="filter"><div><i class="fa-solid fa-snowflake"></i></div><p>Arctic</p></div>
+  <div class="filter"><div><i class="fa-solid fa-igloo"></i></div><p>Domes</p></div>
+  <div class="filter"><div><i class="fa-solid fa-sailboat"></i></div><p>Boats</p></div>
+  <div class="tax-toggle">
+    <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+    </div>
+  </div>
+</div>
 
+<!-- ══════════════════════════════
+     ALL LISTINGS
+══════════════════════════════ -->
+<h2 class="section-title" id="allListingsTitle">All Listings</h2>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3" id="allListingsGrid">
+  <% for(let listing of allListings) { %>
+  <a href="/listings/<%= listing._id %>" class="listing-link">
+    <div class="card col listing-card">
+      <img
+        src="<%= listing.image.url %>"
+        class="card-img-top"
+        alt="listing_image"
+        style="height: 20rem">
+      <div class="card-img-overlay"></div>
+      <div class="card-body">
+        <p class="card-text">
+          <b><%= listing.title %></b><br/>
+          <small style="color:#888"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></small><br/>
+          &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / night
+          <i class="tax-info"> &nbsp;+18% GST</i>
+        </p>
+      </div>
+    </div>
+  </a>
+  <% } %>
+</div>
+
+<!-- Embed listings data for JS search -->
 <script>
-  let taxSwitch=document.getElementById("flexSwitchCheckDefault");
-  taxSwitch.addEventListener("click", () => {
-    let taxInfo=document.getElementsByClassName("tax-info");
-    for (info of taxInfo) {
-      if(info.style.display != "inline") {
-        info.style.display = "inline";
-      } else {
-        info.style.display="none";
+  // All listings injected from server
+  const ALL_LISTINGS = <%- JSON.stringify(allListings.map(l => ({
+    _id: l._id,
+    title: l.title,
+    location: l.location,
+    country: l.country,
+    price: l.price,
+    image: l.image
+  }))) %>;
+
+  // ── Autocomplete logic ──
+  const input       = document.getElementById('citySearchInput');
+  const dropdown    = document.getElementById('autocompleteDropdown');
+  const sugList     = document.getElementById('suggestionsList');
+  const noSug       = document.getElementById('noSuggestion');
+  let highlightIdx  = -1;
+  let currentSuggestions = [];
+
+  // Build unique city list with counts from listings
+  function getCityMap(query) {
+    const map = {};
+    ALL_LISTINGS.forEach(l => {
+      const city = (l.location || '').trim();
+      if (!city) return;
+      if (city.toLowerCase().includes(query.toLowerCase())) {
+        if (!map[city]) map[city] = { city, country: l.country, count: 0 };
+        map[city].count++;
       }
+    });
+    return Object.values(map).sort((a,b) => b.count - a.count);
+  }
+
+  // City emoji map
+  const cityEmojis = {
+    'goa':'🏖️','mumbai':'🌆','delhi':'🕌','jaipur':'🏰','manali':'🏔️',
+    'kerala':'🌴','udaipur':'💎','ooty':'🌿','shimla':'❄️','agra':'🕍',
+    'pune':'🏙️','bangalore':'💻','hyderabad':'🍛','kolkata':'🎨',
+    'paris':'🗼','london':'🎡','new york':'🗽','dubai':'🌇','bali':'🌺',
+    'default':'📍'
+  };
+
+  function getEmoji(city) {
+    const key = city.toLowerCase();
+    for (const k in cityEmojis) {
+      if (key.includes(k)) return cityEmojis[k];
     }
-});
+    return cityEmojis['default'];
+  }
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    highlightIdx = -1;
+    if (q.length < 1) { closeDropdown(); return; }
+    const cities = getCityMap(q);
+    currentSuggestions = cities;
+    renderDropdown(cities, q);
+  });
+
+  function renderDropdown(cities, q) {
+    sugList.innerHTML = '';
+    if (cities.length === 0) {
+      noSug.style.display = 'block';
+      dropdown.classList.add('open');
+      return;
+    }
+    noSug.style.display = 'none';
+    cities.slice(0, 8).forEach((c, i) => {
+      const item = document.createElement('div');
+      item.className = 'suggestion-item';
+      item.innerHTML = `
+        <div class="suggestion-icon">${getEmoji(c.city)}</div>
+        <div class="suggestion-text">
+          <div class="city-name">${highlightMatch(c.city, q)}</div>
+          <div class="city-sub">${c.country || ''}</div>
+        </div>
+        <div class="suggestion-count">${c.count} stay${c.count > 1 ? 's':''}</div>
+      `;
+      item.addEventListener('mousedown', () => selectCity(c.city));
+      sugList.appendChild(item);
+    });
+    dropdown.classList.add('open');
+  }
+
+  function highlightMatch(text, query) {
+    const idx = text.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return text;
+    return text.slice(0, idx) +
+      `<strong style="color:var(--accent)">${text.slice(idx, idx + query.length)}</strong>` +
+      text.slice(idx + query.length);
+  }
+
+  // Keyboard navigation
+  input.addEventListener('keydown', (e) => {
+    const items = sugList.querySelectorAll('.suggestion-item');
+    if (e.key === 'ArrowDown') {
+      highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+      updateHighlight(items);
+    } else if (e.key === 'ArrowUp') {
+      highlightIdx = Math.max(highlightIdx - 1, -1);
+      updateHighlight(items);
+    } else if (e.key === 'Enter') {
+      if (highlightIdx >= 0 && currentSuggestions[highlightIdx]) {
+        selectCity(currentSuggestions[highlightIdx].city);
+      } else {
+        triggerCitySearch();
+      }
+    } else if (e.key === 'Escape') {
+      closeDropdown();
+    }
+  });
+
+  function updateHighlight(items) {
+    items.forEach((el, i) => {
+      el.classList.toggle('highlighted', i === highlightIdx);
+    });
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove('open');
+    sugList.innerHTML = '';
+    noSug.style.display = 'none';
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-box')) closeDropdown();
+  });
+
+  function selectCity(city) {
+    input.value = city;
+    closeDropdown();
+    showCityResults(city);
+  }
+
+  function quickSearch(city) {
+    input.value = city;
+    showCityResults(city);
+  }
+
+  function triggerCitySearch() {
+    const city = input.value.trim();
+    if (city) showCityResults(city);
+  }
+
+  // ── Show city results ──
+  function showCityResults(city) {
+    closeDropdown();
+    const matched = ALL_LISTINGS.filter(l =>
+      (l.location || '').toLowerCase().includes(city.toLowerCase()) ||
+      (l.country  || '').toLowerCase().includes(city.toLowerCase())
+    );
+
+    const section   = document.getElementById('cityResultsSection');
+    const container = document.getElementById('cityCardsContainer');
+    const titleEl   = document.getElementById('cityResultsTitle');
+
+    titleEl.textContent = city;
+    section.style.display = 'block';
+
+    if (matched.length === 0) {
+      container.innerHTML = `
+        <div class="no-city-results">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <p>No stays found in <strong>${city}</strong>. Try another city!</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = `<div class="city-cards-grid">${
+      matched.map(l => `
+        <a href="/listings/${l._id}" class="city-listing-card">
+          <div class="city-card-img-wrap">
+            <img src="${l.image?.url || ''}" alt="${l.title}" loading="lazy"/>
+            <span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span>
+          </div>
+          <div class="city-card-body">
+            <div class="title">${l.title}</div>
+            <div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div>
+            <div class="price">
+              ₹${l.price ? l.price.toLocaleString('en-IN') : 'N/A'}
+              <span class="per-night">/ night</span>
+            </div>
+          </div>
+        </a>
+      `).join('')
+    }</div>`;
+
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function clearSearch() {
+    input.value = '';
+    document.getElementById('cityResultsSection').style.display = 'none';
+  }
+
+  // ── Tax toggle ──
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  taxSwitch.addEventListener("click", () => {
+    let taxInfo = document.getElementsByClassName("tax-info");
+    for (let info of taxInfo) {
+      info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+    }
+  });
 </script>
