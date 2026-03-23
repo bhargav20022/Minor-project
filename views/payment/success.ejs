@@ -1,28 +1,333 @@
-<h1>
-Payment Successful
-</h1>
+<%- include('../includes/navbar') %>
 
-<h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Confirmed | Wanderlust</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-Booking Confirmed
+    :root {
+      --sand: #f5f0e8;
+      --cream: #faf7f2;
+      --ink: #1a1a2e;
+      --muted: #6b6b7b;
+      --accent: #c9783a;
+      --accent-light: #f0dcc8;
+      --gold: #d4a843;
+      --success: #2d7a4f;
+      --success-light: #eaf5ef;
+      --border: #e0d8cc;
+      --white: #ffffff;
+    }
 
-</h3>
-<p>
+    body {
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
 
-Villa Name:
+    /* ── Confetti burst ── */
+    .confetti-wrap {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
 
-<%= booking.listing.title %>
+    .dot {
+      position: absolute;
+      top: -12px;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      animation: fall linear forwards;
+    }
 
-</p>
-<p>
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
 
-Payment ID:
+    /* ── Main card ── */
+    .success-card {
+      position: relative;
+      z-index: 1;
+      background: var(--white);
+      border-radius: 24px;
+      padding: 52px 44px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 16px 60px rgba(26,26,46,0.12);
+      text-align: center;
+      animation: popIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
 
-<%= booking.paymentId %>
-</p>
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85) translateY(24px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
 
-<a href="/listings">
+    /* ── Checkmark ── */
+    .check-circle {
+      width: 88px; height: 88px;
+      background: var(--success-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
 
-Go Home
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(45,122,79,0.25); }
+      50%       { box-shadow: 0 0 0 16px rgba(45,122,79,0); }
+    }
 
-</a>
+    .check-circle i {
+      font-size: 38px;
+      color: var(--success);
+    }
+
+    .success-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .success-card .tagline {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    /* ── Detail grid ── */
+    .detail-box {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .detail-row .key { color: var(--muted); }
+    .detail-row .val { font-weight: 600; text-align: right; max-width: 55%; }
+
+    .amount-highlight {
+      margin: 8px 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--accent), #a85e28);
+      border-radius: 14px;
+      padding: 18px 24px;
+      color: white;
+    }
+
+    .amount-highlight .label { font-size: 13px; opacity: 0.8; }
+    .amount-highlight .number { font-family: 'Playfair Display', serif; font-size: 32px; }
+
+    /* ── Badges ── */
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── Buttons ── */
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-direction: column;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent), #a85e28);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.25s;
+      box-shadow: 0 4px 16px rgba(201,120,58,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,120,58,0.4);
+    }
+
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: var(--ink);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--ink); }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+
+    @media (max-width: 520px) {
+      .success-card { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Confetti -->
+  <div class="confetti-wrap" id="confetti"></div>
+
+  <div class="success-card">
+
+    <!-- Check icon -->
+    <div class="check-circle">
+      <i class="fa-solid fa-check"></i>
+    </div>
+
+    <h1>Booking Confirmed!</h1>
+    <p class="tagline">Your adventure at <strong><%= booking.listing.title %></strong> is all set 🎉</p>
+
+    <!-- Amount -->
+    <div class="amount-highlight">
+      <div>
+        <div class="label">Amount Paid</div>
+        <div class="number">₹<%= booking.totalPrice.toLocaleString('en-IN') %></div>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="detail-box">
+      <div class="detail-row">
+        <span class="key">Payment ID</span>
+        <span class="val" style="font-family:monospace; font-size:13px"><%= booking.paymentId %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Booking ID</span>
+        <span class="val" style="font-family:monospace; font-size:13px">#<%= booking._id.toString().slice(-8).toUpperCase() %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Property</span>
+        <span class="val"><%= booking.listing.title %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Location</span>
+        <span class="val"><%= booking.listing.location %>, <%= booking.listing.country %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Check-in</span>
+        <span class="val"><%= new Date(booking.checkIn).toDateString() %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Check-out</span>
+        <span class="val"><%= new Date(booking.checkOut).toDateString() %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Guests</span>
+        <span class="val"><%= booking.guests %> Guest<%= booking.guests > 1 ? 's' : '' %></span>
+      </div>
+      <div class="detail-row">
+        <span class="key">Status</span>
+        <span class="val" style="color:var(--success)"><i class="fa-solid fa-circle-check"></i> <%= booking.status %></span>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="badges">
+      <div class="badge"><i class="fa-solid fa-shield-halved"></i> Secure Payment</div>
+      <div class="badge"><i class="fa-solid fa-envelope"></i> Confirmation Sent</div>
+      <div class="badge"><i class="fa-solid fa-star"></i> Verified Booking</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-group">
+      <a href="/listings" class="btn-primary">
+        <i class="fa-solid fa-compass"></i> &nbsp;Explore More Listings
+      </a>
+      <a href="/listings/<%= booking.listing._id %>" class="btn-secondary">
+        View Property Details
+      </a>
+    </div>
+
+    <p class="footer-note">A confirmation has been recorded for your booking. Happy travels! ✈️</p>
+  </div>
+
+<script>
+  // Confetti burst
+  const colors = ['#c9783a','#d4a843','#2d7a4f','#1a1a2e','#e07b5c','#f0dcc8'];
+  const wrap = document.getElementById('confetti');
+  for (let i = 0; i < 60; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.left = Math.random() * 100 + 'vw';
+    dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+    dot.style.width = (Math.random() * 8 + 6) + 'px';
+    dot.style.height = (Math.random() * 8 + 6) + 'px';
+    dot.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    dot.style.animationDelay = (Math.random() * 1.5) + 's';
+    dot.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    wrap.appendChild(dot);
+  }
+</script>
+
+</body>
+</html>
