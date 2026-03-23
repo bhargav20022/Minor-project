@@ -1,7 +1,551 @@
-<form action="/payment/<%= booking._id %>/success" method="POST">
 
-<button type="submit">
-Pay Now
-</button>
 
-</form>
+<%- include('../includes/navbar') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Payment | Wanderlust</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #f5f0e8;
+      --cream: #faf7f2;
+      --ink: #1a1a2e;
+      --muted: #6b6b7b;
+      --accent: #c9783a;
+      --accent-light: #f0dcc8;
+      --gold: #d4a843;
+      --success: #2d7a4f;
+      --border: #e0d8cc;
+      --white: #ffffff;
+      --shadow: 0 8px 40px rgba(26,26,46,0.10);
+      --radius: 18px;
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .pay-wrapper {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    /* ── LEFT: Booking Summary ── */
+    .summary-card {
+      background: var(--ink);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      color: var(--white);
+      position: sticky;
+      top: 24px;
+    }
+
+    .summary-card .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .summary-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .summary-card .location {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .summary-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 28px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+    }
+
+    .summary-row:last-child { border-bottom: none; }
+
+    .summary-row span:first-child { color: rgba(255,255,255,0.55); }
+    .summary-row span:last-child { font-weight: 600; }
+
+    .total-row {
+      margin-top: 20px;
+      padding: 18px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.18);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-row .label { font-size: 13px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; }
+    .total-row .amount { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); }
+
+    /* ── RIGHT: Payment Form ── */
+    .payment-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+    }
+
+    .payment-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .payment-card .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* Method Tabs */
+    .method-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .method-tab {
+      border: 2px solid var(--border);
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 14px 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .method-tab i { font-size: 22px; color: var(--muted); transition: color 0.2s; }
+    .method-tab span { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; }
+
+    .method-tab:hover,
+    .method-tab.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .method-tab.active i,
+    .method-tab.active span { color: var(--accent); }
+
+    /* Panels */
+    .panel { display: none; animation: fadeUp 0.3s ease; }
+    .panel.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .field-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus { border-color: var(--accent); background: var(--white); }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .card-icons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .card-icons img {
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      background: white;
+    }
+
+    /* UPI Panel */
+    .upi-apps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .upi-app {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--cream);
+    }
+
+    .upi-app:hover { border-color: var(--accent); background: var(--accent-light); }
+    .upi-app img { height: 32px; object-fit: contain; margin-bottom: 6px; }
+    .upi-app span { font-size: 11px; font-weight: 600; color: var(--muted); display: block; }
+
+    .upi-divider {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 16px 0;
+      position: relative;
+    }
+
+    .upi-divider::before,
+    .upi-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .upi-divider::before { left: 0; }
+    .upi-divider::after { right: 0; }
+
+    /* Pay Button */
+    .pay-btn {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(135deg, var(--accent), #a85e28);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s;
+      margin-top: 28px;
+      box-shadow: 0 4px 20px rgba(201,120,58,0.35);
+    }
+
+    .pay-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,120,58,0.45);
+    }
+
+    .pay-btn:active { transform: translateY(0); }
+
+    .secure-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .secure-note i { color: var(--success); font-size: 13px; }
+
+    /* Loading spinner on btn */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .pay-wrapper { grid-template-columns: 1fr; padding: 24px 16px 60px; }
+      .summary-card { position: static; }
+      .payment-card { padding: 28px 20px; }
+      .upi-apps { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="pay-wrapper">
+
+  <!-- ── LEFT: Summary ── -->
+  <div class="summary-card">
+    <span class="tag">✦ Booking Summary</span>
+    <h2><%= booking.listing.title %></h2>
+    <p class="location"><i class="fa-solid fa-location-dot"></i> <%= booking.listing.location %>, <%= booking.listing.country %></p>
+
+    <% if(booking.listing.image && booking.listing.image.url) { %>
+      <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>" class="summary-img"/>
+    <% } %>
+
+    <div class="summary-row">
+      <span>Check-in</span>
+      <span><%= new Date(booking.checkIn).toDateString() %></span>
+    </div>
+    <div class="summary-row">
+      <span>Check-out</span>
+      <span><%= new Date(booking.checkOut).toDateString() %></span>
+    </div>
+    <div class="summary-row">
+      <span>Guests</span>
+      <span><%= booking.guests %> Guest<%= booking.guests > 1 ? 's' : '' %></span>
+    </div>
+    <div class="summary-row">
+      <span>Booking ID</span>
+      <span style="font-size:12px; color:rgba(255,255,255,0.4)">#<%= booking._id.toString().slice(-8).toUpperCase() %></span>
+    </div>
+
+    <div class="total-row">
+      <span class="label">Total Amount</span>
+      <span class="amount">₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Payment ── -->
+  <div class="payment-card">
+    <h3>Secure Payment</h3>
+    <p class="subtitle">Choose your preferred payment method below</p>
+
+    <!-- Tabs -->
+    <div class="method-tabs">
+      <div class="method-tab active" onclick="switchTab('card', this)">
+        <i class="fa-solid fa-credit-card"></i>
+        <span>Card</span>
+      </div>
+      <div class="method-tab" onclick="switchTab('debit', this)">
+        <i class="fa-solid fa-money-check-dollar"></i>
+        <span>Debit Card</span>
+      </div>
+      <div class="method-tab" onclick="switchTab('upi', this)">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <span>UPI</span>
+      </div>
+    </div>
+
+    <form action="/payment/<%= booking._id %>/success" method="POST" id="payForm">
+
+      <!-- Credit Card Panel -->
+      <div class="panel active" id="panel-card">
+        <div class="card-icons">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/200px-American_Express_logo_%282018%29.svg.png" alt="Amex"/>
+        </div>
+        <div class="field-group">
+          <label>Cardholder Name</label>
+          <input type="text" placeholder="Name on card" required/>
+        </div>
+        <div class="field-group">
+          <label>Card Number</label>
+          <input type="text" placeholder="1234  5678  9012  3456" maxlength="19" id="cardNum" oninput="formatCard(this)"/>
+        </div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/>
+          </div>
+          <div class="field-group">
+            <label>CVV</label>
+            <input type="text" placeholder="•••" maxlength="3"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Debit Card Panel -->
+      <div class="panel" id="panel-debit">
+        <div class="card-icons">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/RuPay-Logo.png" alt="RuPay"/>
+        </div>
+        <div class="field-group">
+          <label>Account Holder Name</label>
+          <input type="text" placeholder="Name on card" required/>
+        </div>
+        <div class="field-group">
+          <label>Debit Card Number</label>
+          <input type="text" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)"/>
+        </div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/>
+          </div>
+          <div class="field-group">
+            <label>ATM PIN</label>
+            <input type="text" placeholder="••••" maxlength="4"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Bank Name</label>
+          <select>
+            <option value="">Select your bank</option>
+            <option>State Bank of India</option>
+            <option>HDFC Bank</option>
+            <option>ICICI Bank</option>
+            <option>Axis Bank</option>
+            <option>Kotak Mahindra Bank</option>
+            <option>Punjab National Bank</option>
+            <option>Bank of Baroda</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- UPI Panel -->
+      <div class="panel" id="panel-upi">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">Select your UPI app to pay</p>
+        <div class="upi-apps">
+          <div class="upi-app" onclick="selectUPI(this, 'GPay')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" alt="GPay"/>
+            <span>GPay</span>
+          </div>
+          <div class="upi-app" onclick="selectUPI(this, 'PhonePe')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/PhonePe_Logo.svg/200px-PhonePe_Logo.svg.png" alt="PhonePe"/>
+            <span>PhonePe</span>
+          </div>
+          <div class="upi-app" onclick="selectUPI(this, 'Paytm')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Paytm_logo.png/200px-Paytm_logo.png" alt="Paytm"/>
+            <span>Paytm</span>
+          </div>
+          <div class="upi-app" onclick="selectUPI(this, 'BHIM')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/BHIM_SVG_Logo.svg/200px-BHIM_SVG_Logo.svg.png" alt="BHIM"/>
+            <span>BHIM</span>
+          </div>
+        </div>
+        <div class="upi-divider">or enter UPI ID</div>
+        <div class="field-group">
+          <label>UPI ID</label>
+          <input type="text" id="upiId" placeholder="yourname@upi"/>
+        </div>
+      </div>
+
+      <!-- Pay Button -->
+      <button type="submit" class="pay-btn" id="payBtn" onclick="handlePay(event)">
+        <i class="fa-solid fa-lock"></i>
+        <span id="btnText">Pay ₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </form>
+
+    <p class="secure-note">
+      <i class="fa-solid fa-shield-halved"></i>
+      256-bit SSL encrypted &bull; 100% secure payment
+    </p>
+  </div>
+
+</div>
+
+<script>
+  let activeTab = 'card';
+  let selectedUPI = '';
+
+  function switchTab(tab, el) {
+    activeTab = tab;
+    document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  function selectUPI(el, app) {
+    document.querySelectorAll('.upi-app').forEach(a => a.style.borderColor = '');
+    el.style.borderColor = 'var(--accent)';
+    el.style.background = 'var(--accent-light)';
+    selectedUPI = app;
+  }
+
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1  ').trim();
+  }
+
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2,4);
+    input.value = v;
+  }
+
+  function handlePay(e) {
+    const btn = document.getElementById('payBtn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btnText');
+    btnText.textContent = 'Processing...';
+    spinner.style.display = 'block';
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.85';
+    // Let the form submit naturally after brief delay
+    e.preventDefault();
+    setTimeout(() => {
+      document.getElementById('payForm').submit();
+    }, 1600);
+  }
+</script>
+
+</body>
+</html>
