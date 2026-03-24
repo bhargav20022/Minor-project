@@ -1,15 +1,211 @@
-<footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-            <i class="fa-brands fa-square-facebook"></i>
-            <i class="fa-brands fa-square-instagram"></i>
-            <i class="fa-brands fa-square-x-twitter"></i>
+<style>
+  .wl-footer {
+    background: #12111e;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 3rem 2rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: auto;
+  }
 
+  .wl-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Top section */
+  .wl-footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 1.8rem;
+  }
+
+  /* Brand column */
+  .wl-footer-brand-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wl-footer-brand-name span { color: #d4a843; }
+
+  .wl-footer-brand-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #c9783a, #a85e28);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+  }
+
+  .wl-footer-tagline {
+    font-size: 0.83rem;
+    color: rgba(255,255,255,0.38);
+    line-height: 1.7;
+    margin-bottom: 1.4rem;
+    max-width: 240px;
+  }
+
+  .wl-footer-socials {
+    display: flex;
+    gap: 10px;
+  }
+
+  .wl-footer-social {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .wl-footer-social:hover {
+    background: rgba(201,120,58,0.15);
+    border-color: rgba(201,120,58,0.4);
+    color: #c9783a;
+    transform: translateY(-2px);
+  }
+
+  /* Link columns */
+  .wl-footer-col-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d4a843;
+    margin-bottom: 14px;
+  }
+
+  .wl-footer-col a {
+    display: block;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 0.87rem;
+    padding: 5px 0;
+    transition: color 0.2s;
+  }
+
+  .wl-footer-col a:hover { color: rgba(255,255,255,0.85); }
+
+  /* Bottom bar */
+  .wl-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .wl-footer-copy {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .wl-footer-legal {
+    display: flex;
+    gap: 20px;
+  }
+
+  .wl-footer-legal a {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .wl-footer-legal a:hover { color: rgba(255,255,255,0.65); }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    .wl-footer { padding: 2.5rem 1.2rem 1.2rem; }
+
+    .wl-footer-top {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .wl-footer-tagline { max-width: 100%; }
+
+    .wl-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+</style>
+
+<footer class="wl-footer">
+  <div class="wl-footer-inner">
+
+    <!-- Top -->
+    <div class="wl-footer-top">
+
+      <!-- Brand -->
+      <div>
+        <div class="wl-footer-brand-name">
+          <div class="wl-footer-brand-icon">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          Wander<span>lust</span>
         </div>
-        <div class="f-info-brand">&copy; Wanderlust Private Limited..</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+        <p class="wl-footer-tagline">
+          Discover extraordinary stays around the world. Curated journeys, unforgettable experiences.
+        </p>
+        <div class="wl-footer-socials">
+          <a href="#" class="wl-footer-social"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="wl-footer-social"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="wl-footer-social"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="wl-footer-social"><i class="fa-brands fa-youtube"></i></a>
         </div>
+      </div>
+
+      <!-- Explore -->
+      <div class="wl-footer-col">
+        <div class="wl-footer-col-title">Explore</div>
+        <a href="/listings">All Listings</a>
+        <a href="/listings/new">Host Your Place</a>
+        <a href="/listings?filter=popular">Popular Stays</a>
+        <a href="/listings?filter=new">New Arrivals</a>
+      </div>
+
+      <!-- Company -->
+      <div class="wl-footer-col">
+        <div class="wl-footer-col-title">Company</div>
+        <a href="/about">About Us</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/contact">Contact</a>
+      </div>
+
     </div>
+
+    <!-- Bottom bar -->
+    <div class="wl-footer-bottom">
+      <span class="wl-footer-copy">&copy; <%= new Date().getFullYear() %> Wanderlust Private Limited. All rights reserved.</span>
+      <div class="wl-footer-legal">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+
+  </div>
 </footer>
