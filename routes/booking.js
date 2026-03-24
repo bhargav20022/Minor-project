@@ -5,26 +5,30 @@ const Booking = require("../models/booking");
 const Listing = require("../models/listing");
 
 router.post("/:id", async (req, res) => {
+  const listing = await Listing.findById(req.params.id);
 
-const listing = await Listing.findById(req.params.id);
+  const { checkIn, checkOut, guests } = req.body;
 
-const booking = new Booking({
+  // Calculate total price based on number of nights
+  const nights = Math.round(
+    (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
+  );
 
-listing: listing._id,
+  const totalPrice = listing.price * (nights > 0 ? nights : 1);
 
-user: req.user._id,
+  const booking = new Booking({
+    listing: listing._id,
+    user: req.user._id,
+    checkIn: new Date(checkIn),
+    checkOut: new Date(checkOut),
+    guests: Number(guests),
+    totalPrice,
+  });
 
-totalPrice: listing.price
+  await booking.save();
 
-});
-
-await booking.save();
-
-
-// ✅ THIS LINE OPENS PAYMENT PAGE
-
-res.redirect("/payment/" + booking._id);
-
+  // ✅ Opens payment page
+  res.redirect("/payment/" + booking._id);
 });
 
 module.exports = router;
