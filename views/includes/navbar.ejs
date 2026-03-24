@@ -1,57 +1,371 @@
 <style>
-  .search-btn {
-    background-color: #fe424d;
-    color: #fff;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+  :root {
+    --ink: #1a1a2e;
+    --cream: #faf7f2;
+    --sand: #f5f0e8;
+    --accent: #c9783a;
+    --accent-light: #f0dcc8;
+    --gold: #d4a843;
+    --muted: #6b6b7b;
+    --border: #e0d8cc;
+    --white: #ffffff;
   }
 
-  .search-btn:hover {
-    background-color: #fe424d;
-    color: #fff;
+  /* ── NAV BASE ── */
+  .wl-nav {
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 24px rgba(26,26,46,0.18);
   }
 
-  .search-btn i {
-    display: inline;
-    margin-right: 0.5rem;
+  .wl-nav .container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 68px;
+    gap: 1rem;
   }
 
-  .search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+  /* ── BRAND ── */
+  .wl-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .wl-brand-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent), #a85e28);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    box-shadow: 0 2px 10px rgba(201,120,58,0.4);
+  }
+
+  .wl-brand-text {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .wl-brand-text span {
+    color: var(--gold);
+  }
+
+  /* ── SEARCH ── */
+  .wl-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    padding: 0 6px 0 16px;
+    gap: 6px;
+    transition: all 0.2s;
+    flex: 1;
+    max-width: 340px;
+  }
+
+  .wl-search:focus-within {
+    background: rgba(255,255,255,0.11);
+    border-color: rgba(212,168,67,0.4);
+    box-shadow: 0 0 0 3px rgba(212,168,67,0.1);
+  }
+
+  .wl-search input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    width: 100%;
+    padding: 9px 0;
+  }
+
+  .wl-search input::placeholder {
+    color: rgba(255,255,255,0.35);
+  }
+
+  .wl-search-btn {
+    background: linear-gradient(135deg, #fe424d, #d42b36);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    padding: 7px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .wl-search-btn:hover { opacity: 0.88; }
+
+  /* ── NAV LINKS ── */
+  .wl-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .wl-link {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .wl-link:hover {
+    color: var(--white);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .wl-link-host {
+    color: var(--gold);
+    border: 1px solid rgba(212,168,67,0.3);
+  }
+
+  .wl-link-host:hover {
+    background: rgba(212,168,67,0.1);
+    color: var(--gold);
+  }
+
+  .wl-link-auth {
+    background: linear-gradient(135deg, var(--accent), #a85e28);
+    color: white !important;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(201,120,58,0.3);
+  }
+
+  .wl-link-auth:hover {
+    opacity: 0.9;
+    background: linear-gradient(135deg, var(--accent), #a85e28) !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(201,120,58,0.4);
+  }
+
+  .wl-link-ghost {
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.85) !important;
+  }
+
+  .wl-link-ghost:hover {
+    border-color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.06);
+    color: white !important;
+  }
+
+  /* ── HAMBURGER ── */
+  .wl-toggler {
+    display: none;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .wl-toggler span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .wl-toggler.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .wl-toggler.open span:nth-child(2) { opacity: 0; }
+  .wl-toggler.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── MOBILE DRAWER ── */
+  .wl-drawer {
+    display: none;
+    background: #12111e;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 1.2rem 1.5rem 1.5rem;
+    flex-direction: column;
+    gap: 6px;
+    animation: slideDown 0.25s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .wl-drawer.open { display: flex; }
+
+  .wl-drawer-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 0 8px 0 14px;
+    margin-bottom: 10px;
+  }
+
+  .wl-drawer-search input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 0.9rem;
+    padding: 11px 0;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .wl-drawer-search input::placeholder { color: rgba(255,255,255,0.35); }
+
+  .wl-drawer-search button {
+    background: linear-gradient(135deg, #fe424d, #d42b36);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .wl-drawer a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 11px 14px;
+    border-radius: 10px;
+    display: block;
+    transition: all 0.2s;
+  }
+
+  .wl-drawer a:hover { background: rgba(255,255,255,0.07); color: white; }
+  .wl-drawer .wl-link-auth { text-align: center; margin-top: 4px; }
+  .wl-drawer .wl-link-ghost { text-align: center; border-color: rgba(255,255,255,0.18); }
+  .wl-drawer hr { border-color: rgba(255,255,255,0.08); margin: 6px 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .wl-search { max-width: 220px; }
+    .wl-link { padding: 7px 10px; font-size: 0.82rem; }
+  }
+
+  @media (max-width: 700px) {
+    .wl-nav .container-fluid { padding: 0 1rem; }
+    .wl-search, .wl-links { display: none; }
+    .wl-toggler { display: flex; }
   }
 </style>
 
+<!-- Fonts needed by navbar -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
+<nav class="wl-nav">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-      <input class="form-control me-2 search-inp" type="search" placeholder="Search Destinations" />
-      <button class="btn search-btn" type="submit">
-        <i class="fa-solid fa-magnifying-glass"></i>Search
-        </button>
-    </form>
-      </div>
-       <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Airbnb your choice</a>
 
-        <% if(!currUser) { %>
-        <a class="nav-link"  href="/signup"><b>Sign Up</b></a>
-        <a class="nav-link" href="/login"><b>Log in</b></a>
-        <% } %> <% if(currUser) { %>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
-        <% } %>
+    <!-- Brand -->
+    <a href="/listings" class="wl-brand">
+      <div class="wl-brand-icon">
+        <i class="fa-solid fa-compass"></i>
       </div>
+      <span class="wl-brand-text">Wander<span>lust</span></span>
+    </a>
+
+    <!-- Search (desktop) -->
+    <form class="wl-search" role="search" action="/listings" method="GET">
+      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3); font-size:13px;"></i>
+      <input type="search" name="search" placeholder="Search destinations…"/>
+      <button type="submit" class="wl-search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+      </button>
+    </form>
+
+    <!-- Links (desktop) -->
+    <div class="wl-links">
+      <a href="/listings" class="wl-link">Explore</a>
+      <a href="/listings/new" class="wl-link wl-link-host">
+        <i class="fa-solid fa-plus" style="font-size:11px;"></i> Host
+      </a>
+
+      <% if(!currUser) { %>
+        <a href="/signup" class="wl-link wl-link-ghost">Sign Up</a>
+        <a href="/login" class="wl-link wl-link-auth">Log In</a>
+      <% } %>
+      <% if(currUser) { %>
+        <a href="/logout" class="wl-link wl-link-ghost">Log Out</a>
+      <% } %>
     </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="wl-toggler" id="wlToggler" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div class="wl-drawer" id="wlDrawer">
+    <form class="wl-drawer-search" role="search" action="/listings" method="GET">
+      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3); font-size:13px;"></i>
+      <input type="search" name="search" placeholder="Search destinations…"/>
+      <button type="submit">Search</button>
+    </form>
+    <a href="/listings"><i class="fa-solid fa-compass me-2"></i>Explore</a>
+    <a href="/listings/new" style="color:var(--gold) !important;"><i class="fa-solid fa-plus me-2"></i>Host your place</a>
+    <hr/>
+    <% if(!currUser) { %>
+      <a href="/signup" class="wl-link-ghost">Sign Up</a>
+      <a href="/login" class="wl-link-auth">Log In</a>
+    <% } %>
+    <% if(currUser) { %>
+      <a href="/logout" class="wl-link-ghost">Log Out</a>
+    <% } %>
   </div>
 </nav>
+
+<script>
+  const toggler = document.getElementById('wlToggler');
+  const drawer  = document.getElementById('wlDrawer');
+  toggler.addEventListener('click', () => {
+    toggler.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+</script>
