@@ -1,62 +1,502 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
-        <br><br>
-<body>
-    <h3>Create a New Listing</h3>
-    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-        <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required>
-        <div class="valid-feedback">Title looks good keep ahead</div>
+
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --cream: #faf7f2;
+    --sand: #f5f0e8;
+    --accent: #c9783a;
+    --accent-light: #f0dcc8;
+    --gold: #d4a843;
+    --muted: #6b6b7b;
+    --border: #e0d8cc;
+    --success: #2d7a4f;
+    --white: #ffffff;
+    --shadow: 0 8px 40px rgba(26,26,46,0.10);
+    --radius: 18px;
+  }
+
+  .new-listing-page {
+    min-height: 100vh;
+    background: var(--cream);
+    padding: 0 0 80px;
+  }
+
+  /* ── HERO BANNER ── */
+  .nl-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2e1a0e 60%, #1a1a2e 100%);
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nl-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 0%, rgba(201,120,58,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .nl-hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nl-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .nl-hero p {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Sans', sans-serif;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── FORM WRAPPER ── */
+  .nl-wrap {
+    max-width: 680px;
+    margin: -1px auto 0;
+    padding: 0 1.2rem;
+  }
+
+  /* ── FORM CARD ── */
+  .nl-card {
+    background: var(--white);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.8rem 2.5rem 2.5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION LABELS ── */
+  .nl-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 2rem 0 1.2rem;
+  }
+
+  .nl-section:first-of-type { margin-top: 0; }
+
+  .nl-section-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .nl-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .nl-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.8rem 0;
+  }
+
+  /* ── FIELDS ── */
+  .nl-field { margin-bottom: 1.3rem; }
+
+  .nl-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nl-input,
+  .nl-textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 2px solid var(--border);
+    border-radius: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    color: var(--ink);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+
+  .nl-input:focus,
+  .nl-textarea:focus {
+    border-color: var(--accent);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(201,120,58,0.1);
+  }
+
+  .nl-input::placeholder,
+  .nl-textarea::placeholder { color: rgba(107,107,123,0.5); }
+
+  .nl-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+  /* Price input with ₹ prefix */
+  .nl-price-wrap {
+    position: relative;
+  }
+
+  .nl-price-wrap .nl-currency {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .nl-price-wrap .nl-input {
+    padding-left: 30px;
+  }
+
+  /* Grid row */
+  .nl-row {
+    display: grid;
+    gap: 14px;
+  }
+
+  .nl-row-2 { grid-template-columns: 1fr 1fr; }
+  .nl-row-3 { grid-template-columns: 1fr 1.6fr; }
+
+  /* ── IMAGE UPLOAD ── */
+  .nl-upload-box {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--cream);
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .nl-upload-box:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .nl-upload-box input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .nl-upload-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 20px;
+    color: var(--accent);
+  }
+
+  .nl-upload-text {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 4px;
+  }
+
+  .nl-upload-sub {
+    font-size: 0.77rem;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Preview */
+  #imgPreview {
+    display: none;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 12px;
+    border: 2px solid var(--border);
+  }
+
+  /* ── SUBMIT BTN ── */
+  .nl-submit {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), #a85e28);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(201,120,58,0.35);
+    letter-spacing: 0.3px;
+    margin-top: 2rem;
+  }
+
+  .nl-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(201,120,58,0.45);
+  }
+
+  .nl-submit:active { transform: translateY(0); }
+
+  /* ── VALIDATION ── */
+  .nl-input.is-invalid,
+  .nl-textarea.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220,53,69,0.1);
+  }
+
+  .nl-feedback {
+    font-size: 0.78rem;
+    color: #dc3545;
+    margin-top: 5px;
+    display: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .nl-card { padding: 2rem 1.3rem; }
+    .nl-row-2, .nl-row-3 { grid-template-columns: 1fr; }
+    .nl-hero { padding: 2.5rem 1.2rem 2rem; }
+  }
+</style>
+
+<div class="new-listing-page">
+
+  <!-- Hero Banner -->
+  <div class="nl-hero">
+    <div class="nl-hero-tag">✦ Become a Host</div>
+    <h1>List Your Space</h1>
+    <p>Share your place with travellers from around the world and start earning.</p>
+  </div>
+
+  <!-- Form -->
+  <div class="nl-wrap">
+    <div class="nl-card">
+
+      <form method="POST" action="/listings" novalidate id="nlForm" enctype="multipart/form-data">
+
+        <!-- BASIC INFO -->
+        <div class="nl-section">
+          <div class="nl-section-icon"><i class="fa-solid fa-pen-nib"></i></div>
+          <div class="nl-section-title">Basic Information</div>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]"  class="form-control" required ></textarea>
-            <div class="invalid-feedback">give in short </div>
 
-        </div>
-
-        
-
-
-         <div class="mb-3">
-            <label for="image" class="form-label">Upload Listing Image</label>
-            <input name="listing[image]"  type="file" class="form-control"/>
+        <div class="nl-field">
+          <label class="nl-label">Listing Title</label>
+          <input
+            name="listing[title]"
+            type="text"
+            class="nl-input"
+            placeholder="e.g. Cozy beachfront villa with ocean views"
             required
+            id="nlTitle"
+          />
+          <div class="nl-feedback" id="nlTitleErr">Please add a catchy title.</div>
         </div>
 
-
-        <div class="row">
-            <div class="mb-3 col-md-4">
-            <label for="price" class="form-label">Price</label>
-            <input name="listing[price]" placeholder="1200"  class="form-control" required>
-            <div class="invalid-feedback">Please a enter a vlid price</div>
-
-
-        </div>
-      
-        <div class="mb-3 col-md-8">
-            <label for="country" class="form-label">Country</label>
-            <input name="listing[country]" placeholder="India" type="text" class="form-control" required>
-            <div class="invalid-feedback">Please enter country name</div>
-
-
-        </div>
+        <div class="nl-field">
+          <label class="nl-label">Description</label>
+          <textarea
+            name="listing[description]"
+            class="nl-textarea"
+            placeholder="Describe what makes your place special — amenities, views, vibe…"
+            required
+            id="nlDesc"
+          ></textarea>
+          <div class="nl-feedback" id="nlDescErr">Please add a short description.</div>
         </div>
 
+        <div class="nl-divider"></div>
 
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input name="listing[location]" placeholder="Jaipur,Goa" type="text" class="form-control" required>
-            <div class="invalid-feedback">Location should be valid</div>
-
-
+        <!-- PHOTO -->
+        <div class="nl-section">
+          <div class="nl-section-icon"><i class="fa-solid fa-image"></i></div>
+          <div class="nl-section-title">Listing Photo</div>
         </div>
-        <button class="btn btn-dark add-btn mt-3">Add</button>
 
-    </form>
-    
-</body>
+        <div class="nl-field">
+          <div class="nl-upload-box" id="uploadBox">
+            <input
+              type="file"
+              name="listing[image]"
+              accept="image/*"
+              id="nlImage"
+              onchange="previewImg(this)"
+            />
+            <div class="nl-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="nl-upload-text">Click to upload a photo</div>
+            <div class="nl-upload-sub">PNG, JPG, WEBP — max 5MB</div>
+          </div>
+          <img id="imgPreview" src="" alt="Preview"/>
+        </div>
+
+        <div class="nl-divider"></div>
+
+        <!-- PRICING & LOCATION -->
+        <div class="nl-section">
+          <div class="nl-section-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="nl-section-title">Price & Location</div>
+        </div>
+
+        <div class="nl-field">
+          <label class="nl-label">Price per Night (₹)</label>
+          <div class="nl-price-wrap">
+            <span class="nl-currency">₹</span>
+            <input
+              name="listing[price]"
+              type="number"
+              class="nl-input"
+              placeholder="1200"
+              min="1"
+              required
+              id="nlPrice"
+            />
+          </div>
+          <div class="nl-feedback" id="nlPriceErr">Please enter a valid price.</div>
+        </div>
+
+        <div class="nl-row nl-row-3">
+          <div class="nl-field" style="margin-bottom:0">
+            <label class="nl-label">Country</label>
+            <input
+              name="listing[country]"
+              type="text"
+              class="nl-input"
+              placeholder="India"
+              required
+              id="nlCountry"
+            />
+            <div class="nl-feedback" id="nlCountryErr">Enter country name.</div>
+          </div>
+          <div class="nl-field" style="margin-bottom:0">
+            <label class="nl-label">Location / City</label>
+            <input
+              name="listing[location]"
+              type="text"
+              class="nl-input"
+              placeholder="Goa, Jaipur, Bali…"
+              required
+              id="nlLocation"
+            />
+            <div class="nl-feedback" id="nlLocationErr">Enter a valid location.</div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="nl-submit">
+          <i class="fa-solid fa-plus-circle"></i>
+          Publish Listing
+        </button>
+
+      </form>
     </div>
+  </div>
+
 </div>
+
+<script>
+  // Image preview
+  function previewImg(input) {
+    const preview = document.getElementById('imgPreview');
+    const box = document.getElementById('uploadBox');
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        box.querySelector('.nl-upload-icon').style.display = 'none';
+        box.querySelector('.nl-upload-text').textContent = input.files[0].name;
+        box.querySelector('.nl-upload-sub').textContent = 'Click to change photo';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // Custom validation
+  document.getElementById('nlForm').addEventListener('submit', function(e) {
+    let valid = true;
+
+    const fields = [
+      { id: 'nlTitle',    errId: 'nlTitleErr' },
+      { id: 'nlDesc',     errId: 'nlDescErr' },
+      { id: 'nlPrice',    errId: 'nlPriceErr' },
+      { id: 'nlCountry',  errId: 'nlCountryErr' },
+      { id: 'nlLocation', errId: 'nlLocationErr' },
+    ];
+
+    fields.forEach(({ id, errId }) => {
+      const el  = document.getElementById(id);
+      const err = document.getElementById(errId);
+      if (!el) return;
+      if (!el.value.trim()) {
+        el.classList.add('is-invalid');
+        if (err) err.style.display = 'block';
+        valid = false;
+      } else {
+        el.classList.remove('is-invalid');
+        if (err) err.style.display = 'none';
+      }
+    });
+
+    if (!valid) e.preventDefault();
+  });
+
+  // Clear error on input
+  document.querySelectorAll('.nl-input, .nl-textarea').forEach(el => {
+    el.addEventListener('input', function() {
+      this.classList.remove('is-invalid');
+      const errId = this.id + 'Err';
+      const err = document.getElementById(errId);
+      if (err) err.style.display = 'none';
+    });
+  });
+</script>
