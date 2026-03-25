@@ -359,6 +359,64 @@ body { background: #f5f1eb; }
   .search-input-wrap { padding:5px 5px 5px 14px; }
   .search-btn span { display:none; }
 }
+/* ══ CITY ATTRACTIONS ══ */
+.city-attractions-section {
+  display: none; margin-bottom: 28px; animation: fadeUp .4s ease;
+}
+.attractions-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; flex-wrap: wrap; gap: 10px;
+}
+.attractions-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 10px; margin: 0;
+}
+.attractions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.attraction-card {
+  background: white; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(26,26,46,.08);
+  transition: all .3s ease; border: 1px solid var(--border);
+}
+.attraction-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 36px rgba(26,26,46,.14);
+}
+.attraction-img-wrap { overflow: hidden; position: relative; }
+.attraction-emoji-thumb {
+  width: 100%; height: 130px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px;
+  background: linear-gradient(135deg, var(--sand), var(--accent-light));
+  transition: transform .4s ease;
+}
+.attraction-card:hover .attraction-emoji-thumb { transform: scale(1.07); }
+.attraction-tag {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(26,26,46,.72); color: white;
+  font-size: 10px; font-weight: 600; padding: 3px 10px;
+  border-radius: 20px; backdrop-filter: blur(6px);
+  font-family: 'DM Sans', sans-serif; letter-spacing: .5px;
+}
+.attraction-body { padding: 13px 15px 15px; }
+.attraction-name {
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+  font-weight: 700; color: var(--ink); margin-bottom: 4px;
+}
+.attraction-desc {
+  font-family: 'DM Sans', sans-serif; font-size: 11.5px;
+  color: var(--muted); line-height: 1.5;
+}
+.no-attractions {
+  text-align: center; padding: 32px; color: var(--muted);
+  background: var(--sand); border-radius: 16px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  grid-column: 1 / -1;
+}
 </style>
 
 <!-- ══ HERO ══ -->
@@ -500,6 +558,18 @@ body { background: #f5f1eb; }
     <button class="clear-search-btn" onclick="clearSearch()"><i class="fa-solid fa-xmark"></i> Clear search</button>
   </div>
   <div id="cityCardsContainer"></div>
+</div>
+
+<!-- ══ CITY ATTRACTIONS ══ -->
+<div class="city-attractions-section" id="cityAttractionsSection">
+  <div class="attractions-header">
+    <h3 class="attractions-title">
+      <span id="attractionsCityEmoji">📍</span>
+      Must-Visit in <span id="attractionsCityName" style="color:var(--accent);font-style:italic;margin-left:6px"></span>
+    </h3>
+    <span style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted)">Famous places &amp; experiences</span>
+  </div>
+  <div class="attractions-grid" id="attractionsGrid"></div>
 </div>
 
 <!-- ══ MOOD ══ -->
@@ -812,8 +882,11 @@ function showCityResults(city){
   container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`<a href="/listings/${l._id}" class="city-listing-card"><div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div><div class="city-card-body"><div class="title">${l.title}</div><div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div><div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div></div></a>`).join('')}</div>`;
   section.scrollIntoView({behavior:'smooth',block:'start'});
 }
-function clearSearch(){input.value='';document.getElementById('cityResultsSection').style.display='none';}
-document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});});
+function clearSearch() {
+  input.value = '';
+  document.getElementById('cityResultsSection').style.display = 'none';
+  document.getElementById('cityAttractionsSection').style.display = 'none'; // ← NEW
+}document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});});
 document.querySelectorAll('#filters .filter').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#filters .filter').forEach(b=>b.classList.remove('active'));this.classList.add('active');});});
 const wishlist=new Set(JSON.parse(localStorage.getItem('wl_wishlist')||'[]'));
 function toggleWishlist(e,id){e.preventDefault();e.stopPropagation();const btn=e.currentTarget,icon=btn.querySelector('i');if(wishlist.has(id)){wishlist.delete(id);icon.className='fa-regular fa-heart';btn.classList.remove('liked');}else{wishlist.add(id);icon.className='fa-solid fa-heart';btn.classList.add('liked');btn.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300,easing:'ease'});}localStorage.setItem('wl_wishlist',JSON.stringify([...wishlist]));}
@@ -913,4 +986,146 @@ function shake(id){
 }
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCabModal();});
+/* ═══ CITY ATTRACTIONS DATA ═══ */
+const CITY_ATTRACTIONS = {
+  bhubaneswar: [
+    { name:'Nandankanan Zoo',       emoji:'🦁', tag:'Wildlife',    desc:'Famous zoo with white tigers, white crocodiles & elephant safari' },
+    { name:'Lingaraj Temple',       emoji:'🛕', tag:'Heritage',    desc:'11th-century Shiva temple — crown jewel of Kalinga architecture' },
+    { name:'Udayagiri & Khandagiri',emoji:'⛰️', tag:'History',     desc:'Ancient Jain rock-cut caves carved in the 2nd century BC' },
+    { name:'Dhauli Peace Pagoda',   emoji:'☮️', tag:'Spiritual',   desc:'Buddhist stupa marking Ashoka\'s transformation after Kalinga War' },
+    { name:'Odisha State Museum',   emoji:'🏛️', tag:'Culture',     desc:'Tribal art, ancient coins, manuscripts & Odishan sculptures' },
+    { name:'Ekamra Haat',           emoji:'🛍️', tag:'Shopping',    desc:'Outdoor craft market — Pattachitra, appliqué & local food' },
+  ],
+  puri: [
+    { name:'Jagannath Temple',      emoji:'🛕', tag:'Spiritual',   desc:'One of the sacred Char Dham — home of Lord Jagannath since 12th century' },
+    { name:'Puri Beach',            emoji:'🏖️', tag:'Beach',       desc:'Golden shoreline famous for sand art & spectacular sunrises' },
+    { name:'Chilika Lake',          emoji:'🦢', tag:'Nature',      desc:'Asia\'s largest coastal lagoon — Irrawaddy dolphins & flamingos' },
+    { name:'Raghurajpur Art Village',emoji:'🎨',tag:'Culture',     desc:'UNESCO heritage craft village of Pattachitra artists' },
+    { name:'Konark Sun Temple',     emoji:'🌅', tag:'UNESCO',      desc:'13th-century chariot-shaped sun temple — a World Heritage Site' },
+    { name:'Narendra Tank',         emoji:'💧', tag:'Pilgrimage',  desc:'Sacred tank where Chandana Yatra of Lord Jagannath is celebrated' },
+  ],
+  goa: [
+    { name:'Basilica of Bom Jesus', emoji:'⛪', tag:'Heritage',    desc:'UNESCO baroque church housing St. Francis Xavier\'s relics' },
+    { name:'Calangute Beach',       emoji:'🏖️', tag:'Beach',       desc:'Queen of beaches — water sports, beach shacks & nightlife' },
+    { name:'Dudhsagar Falls',       emoji:'💧', tag:'Nature',      desc:'Majestic 4-tier waterfall deep inside Bhagwan Mahavir Sanctuary' },
+    { name:'Anjuna Flea Market',    emoji:'🛍️', tag:'Shopping',    desc:'Iconic Wednesday market for bohemian fashion & handicrafts' },
+    { name:'Fort Aguada',           emoji:'🏰', tag:'History',     desc:'17th-century Portuguese sea fort with lighthouse & ocean panorama' },
+    { name:'Spice Plantation',      emoji:'🌿', tag:'Experience',  desc:'Guided walk through cardamom, pepper & vanilla farms + lunch' },
+  ],
+  jaipur: [
+    { name:'Amber Fort',            emoji:'🏰', tag:'Heritage',    desc:'Hilltop Rajput fort palace with mirror halls & elephant rides' },
+    { name:'Hawa Mahal',            emoji:'🏯', tag:'Iconic',      desc:'Palace of Winds — 5-storey pink sandstone lattice facade' },
+    { name:'City Palace',           emoji:'👑', tag:'Royal',       desc:'Living royal complex blending Rajput & Mughal architecture' },
+    { name:'Jantar Mantar',         emoji:'🔭', tag:'UNESCO',      desc:'UNESCO astronomical observatory with world\'s largest stone sundial' },
+    { name:'Nahargarh Fort',        emoji:'🌄', tag:'Views',       desc:'Best hilltop sunset views overlooking the Pink City' },
+    { name:'Johari Bazaar',         emoji:'💎', tag:'Shopping',    desc:'Famous gem & jewellery street — kundan, meenakari & more' },
+  ],
+  mumbai: [
+    { name:'Gateway of India',      emoji:'🏛️', tag:'Landmark',   desc:'Iconic 1924 colonial arch on the Bombay waterfront' },
+    { name:'Marine Drive',          emoji:'🌊', tag:'Scenic',      desc:'Queen\'s Necklace — 3.6km coastal promenade that glitters at night' },
+    { name:'Elephanta Caves',       emoji:'🗿', tag:'UNESCO',      desc:'Ancient rock-cut Shiva temples on an island in Mumbai Harbour' },
+    { name:'Colaba Causeway',       emoji:'🛍️', tag:'Shopping',    desc:'Bustling bazaar for fashion, antiques & Mumbai street food' },
+    { name:'Siddhivinayak Temple',  emoji:'🛕', tag:'Spiritual',   desc:'One of India\'s most visited & revered Ganesha temples' },
+    { name:'Dharavi Walk',          emoji:'🏙️', tag:'Culture',     desc:'Eye-opening guided tour of Asia\'s most innovative urban hub' },
+  ],
+  delhi: [
+    { name:'Red Fort',              emoji:'🏰', tag:'UNESCO',      desc:'Mughal masterpiece where India\'s Independence was declared' },
+    { name:'Qutub Minar',           emoji:'🗼', tag:'UNESCO',      desc:'72m tall 12th-century minaret — oldest in India' },
+    { name:'Humayun\'s Tomb',       emoji:'⛩️', tag:'Heritage',    desc:'First garden-tomb in the subcontinent — Taj Mahal\'s precursor' },
+    { name:'India Gate',            emoji:'🏛️', tag:'Landmark',   desc:'War memorial at the heart of New Delhi\'s ceremonial avenue' },
+    { name:'Chandni Chowk',         emoji:'🌶️', tag:'Food',        desc:'400-year-old market — best street food & spice bazaars in India' },
+    { name:'Lotus Temple',          emoji:'🌸', tag:'Spiritual',   desc:'Flower-shaped Bahá\'í temple open to all faiths — stunning architecture' },
+  ],
+  manali: [
+    { name:'Rohtang Pass',          emoji:'🏔️', tag:'Adventure',  desc:'Snow-covered mountain pass at 3,978m with stunning Himalayan views' },
+    { name:'Solang Valley',         emoji:'⛷️', tag:'Snow Sports', desc:'Top spot for skiing, zorbing & paragliding near Manali' },
+    { name:'Hadimba Temple',        emoji:'🛕', tag:'Spiritual',   desc:'Unique wooden temple for Goddess Hadimba inside cedar forest' },
+    { name:'Old Manali',            emoji:'🛍️', tag:'Vibe',        desc:'Bohemian cafes, wooden bridges & local Himachali culture' },
+    { name:'Beas River Rafting',    emoji:'🚣', tag:'Adventure',   desc:'Thrilling white-water rafting through the Kullu Valley rapids' },
+    { name:'Naggar Castle',         emoji:'🏯', tag:'History',     desc:'15th-century stone & wood castle with Himalayan valley views' },
+  ],
+  kerala: [
+    { name:'Alleppey Backwaters',   emoji:'🛶', tag:'Nature',      desc:'Houseboat cruise through tranquil canals, lagoons & paddy fields' },
+    { name:'Munnar Tea Gardens',    emoji:'🍵', tag:'Scenic',      desc:'Emerald tea estates rolling across hills at 1,600m altitude' },
+    { name:'Periyar Wildlife Sanctuary',emoji:'🐘',tag:'Wildlife', desc:'Boat safari in a tiger reserve — elephants, gaur & rare birds' },
+    { name:'Kovalam Beach',         emoji:'🏖️', tag:'Beach',       desc:'Crescent-shaped beach paradise famous for Ayurveda resorts' },
+    { name:'Kathakali Performance', emoji:'🎭', tag:'Culture',     desc:'Classical dance drama with elaborate costumes & face painting' },
+    { name:'Varkala Cliffs',        emoji:'🌊', tag:'Scenic',      desc:'Dramatic red cliffs above the sea — yoga retreats & sunset cafes' },
+  ],
+  udaipur: [
+    { name:'City Palace',           emoji:'👑', tag:'Royal',       desc:'Largest palace in Rajasthan with spectacular lake & city views' },
+    { name:'Lake Pichola',          emoji:'🌅', tag:'Scenic',      desc:'Romantic sunset boat ride past island palaces & ghats' },
+    { name:'Jag Mandir',            emoji:'🏝️', tag:'Heritage',    desc:'Island palace on Lake Pichola — once sheltered Mughal prince Khurram' },
+    { name:'Sajjangarh Fort',       emoji:'🌙', tag:'Views',       desc:'Monsoon Palace perched on a hill — best panoramic Udaipur views' },
+    { name:'Saheliyon Ki Bari',     emoji:'🌺', tag:'Garden',      desc:'Garden of Maidens — marble pavilions, lotus pools & fountains' },
+    { name:'Shilpgram',             emoji:'🎨', tag:'Culture',     desc:'Rural arts village with folk dances, tribal crafts & live demos' },
+  ],
+  agra: [
+    { name:'Taj Mahal',             emoji:'🕌', tag:'Wonder',      desc:'UNESCO symbol of eternal love — a Mughal masterpiece in white marble' },
+    { name:'Agra Fort',             emoji:'🏰', tag:'Heritage',    desc:'Massive red sandstone fort with palaces, mosques & audience halls' },
+    { name:'Fatehpur Sikri',        emoji:'⛩️', tag:'UNESCO',      desc:'Perfectly preserved Mughal capital city built by Akbar the Great' },
+    { name:'Mehtab Bagh',           emoji:'🌙', tag:'Views',       desc:'Moonlit garden — the best sunset & moonrise view of the Taj' },
+    { name:'Itmad-ud-Daulah',       emoji:'🗿', tag:'Monument',    desc:'Baby Taj — first structure in India using pietra dura marble inlay' },
+    { name:'Kinari Bazaar',         emoji:'🛍️', tag:'Shopping',    desc:'Famous for marble inlay souvenirs, leather & Agra petha sweets' },
+  ],
+  shimla: [
+    { name:'The Ridge',             emoji:'🌄', tag:'Landmark',    desc:'Central open space with sweeping views of Himalayan ranges' },
+    { name:'Mall Road',             emoji:'🛍️', tag:'Shopping',    desc:'Colonial promenade lined with cafes, shops & Victorian buildings' },
+    { name:'Jakhu Temple',          emoji:'🐒', tag:'Spiritual',   desc:'Ancient Hanuman temple at 2,455m — snow views & playful monkeys' },
+    { name:'Kalka–Shimla Toy Train',emoji:'🚂', tag:'UNESCO',      desc:'UNESCO narrow-gauge mountain railway through 102 tunnels' },
+    { name:'Kufri',                 emoji:'⛷️', tag:'Snow',        desc:'Ski resort with yak rides & adventure sports near Shimla' },
+    { name:'Christ Church',         emoji:'⛪', tag:'Architecture', desc:'Second oldest church in North India — neo-Gothic stained glass' },
+  ],
+  ooty: [
+    { name:'Ooty Lake',             emoji:'🚣', tag:'Scenic',      desc:'Serene artificial lake popular for paddleboating & picnics' },
+    { name:'Botanical Gardens',     emoji:'🌸', tag:'Nature',      desc:'152-year-old gardens with 650+ exotic plants & a fossil tree' },
+    { name:'Nilgiri Mountain Railway',emoji:'🚂',tag:'UNESCO',     desc:'UNESCO World Heritage blue train winding through tea estates' },
+    { name:'Doddabetta Peak',       emoji:'🏔️', tag:'Views',       desc:'Highest point in Nilgiris at 2,637m — panoramic view on clear days' },
+    { name:'Tea Factory Tour',      emoji:'🍵', tag:'Experience',  desc:'See how Nilgiri tea is processed — tasting included' },
+    { name:'Rose Garden',           emoji:'🌹', tag:'Nature',      desc:'India\'s largest rose garden with 20,000+ varieties in bloom' },
+  ],
+};
+
+/* ═══ SHOW ATTRACTIONS ═══ */
+function showCityAttractions(city) {
+  const section  = document.getElementById('cityAttractionsSection');
+  const grid     = document.getElementById('attractionsGrid');
+  const nameEl   = document.getElementById('attractionsCityName');
+  const emojiEl  = document.getElementById('attractionsCityEmoji');
+
+  // Find closest matching key
+  const cityLower = city.toLowerCase();
+  const matchedKey = Object.keys(CITY_ATTRACTIONS).find(k =>
+    cityLower.includes(k) || k.includes(cityLower)
+  );
+
+  nameEl.textContent  = city;
+  emojiEl.textContent = getEmoji(city);
+
+  if (!matchedKey) {
+    grid.innerHTML = `<div class="no-attractions">
+      <span style="font-size:32px;display:block;margin-bottom:10px">🗺️</span>
+      Attractions for <strong>${city}</strong> are coming soon!
+    </div>`;
+    section.style.display = 'block';
+    return;
+  }
+
+  grid.innerHTML = CITY_ATTRACTIONS[matchedKey].map(a => `
+    <div class="attraction-card">
+      <div class="attraction-img-wrap">
+        <div class="attraction-emoji-thumb">${a.emoji}</div>
+        <span class="attraction-tag">${a.tag}</span>
+      </div>
+      <div class="attraction-body">
+        <div class="attraction-name">${a.name}</div>
+        <div class="attraction-desc">${a.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  section.style.display = 'block';
+// At the END of showCityResults(), before the closing }
+showCityAttractions(city);   // ← ADD THIS LINE
+}
 </script>
