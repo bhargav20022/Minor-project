@@ -311,21 +311,7 @@
 </div>
 
         <!-- Google Maps fallback -->
-        <div id="gmaps-fallback" style="display:none;">
-          <div class="map-fallback">
-            <iframe
-              width="100%" height="360" style="border:0;" loading="lazy" allowfullscreen
-              src="https://www.google.com/maps?q=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>&output=embed">
-            </iframe>
-          </div>
-          <div class="mt-2">
-            <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>"
-               target="_blank" class="btn-gmaps">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Google Maps
-            </a>
-          </div>
-        </div>
-      </div>
+       
 
     </div><!-- /left -->
 
@@ -385,20 +371,11 @@
   </div><!-- /show-grid -->
 </div><!-- /show-page -->
 
-<!-- Mapbox -->
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<script src="/js/map.js"></script>
+
 
 <script>
   /* ── Auto fallback to Google Maps if no Mapbox token ── */
-  (function(){
-    const token = "<%= process.env.MAP_TOKEN %>";
-    if (!token || token === 'undefined' || token.trim() === '') {
-      document.getElementById('map').style.display = 'none';
-      document.getElementById('gmaps-fallback').style.display = 'block';
-    }
-  })();
+ 
 
   /* ── Date logic ── */
   const today = new Date().toISOString().split('T')[0];
