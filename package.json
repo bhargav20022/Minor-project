@@ -1,6 +1,7 @@
 {
-  "engines": {
-    "node": "16.13.0"
+  "engines" :{
+    "node" : "16.13.0"
+
   },
   "name": "minor-project",
   "version": "1.0.0",
@@ -15,6 +16,7 @@
   "type": "commonjs",
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.16.2",
+    "cloudinary": "^2.8.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^6.0.0",
     "dotenv": "^17.2.3",
@@ -26,11 +28,12 @@
     "method-override": "^3.0.0",
     "mongoose": "^9.0.2",
     "multer": "^2.0.2",
-    "nodemailer": "^8.0.3",
+    "multer-storage-cloudinary": "^4.0.0",
+      "nodemailer": "^8.0.3",
+
     "nodemon": "^3.1.11",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^9.0.1",
-    "razorpay": "^2.9.6"
+    "passport-local-mongoose": "^9.0.1"
   }
 }
