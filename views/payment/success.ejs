@@ -1,364 +1,199 @@
-<%- include('../includes/navbar') %>
+<% layout("/layouts/boilerplate") %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Booking Confirmed | Wanderlust</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<style>
+.receipt-page { background:#f5f1eb; min-height:80vh; padding:40px 0; }
+.receipt-wrap { max-width:680px; margin:0 auto; padding:0 16px; }
+.receipt-actions { display:flex; gap:12px; justify-content:center; margin-bottom:28px; flex-wrap:wrap; }
+.receipt-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 26px; border-radius:50px; font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all .22s; text-decoration:none;
+}
+.btn-download { background:linear-gradient(135deg,#1a1a2e,#2d2250); color:#fff; }
+.btn-download:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(26,26,46,.35); color:#fff; }
+.btn-home { background:white; color:#1a1a2e; border:1.5px solid #e0d8cc; }
+.btn-home:hover { border-color:#c9783a; color:#c9783a; transform:translateY(-2px); }
 
-    :root {
-      --sand: #f5f0e8;
-      --cream: #faf7f2;
-      --ink: #1a1a2e;
-      --muted: #6b6b7b;
-      --accent: #c9783a;
-      --accent-light: #f0dcc8;
-      --gold: #d4a843;
-      --success: #2d7a4f;
-      --border: #e0d8cc;
-      --white: #ffffff;
-      --shadow: 0 8px 40px rgba(26,26,46,0.10);
-      --radius: 18px;
-    }
+/* ── Receipt Card ── */
+#receiptCard {
+  background:#fff; border-radius:24px;
+  box-shadow:0 6px 36px rgba(26,26,46,.12); overflow:hidden;
+}
+.receipt-header {
+  background:linear-gradient(135deg,#1a1a2e 0%,#2d2250 100%);
+  padding:36px 40px 30px; text-align:center; position:relative; overflow:hidden;
+}
+.receipt-header::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 70% at 50% 120%, rgba(212,168,67,.2) 0%,transparent 65%);
+  pointer-events:none;
+}
+.receipt-brand { font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:4px; text-transform:uppercase; color:#d4a843; margin-bottom:16px; position:relative; }
+.receipt-status-icon { font-size:52px; margin-bottom:14px; display:block; position:relative; animation:popIn .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.receipt-header h1 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:600; color:#fff; margin:0 0 8px; position:relative; }
+.receipt-header p { font-family:'DM Sans',sans-serif; font-size:13px; color:rgba(255,255,255,.45); margin:0; position:relative; }
+.receipt-paid-badge {
+  display:inline-flex; align-items:center; gap:7px; margin-top:16px; position:relative;
+  background:rgba(76,175,80,.2); border:1.5px solid rgba(76,175,80,.5); border-radius:30px;
+  padding:7px 18px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; color:#4caf7d;
+}
 
-    body {
-      background: var(--cream);
-      font-family: 'DM Sans', sans-serif;
-      color: var(--ink);
-      min-height: 100vh;
-    }
+/* Divider */
+.receipt-divider { display:flex; align-items:center; position:relative; background:#1a1a2e; }
+.receipt-divider::before,.receipt-divider::after {
+  content:''; flex:1; height:1px; background:rgba(255,255,255,.1);
+}
+.divider-circle {
+  width:22px; height:22px; border-radius:50%; background:#f5f1eb;
+  box-shadow:inset 0 0 0 4px #1a1a2e; margin:0 -1px; flex-shrink:0;
+}
+.divider-circles { display:flex; align-items:center; padding:0 20px; gap:8px; }
+.divider-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.15); }
 
-    .success-wrapper {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 60px 20px 100px;
-    }
+/* Body */
+.receipt-body { padding:36px 40px; }
+@media(max-width:480px) { .receipt-body { padding:24px 20px; } .receipt-header { padding:28px 20px 24px; } }
 
-    /* ── Animated checkmark ── */
-    .check-circle {
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      background: rgba(45,122,79,0.1);
-      border: 2.5px solid var(--success);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 28px;
-      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-    }
+.receipt-section-label { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#7a7a8a; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.receipt-section-label::after { content:''; flex:1; height:1px; background:#e0d8cc; }
 
-    .check-circle i {
-      font-size: 36px;
-      color: var(--success);
-    }
+.receipt-listing-row { display:flex; gap:16px; align-items:center; background:#faf7f2; border-radius:14px; padding:16px; margin-bottom:24px; border:1px solid #e0d8cc; }
+.receipt-listing-img { width:70px; height:70px; border-radius:10px; object-fit:cover; flex-shrink:0; }
+.receipt-listing-info .title { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; color:#1a1a2e; margin-bottom:4px; }
+.receipt-listing-info .loc { font-size:12px; color:#7a7a8a; display:flex; align-items:center; gap:4px; }
 
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.5); }
-      to   { opacity: 1; transform: scale(1); }
-    }
+.receipt-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+@media(max-width:400px) { .receipt-grid { grid-template-columns:1fr; } }
+.receipt-detail { background:#faf7f2; border-radius:12px; padding:14px 16px; border:1px solid #e0d8cc; }
+.receipt-detail .lbl { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:#7a7a8a; margin-bottom:5px; }
+.receipt-detail .val { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; color:#1a1a2e; }
 
-    .success-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      text-align: center;
-      color: var(--ink);
-      margin-bottom: 8px;
-      animation: fadeUp 0.5s 0.15s ease both;
-    }
+.receipt-total-box { background:#1a1a2e; border-radius:16px; padding:22px 24px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.receipt-total-box .lbl { font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,.45); margin-bottom:4px; }
+.receipt-total-box .amount { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:600; color:#d4a843; line-height:1; }
+.receipt-total-box .pid { font-family:'DM Sans',sans-serif; font-size:11px; color:rgba(255,255,255,.3); margin-top:5px; }
+.receipt-total-box .status-pill { background:rgba(76,175,80,.2); border:1.5px solid rgba(76,175,80,.4); border-radius:30px; padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; color:#4caf7d; }
 
-    .success-sub {
-      text-align: center;
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 40px;
-      line-height: 1.7;
-      animation: fadeUp 0.5s 0.25s ease both;
-    }
+.receipt-footer { text-align:center; padding-top:20px; border-top:1px solid #e0d8cc; }
+.receipt-footer p { font-family:'DM Sans',sans-serif; font-size:12px; color:#7a7a8a; line-height:1.7; margin:0 0 6px; }
+.receipt-footer .brand { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:#1a1a2e; letter-spacing:2px; }
+</style>
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+<div class="receipt-page">
+  <div class="receipt-wrap">
 
-    /* ── Main card ── */
-    .confirm-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      animation: fadeUp 0.5s 0.3s ease both;
-    }
+    <!-- Action Buttons -->
+    <div class="receipt-actions">
+      <button class="receipt-btn btn-download" onclick="downloadReceipt()">
+        <i class="fa-solid fa-download"></i> Download Receipt
+      </button>
+      <a href="/listings" class="receipt-btn btn-home">
+        <i class="fa-solid fa-house"></i> Back to Home
+      </a>
+    </div>
 
-    /* Listing image */
-    .confirm-img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-    }
+    <!-- Receipt Card -->
+    <div id="receiptCard">
+      <div class="receipt-header">
+        <div class="receipt-brand">✦ Wanderlust</div>
+        <span class="receipt-status-icon">🎉</span>
+        <h1>Booking Confirmed!</h1>
+        <p>Your adventure is officially locked in</p>
+        <div class="receipt-paid-badge">✓ &nbsp;Payment Successful</div>
+      </div>
 
-    .confirm-img-placeholder {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, #1a1a2e, #2e2640);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-    }
+      <!-- Ticket-style tear -->
+      <div class="receipt-divider">
+        <div class="divider-circle"></div>
+        <div class="divider-circles">
+          <% for(let i=0;i<18;i++) { %><div class="divider-dot"></div><% } %>
+        </div>
+        <div class="divider-circle"></div>
+      </div>
 
-    .confirm-body { padding: 32px 36px; }
+      <div class="receipt-body">
 
-    /* Destination heading */
-    .dest-tag {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-
-    .dest-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      color: var(--ink);
-      margin-bottom: 4px;
-    }
-
-    .dest-loc {
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 28px;
-    }
-
-    /* Details grid */
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .detail-box {
-      background: var(--cream);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-
-    .detail-box .d-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    .detail-box .d-val {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink);
-    }
-
-    /* Amount row */
-    .amount-row {
-      background: var(--ink);
-      border-radius: 12px;
-      padding: 20px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .amount-row .a-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.45);
-    }
-
-    .amount-row .a-val {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--gold);
-    }
-
-    .amount-row .a-pid {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      margin-top: 3px;
-    }
-
-    /* Email notice */
-    .email-notice {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(45,122,79,0.07);
-      border: 1px solid rgba(45,122,79,0.2);
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 28px;
-    }
-
-    .email-notice i { font-size: 20px; color: var(--success); flex-shrink: 0; }
-    .email-notice p { font-size: 13px; color: var(--ink); line-height: 1.5; margin: 0; }
-    .email-notice p span { font-weight: 600; }
-
-    /* CTA buttons */
-    .cta-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn-primary {
-      padding: 14px;
-      background: linear-gradient(135deg, var(--accent), #a85e28);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-      display: block;
-      transition: all 0.2s;
-      box-shadow: 0 4px 16px rgba(201,120,58,0.3);
-    }
-
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,120,58,0.4); }
-
-    .btn-outline {
-      padding: 14px;
-      background: transparent;
-      color: var(--ink);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-      display: block;
-      transition: all 0.2s;
-    }
-
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-    @media (max-width: 520px) {
-      .details-grid { grid-template-columns: 1fr; }
-      .cta-row { grid-template-columns: 1fr; }
-      .confirm-body { padding: 24px 20px; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="success-wrapper">
-
-  <!-- Animated check -->
-  <div class="check-circle">
-    <i class="fa-solid fa-check"></i>
-  </div>
-
-  <h1 class="success-title">You're all set! 🎉</h1>
-  <p class="success-sub">
-    Your payment was successful and your booking is confirmed.<br/>
-    A confirmation email has been sent to your inbox.
-  </p>
-
-  <!-- Confirmation Card -->
-  <div class="confirm-card">
-
-    <!-- Listing image -->
-    <% if(booking.listing.image && booking.listing.image.url) { %>
-      <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>" class="confirm-img"/>
-    <% } else { %>
-      <div class="confirm-img-placeholder">🌍</div>
-    <% } %>
-
-    <div class="confirm-body">
-
-      <p class="dest-tag">✦ Booking Confirmed</p>
-      <h2 class="dest-name"><%= booking.listing.title %></h2>
-      <p class="dest-loc">
-        <i class="fa-solid fa-location-dot"></i>
-        <%= booking.listing.location %>, <%= booking.listing.country %>
-      </p>
-
-      <!-- Details grid -->
-      <div class="details-grid">
-        <div class="detail-box">
-          <div class="d-label">Check-in</div>
-          <div class="d-val">
-            <% if(booking.checkIn) { %>
-              📅 <%= new Date(booking.checkIn).toDateString() %>
-            <% } else { %> — <% } %>
+        <!-- Listing -->
+        <div class="receipt-section-label">Destination</div>
+        <div class="receipt-listing-row">
+          <% if(booking.listing && booking.listing.image && booking.listing.image.url) { %>
+            <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>" class="receipt-listing-img"/>
+          <% } %>
+          <div class="receipt-listing-info">
+            <div class="title"><%= booking.listing ? booking.listing.title : 'Your Stay' %></div>
+            <div class="loc">
+              <i class="fa-solid fa-location-dot" style="color:#c9783a;font-size:10px"></i>
+              <%= booking.listing ? booking.listing.location + ', ' + booking.listing.country : '' %>
+            </div>
           </div>
         </div>
-        <div class="detail-box">
-          <div class="d-label">Check-out</div>
-          <div class="d-val">
-            <% if(booking.checkOut) { %>
-              📅 <%= new Date(booking.checkOut).toDateString() %>
-            <% } else { %> — <% } %>
+
+        <!-- Trip Details -->
+        <div class="receipt-section-label">Trip Details</div>
+        <div class="receipt-grid">
+          <div class="receipt-detail">
+            <div class="lbl">Check-in</div>
+            <div class="val">📅 <%= booking.checkIn ? new Date(booking.checkIn).toDateString() : '—' %></div>
+          </div>
+          <div class="receipt-detail">
+            <div class="lbl">Check-out</div>
+            <div class="val">📅 <%= booking.checkOut ? new Date(booking.checkOut).toDateString() : '—' %></div>
+          </div>
+          <div class="receipt-detail">
+            <div class="lbl">Guests</div>
+            <div class="val">👤 <%= booking.guests || 1 %> Guest<%= booking.guests > 1 ? 's' : '' %></div>
+          </div>
+          <div class="receipt-detail">
+            <div class="lbl">Booking Ref</div>
+            <div class="val">#<%= booking._id.toString().slice(-8).toUpperCase() %></div>
           </div>
         </div>
-        <div class="detail-box">
-          <div class="d-label">Guests</div>
-          <div class="d-val">👤 <%= booking.guests || 1 %> Guest<%= (booking.guests || 1) > 1 ? 's' : '' %></div>
+
+        <!-- Total -->
+        <div class="receipt-section-label">Payment</div>
+        <div class="receipt-total-box">
+          <div>
+            <div class="lbl">Total Amount Paid</div>
+            <div class="amount">₹<%= booking.totalPrice ? booking.totalPrice.toLocaleString('en-IN') : '—' %></div>
+            <div class="pid">Payment ID: <%= booking.paymentId || '—' %></div>
+          </div>
+          <div class="status-pill">✓ Paid</div>
         </div>
-        <div class="detail-box">
-          <div class="d-label">Booking Ref</div>
-          <div class="d-val">#<%= booking._id.toString().slice(-8).toUpperCase() %></div>
+
+        <!-- Footer -->
+        <div class="receipt-footer">
+          <p>A confirmation email has been sent to your registered email address.</p>
+          <p>Questions? Contact us at <strong>support@wanderlust.com</strong></p>
+          <div class="brand">WANDERLUST</div>
         </div>
-      </div>
 
-      <!-- Amount -->
-      <div class="amount-row">
-        <div>
-          <div class="a-label">Total Paid</div>
-          <div class="a-pid">Payment ID: <%= booking.paymentId %></div>
-        </div>
-        <div class="a-val">₹<%= booking.totalPrice.toLocaleString('en-IN') %></div>
       </div>
-
-      <!-- Email notice -->
-      <div class="email-notice">
-        <i class="fa-solid fa-envelope-circle-check"></i>
-        <p>A detailed confirmation has been sent to <span><%= user ? user.email : 'your email' %></span>. Check your inbox (and spam folder).</p>
-      </div>
-
-      <!-- CTAs -->
-      <div class="cta-row">
-        <a href="/listings" class="btn-primary">
-          <i class="fa-solid fa-compass"></i> &nbsp;Explore More
-        </a>
-        <a href="/bookings" class="btn-outline">
-          <i class="fa-solid fa-calendar-check"></i> &nbsp;My Bookings
-        </a>
-      </div>
-
     </div>
   </div>
-
 </div>
 
-</body>
-</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+async function downloadReceipt() {
+  const btn = document.querySelector('.btn-download');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+  btn.disabled = true;
+
+  try {
+    const card = document.getElementById('receiptCard');
+    const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width / 2, canvas.height / 2] });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+    pdf.save('Wanderlust-Booking-Receipt.pdf');
+  } catch(e) {
+    alert('Could not generate PDF. Please try again.');
+  }
+
+  btn.innerHTML = '<i class="fa-solid fa-download"></i> Download Receipt';
+  btn.disabled = false;
+}
+</script>
