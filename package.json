@@ -8,13 +8,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@getbrevo/brevo": "^2.5.0",
+    "@getbrevo/brevo": "^2.0.0",
     "@mapbox/mapbox-sdk": "^0.16.2",
     "cloudinary": "^2.8.0",
     "connect-flash": "^0.1.1",
