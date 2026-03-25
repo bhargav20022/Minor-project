@@ -3,9 +3,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
 
 <style>
-/* ══════════════════════════════════════════════════
-   ROOT TOKENS
-══════════════════════════════════════════════════ */
 :root {
   --ink:          #1a1a2e;
   --cream:        #faf7f2;
@@ -21,66 +18,39 @@
 *, *::before, *::after { box-sizing: border-box; }
 body { background: #f5f1eb; }
 
-/* ══════════════════════════════════════════════════
-   HERO
-══════════════════════════════════════════════════ */
+/* ══ HERO ══ */
 .hero-search-section {
   background: linear-gradient(135deg,#0c0c20 0%,#1c1440 50%,#0c0c20 100%);
-  border-radius: 28px;
-  padding: 60px 48px 52px;
-  margin: 24px 0 0;
-  position: relative;
-  overflow: hidden;
+  border-radius: 28px; padding: 60px 48px 52px;
+  margin: 24px 0 0; position: relative; overflow: hidden;
 }
 .hero-search-section::before {
-  content:'';
-  position:absolute; inset:0;
+  content:''; position:absolute; inset:0;
   background:
     radial-gradient(ellipse 55% 65% at 12% 65%, rgba(201,120,58,.22) 0%, transparent 65%),
     radial-gradient(ellipse 40% 50% at 88% 18%, rgba(212,168,67,.14) 0%, transparent 65%),
     radial-gradient(ellipse 35% 45% at 55% 85%, rgba(80,60,160,.12) 0%, transparent 60%);
   pointer-events:none;
 }
-#heroCanvas {
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  pointer-events:none; z-index:0; opacity:.55;
-}
+#heroCanvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:.55; }
 .hero-content { position:relative; z-index:1; text-align:center; }
 .hero-eyebrow {
   display:inline-flex; align-items:center; gap:10px;
   font-size:10.5px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
   color:var(--gold); margin-bottom:20px;
 }
-.hero-eyebrow::before,.hero-eyebrow::after {
-  content:''; width:32px; height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold)); opacity:.6;
-}
+.hero-eyebrow::before,.hero-eyebrow::after { content:''; width:32px; height:1px; background:linear-gradient(90deg,transparent,var(--gold)); opacity:.6; }
 .hero-eyebrow::after { background:linear-gradient(90deg,var(--gold),transparent); }
-.hero-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(34px,5.5vw,58px); font-weight:600; color:#fff;
-  line-height:1.13; margin-bottom:14px; letter-spacing:-.5px;
-}
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(34px,5.5vw,58px); font-weight:600; color:#fff; line-height:1.13; margin-bottom:14px; letter-spacing:-.5px; }
 .hero-title em { font-style:italic; color:var(--gold); }
-.hero-subtitle {
-  font-family:'DM Sans',sans-serif; font-size:15px;
-  color:rgba(255,255,255,.42); margin-bottom:38px; font-weight:300;
-}
+.hero-subtitle { font-family:'DM Sans',sans-serif; font-size:15px; color:rgba(255,255,255,.42); margin-bottom:38px; font-weight:300; }
 .search-box { max-width:590px; margin:0 auto; position:relative; }
 .search-input-wrap {
-  display:flex; align-items:center;
-  background:rgba(255,255,255,.97); border-radius:60px;
-  padding:6px 6px 6px 22px;
-  box-shadow:0 10px 50px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.1);
-  gap:10px;
+  display:flex; align-items:center; background:rgba(255,255,255,.97); border-radius:60px;
+  padding:6px 6px 6px 22px; box-shadow:0 10px 50px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.1); gap:10px;
 }
 .search-input-wrap i { color:var(--accent); font-size:17px; flex-shrink:0; }
-#citySearchInput {
-  flex:1; border:none; outline:none;
-  font-family:'DM Sans',sans-serif; font-size:15.5px; color:var(--ink);
-  background:transparent; padding:11px 0;
-}
+#citySearchInput { flex:1; border:none; outline:none; font-family:'DM Sans',sans-serif; font-size:15.5px; color:var(--ink); background:transparent; padding:11px 0; }
 #citySearchInput::placeholder { color:#b0a8a0; }
 .search-btn {
   background:linear-gradient(135deg,var(--accent) 0%,#a85e28 100%);
@@ -92,10 +62,8 @@ body { background: #f5f1eb; }
 .search-btn:hover { transform:scale(1.04); box-shadow:0 6px 20px rgba(201,120,58,.55); }
 .autocomplete-dropdown {
   position:absolute; top:calc(100% + 10px); left:0; right:0;
-  background:white; border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,.18); overflow:hidden;
-  display:none; z-index:999; border:1px solid var(--border);
-  animation:dropDown .2s ease;
+  background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,.18);
+  overflow:hidden; display:none; z-index:999; border:1px solid var(--border); animation:dropDown .2s ease;
 }
 @keyframes dropDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
 .autocomplete-dropdown.open { display:block; }
@@ -116,143 +84,158 @@ body { background: #f5f1eb; }
 }
 .city-pill:hover { background:rgba(201,120,58,.28); border-color:var(--accent); color:white; transform:translateY(-2px); box-shadow:0 4px 14px rgba(201,120,58,.3); }
 
-/* ══════════════════════════════════════════════════
-   🎰 DESTINATION ROULETTE
-══════════════════════════════════════════════════ */
+/* ══ ROULETTE ══ */
 .roulette-section {
   margin: 28px 0 36px;
   background: linear-gradient(135deg,#1a1a2e 0%,#2d2250 100%);
-  border-radius: 28px;
-  padding: 40px 44px 44px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 48px;
+  border-radius: 28px; padding: 40px 44px 44px;
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: 48px;
 }
 .roulette-section::before {
   content:''; position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 50% 80% at 80% 50%, rgba(212,168,67,.12) 0%,transparent 65%),
-    radial-gradient(ellipse 30% 40% at 10% 20%, rgba(201,120,58,.1) 0%,transparent 60%);
+  background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(212,168,67,.12) 0%,transparent 65%), radial-gradient(ellipse 30% 40% at 10% 20%, rgba(201,120,58,.1) 0%,transparent 60%);
   pointer-events:none;
 }
-.roulette-section::after {
-  content:''; position:absolute; inset:0;
-  background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
-  background-size:22px 22px; pointer-events:none;
-}
+.roulette-section::after { content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px); background-size:22px 22px; pointer-events:none; }
 .roulette-left { flex:1; position:relative; z-index:1; }
-.roulette-eyebrow {
-  display:inline-flex; align-items:center; gap:8px;
-  font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
-  color:var(--gold); margin-bottom:14px;
-  background:rgba(212,168,67,.12); padding:5px 14px; border-radius:20px;
-  border:1px solid rgba(212,168,67,.25);
-}
-.roulette-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(26px,3.5vw,38px); font-weight:600; color:#fff;
-  line-height:1.18; margin-bottom:12px;
-}
+.roulette-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:14px; background:rgba(212,168,67,.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(212,168,67,.25); }
+.roulette-title { font-family:'Cormorant Garamond',serif; font-size:clamp(26px,3.5vw,38px); font-weight:600; color:#fff; line-height:1.18; margin-bottom:12px; }
 .roulette-title em { font-style:italic; color:var(--gold); }
-.roulette-desc {
-  font-family:'DM Sans',sans-serif; font-size:14px;
-  color:rgba(255,255,255,.5); font-weight:300;
-  margin-bottom:28px; line-height:1.6; max-width:380px;
-}
+.roulette-desc { font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(255,255,255,.5); font-weight:300; margin-bottom:28px; line-height:1.6; max-width:380px; }
 .slot-strip { display:flex; gap:10px; margin-bottom:22px; }
-.slot-reel {
-  width:48px; height:48px;
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
-  border-radius:12px; overflow:hidden;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--gold);
-  transition:color .1s;
-}
-.spin-btn {
-  display:inline-flex; align-items:center; gap:10px;
-  background:linear-gradient(135deg,var(--gold),#b8882e);
-  color:#1a1a2e; border:none; border-radius:50px; padding:16px 34px;
-  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700;
-  cursor:pointer; transition:all .25s;
-  box-shadow:0 6px 28px rgba(212,168,67,.4);
-  position:relative; overflow:hidden;
-}
-.spin-btn::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);
-  border-radius:inherit; opacity:0; transition:opacity .2s;
-}
+.slot-reel { width:48px; height:48px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--gold); transition:color .1s; }
+.spin-btn { display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg,var(--gold),#b8882e); color:#1a1a2e; border:none; border-radius:50px; padding:16px 34px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:all .25s; box-shadow:0 6px 28px rgba(212,168,67,.4); position:relative; overflow:hidden; }
+.spin-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.25),transparent); border-radius:inherit; opacity:0; transition:opacity .2s; }
 .spin-btn:hover::after { opacity:1; }
 .spin-btn:hover { transform:scale(1.05) translateY(-2px); box-shadow:0 10px 36px rgba(212,168,67,.55); }
 .spin-btn:disabled { opacity:.7; transform:none; cursor:default; }
 .spin-icon { font-size:18px; display:inline-block; }
-.spin-btn.spinning .spin-icon { animation:spinIcon .5s linear infinite; }
 @keyframes spinIcon { to { transform:rotate(360deg); } }
 .roulette-right { flex-shrink:0; width:310px; position:relative; z-index:1; }
-.rrc-placeholder {
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  height:300px; background:rgba(255,255,255,.05);
-  border-radius:22px; border:2px dashed rgba(255,255,255,.14);
-  color:rgba(255,255,255,.3); font-family:'DM Sans',sans-serif;
-  transition:all .3s;
-}
+.rrc-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; height:300px; background:rgba(255,255,255,.05); border-radius:22px; border:2px dashed rgba(255,255,255,.14); color:rgba(255,255,255,.3); font-family:'DM Sans',sans-serif; transition:all .3s; }
 .rrc-placeholder i { font-size:40px; margin-bottom:14px; opacity:.5; }
 .rrc-placeholder p { font-size:13px; font-weight:300; text-align:center; line-height:1.5; }
-.roulette-result-card {
-  background:white; border-radius:22px; overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.45);
-  transform:scale(.9) rotateY(15deg);
-  opacity:0; transition:all .55s cubic-bezier(.34,1.56,.64,1);
-  pointer-events:none;
-}
-.roulette-result-card.revealed {
-  transform:scale(1) rotateY(0deg);
-  opacity:1; pointer-events:auto;
-}
+.roulette-result-card { background:white; border-radius:22px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.45); transform:scale(.9) rotateY(15deg); opacity:0; transition:all .55s cubic-bezier(.34,1.56,.64,1); pointer-events:none; }
+.roulette-result-card.revealed { transform:scale(1) rotateY(0deg); opacity:1; pointer-events:auto; }
 .rrc-img-wrap { position:relative; }
 .rrc-img { width:100%; height:185px; object-fit:cover; display:block; }
-.rrc-overlay {
-  position:absolute; top:0; left:0; right:0; height:185px;
-  background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.5) 100%);
-}
-.rrc-badge {
-  position:absolute; bottom:12px; left:12px;
-  background:rgba(212,168,67,.92); color:#1a1a2e;
-  font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700;
-  padding:4px 12px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
-}
+.rrc-overlay { position:absolute; top:0; left:0; right:0; height:185px; background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.5) 100%); }
+.rrc-badge { position:absolute; bottom:12px; left:12px; background:rgba(212,168,67,.92); color:#1a1a2e; font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase; }
 .rrc-body { padding:18px 20px 20px; }
 .rrc-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--ink); margin-bottom:6px; line-height:1.2; }
 .rrc-location { font-size:12px; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:4px; }
 .rrc-footer { display:flex; align-items:center; justify-content:space-between; }
 .rrc-price { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--accent); }
 .rrc-night { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:400; color:var(--muted); }
-.rrc-go-btn {
-  background:var(--ink); color:white; border:none; border-radius:30px;
-  padding:9px 20px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600;
-  cursor:pointer; text-decoration:none; display:inline-block; transition:all .2s;
-}
+.rrc-go-btn { background:var(--ink); color:white; border:none; border-radius:30px; padding:9px 20px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block; transition:all .2s; }
 .rrc-go-btn:hover { background:var(--accent); color:white; transform:translateY(-1px); }
 
-/* ══════════════════════════════════════════════════
-   🌈 MOOD DISCOVERY
-══════════════════════════════════════════════════ */
-.mood-section { margin: 0 0 36px; }
+/* ══ CAB SECTION ══ */
+.cab-section {
+  margin: 0 0 36px;
+  background: linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);
+  border-radius: 28px; padding: 44px 48px;
+  position: relative; overflow: hidden;
+}
+.cab-section::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 40% 60% at 90% 50%, rgba(255,193,7,.1) 0%,transparent 65%), radial-gradient(ellipse 30% 40% at 10% 30%, rgba(0,188,212,.08) 0%,transparent 60%);
+  pointer-events:none;
+}
+.cab-section::after { content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px); background-size:24px 24px; pointer-events:none; }
+.cab-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; position:relative; z-index:1; }
+.cab-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#ffc107; margin-bottom:12px; background:rgba(255,193,7,.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(255,193,7,.25); }
+.cab-title { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,3vw,34px); font-weight:600; color:#fff; line-height:1.2; margin:0 0 8px; }
+.cab-title em { font-style:italic; color:#ffc107; }
+.cab-subtitle { font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(255,255,255,.45); font-weight:300; margin:0; }
+.cab-trust-badges { display:flex; gap:10px; flex-wrap:wrap; }
+.cab-badge { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:30px; padding:7px 14px; font-family:'DM Sans',sans-serif; font-size:11.5px; font-weight:500; color:rgba(255,255,255,.7); }
+.cab-badge i { font-size:12px; color:#ffc107; }
+.cab-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; position:relative; z-index:1; }
+@media(max-width:992px) { .cab-cards { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:576px)  { .cab-cards { grid-template-columns:1fr; } }
+.cab-card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:20px; padding:24px 20px 22px; cursor:pointer; transition:all .3s ease; position:relative; overflow:hidden; text-decoration:none; display:block; }
+.cab-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity .3s; border-radius:inherit; }
+.cab-card-1::before { background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.1)); }
+.cab-card-2::before { background:linear-gradient(135deg,rgba(0,188,212,.15),rgba(0,150,136,.1)); }
+.cab-card-3::before { background:linear-gradient(135deg,rgba(156,39,176,.15),rgba(103,58,183,.1)); }
+.cab-card-4::before { background:linear-gradient(135deg,rgba(76,175,80,.15),rgba(139,195,74,.1)); }
+.cab-card:hover { transform:translateY(-6px); border-color:rgba(255,255,255,.28); box-shadow:0 16px 40px rgba(0,0,0,.35); }
+.cab-card:hover::before { opacity:1; }
+.cab-card-icon { width:54px; height:54px; border-radius:14px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; font-size:24px; }
+.cab-card-1 .cab-card-icon { background:rgba(255,193,7,.2); }
+.cab-card-2 .cab-card-icon { background:rgba(0,188,212,.2); }
+.cab-card-3 .cab-card-icon { background:rgba(156,39,176,.2); }
+.cab-card-4 .cab-card-icon { background:rgba(76,175,80,.2); }
+.cab-card-title { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; color:#fff; margin-bottom:6px; }
+.cab-card-desc { font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,.45); line-height:1.5; margin-bottom:14px; }
+.cab-card-price { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:#ffc107; }
+.cab-card-price span { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:400; color:rgba(255,255,255,.4); }
+.cab-card-arrow { position:absolute; top:18px; right:18px; width:28px; height:28px; background:rgba(255,255,255,.08); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:rgba(255,255,255,.4); transition:all .2s; }
+.cab-card:hover .cab-card-arrow { background:rgba(255,193,7,.25); color:#ffc107; transform:translateX(2px); }
+
+/* ══ CAB MODAL ══ */
+.cab-overlay { position:fixed; inset:0; background:rgba(10,10,22,.72); backdrop-filter:blur(6px); z-index:1200; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.cab-overlay.open { opacity:1; pointer-events:all; }
+.cab-modal-box { background:var(--white); border-radius:28px; width:100%; max-width:560px; max-height:92vh; overflow-y:auto; box-shadow:0 32px 80px rgba(0,0,0,.45); transform:translateY(30px) scale(.97); transition:transform .35s cubic-bezier(.34,1.56,.64,1); scrollbar-width:none; }
+.cab-modal-box::-webkit-scrollbar { display:none; }
+.cab-overlay.open .cab-modal-box { transform:translateY(0) scale(1); }
+.cab-modal-hdr { background:linear-gradient(135deg,#1a1a2e 0%,#2d2250 100%); padding:28px 28px 24px; border-radius:28px 28px 0 0; position:relative; overflow:hidden; }
+.cab-modal-hdr::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 90% 20%,rgba(212,168,67,.15) 0%,transparent 65%); pointer-events:none; }
+.cab-modal-x { position:absolute; top:18px; right:20px; width:34px; height:34px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:50%; color:rgba(255,255,255,.7); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; z-index:1; }
+.cab-modal-x:hover { background:rgba(255,255,255,.18); color:white; transform:rotate(90deg); }
+.cab-modal-ey { font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; font-family:'DM Sans',sans-serif; position:relative; z-index:1; }
+.cab-modal-ttl { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:white; margin-bottom:6px; line-height:1.2; position:relative; z-index:1; }
+.cab-modal-sub2 { font-family:'DM Sans',sans-serif; font-size:13px; color:rgba(255,255,255,.45); font-weight:300; position:relative; z-index:1; }
+.cab-car-types { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.cab-car-type { border:2px solid var(--border); background:var(--cream); border-radius:14px; padding:14px 10px 12px; cursor:pointer; text-align:center; transition:all .22s; }
+.cab-car-type:hover { border-color:var(--accent); background:var(--accent-light); }
+.cab-car-type.selected { border-color:var(--accent); background:var(--accent-light); box-shadow:0 0 0 3px rgba(201,120,58,.15); }
+.cab-car-emoji { font-size:26px; display:block; margin-bottom:6px; }
+.cab-car-name  { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700; color:var(--ink); }
+.cab-car-seats { font-family:'DM Sans',sans-serif; font-size:11px; color:var(--muted); margin-top:2px; }
+.cab-modal-bdy { padding:24px 28px 28px; }
+.cab-field { margin-bottom:16px; }
+.cab-lbl { display:block; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; font-family:'DM Sans',sans-serif; }
+.cab-inp, .cab-sel { width:100%; padding:13px 16px; border:2px solid var(--border); border-radius:11px; font-family:'DM Sans',sans-serif; font-size:.93rem; color:var(--ink); background:var(--cream); outline:none; transition:border-color .2s,background .2s,box-shadow .2s; appearance:none; }
+.cab-inp:focus, .cab-sel:focus { border-color:var(--accent); background:white; box-shadow:0 0 0 3px rgba(201,120,58,.1); }
+.cab-inp::placeholder { color:rgba(107,107,123,.5); }
+.cab-swap-wrap { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.cab-swap-line { flex:1; height:1px; background:var(--border); }
+.cab-swap-btn { width:32px; height:32px; background:white; border:2px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; color:var(--accent); transition:all .2s; box-shadow:0 2px 8px rgba(0,0,0,.1); }
+.cab-swap-btn:hover { border-color:var(--accent); transform:rotate(180deg); }
+.cab-row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.cab-fare-est { display:none; background:linear-gradient(135deg,#1a1a2e,#2d2250); border-radius:14px; padding:16px 20px; margin-bottom:20px; animation:fadeUp .3s ease; }
+.cab-fare-est.show { display:flex; align-items:center; justify-content:space-between; }
+.cab-fare-lbl { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:4px; }
+.cab-fare-amt { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--gold); }
+.cab-fare-note { font-family:'DM Sans',sans-serif; font-size:11px; color:rgba(255,255,255,.35); }
+.cab-fare-badge { background:rgba(212,168,67,.15); border:1px solid rgba(212,168,67,.3); border-radius:8px; padding:6px 12px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; color:var(--gold); text-align:center; }
+.cab-submit-btn { width:100%; padding:16px; background:linear-gradient(135deg,var(--accent),#a85e28); color:white; border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:all .25s; box-shadow:0 4px 20px rgba(201,120,58,.35); }
+.cab-submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,120,58,.45); }
+.cab-success-box { display:none; padding:40px 28px; text-align:center; animation:fadeUp .4s ease; }
+.cab-success-box.show { display:block; }
+.cab-success-ico { width:80px; height:80px; background:rgba(45,122,79,.1); border:2px solid #2d7a4f; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:32px; animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes popIn { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
+.cab-success-ttl { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--ink); margin-bottom:8px; }
+.cab-success-sub { font-family:'DM Sans',sans-serif; font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+.cab-success-dets { background:var(--cream); border:1px solid var(--border); border-radius:16px; padding:18px 20px; text-align:left; margin-bottom:20px; }
+.cab-srow { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-family:'DM Sans',sans-serif; font-size:13px; }
+.cab-srow:last-child { border-bottom:none; }
+.cab-srow span:first-child { color:var(--muted); }
+.cab-srow span:last-child { font-weight:600; color:var(--ink); }
+.cab-done-btn { background:var(--ink); color:white; border:none; border-radius:12px; padding:13px 32px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+.cab-done-btn:hover { background:var(--accent); transform:translateY(-1px); }
+
+/* ══ MOOD ══ */
+.mood-section { margin:0 0 36px; }
 .mood-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
 .mood-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:12px; margin:0; }
 .mood-title::after { content:''; width:48px; height:2px; background:linear-gradient(90deg,var(--accent),transparent); border-radius:2px; display:inline-block; }
 .mood-subtitle { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--muted); }
 .mood-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
 @media(max-width:768px) { .mood-cards { grid-template-columns:repeat(2,1fr); } }
-.mood-card {
-  border-radius:20px; padding:24px 20px 22px;
-  cursor:pointer; transition:all .3s cubic-bezier(.25,.8,.25,1);
-  position:relative; overflow:hidden;
-  border:2px solid transparent;
-  min-height:130px; display:flex; flex-direction:column; justify-content:space-between;
-}
+.mood-card { border-radius:20px; padding:24px 20px 22px; cursor:pointer; transition:all .3s cubic-bezier(.25,.8,.25,1); position:relative; overflow:hidden; border:2px solid transparent; min-height:130px; display:flex; flex-direction:column; justify-content:space-between; }
 .mood-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(0,0,0,.14); }
 .mood-card.active { border-color:rgba(255,255,255,.6); box-shadow:0 0 0 4px rgba(255,255,255,.7),0 12px 36px rgba(0,0,0,.18); transform:translateY(-5px) scale(1.02); }
 .mood-card-1 { background:linear-gradient(135deg,#ff6b6b,#ee5a24); color:white; }
@@ -262,39 +245,22 @@ body { background: #f5f1eb; }
 .mood-emoji { font-size:32px; margin-bottom:10px; display:block; }
 .mood-name { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; line-height:1.1; margin-bottom:4px; }
 .mood-desc { font-family:'DM Sans',sans-serif; font-size:11px; opacity:.82; font-weight:400; line-height:1.4; }
-.mood-filter-bar {
-  display:none; align-items:center; justify-content:space-between;
-  background:white; border-radius:16px; padding:14px 20px; margin-top:16px;
-  box-shadow:0 3px 16px rgba(26,26,46,.08); border:1px solid var(--border);
-  animation:fadeUp .3s ease;
-}
+.mood-filter-bar { display:none; align-items:center; justify-content:space-between; background:white; border-radius:16px; padding:14px 20px; margin-top:16px; box-shadow:0 3px 16px rgba(26,26,46,.08); border:1px solid var(--border); animation:fadeUp .3s ease; }
 .mood-filter-bar.show { display:flex; }
 .mood-filter-info { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--ink); }
 .mood-filter-info strong { color:var(--accent); }
-.mood-clear-btn {
-  background:none; border:1px solid var(--border); border-radius:30px;
-  padding:6px 14px; font-size:12px; font-weight:600; color:var(--muted);
-  cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px;
-}
+.mood-clear-btn { background:none; border:1px solid var(--border); border-radius:30px; padding:6px 14px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px; }
 .mood-clear-btn:hover { border-color:var(--accent); color:var(--accent); }
 
-/* ══════════════════════════════════════════════════
-   STATS STRIP
-══════════════════════════════════════════════════ */
-.stats-strip {
-  display:flex; align-items:center; justify-content:center;
-  margin:0 0 36px; background:white; border-radius:20px;
-  box-shadow:0 2px 20px rgba(26,26,46,.07); overflow:hidden; border:1px solid var(--border);
-}
+/* ══ STATS ══ */
+.stats-strip { display:flex; align-items:center; justify-content:center; margin:0 0 36px; background:white; border-radius:20px; box-shadow:0 2px 20px rgba(26,26,46,.07); overflow:hidden; border:1px solid var(--border); }
 .stat-item { flex:1; text-align:center; padding:22px 16px; position:relative; }
 .stat-item+.stat-item::before { content:''; position:absolute; left:0; top:20%; bottom:20%; width:1px; background:var(--border); }
 .stat-num { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:600; color:var(--ink); line-height:1; margin-bottom:4px; }
 .stat-num span { color:var(--accent); }
 .stat-label { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
 
-/* ══════════════════════════════════════════════════
-   CITY RESULTS
-══════════════════════════════════════════════════ */
+/* ══ CITY RESULTS ══ */
 #cityResultsSection { display:none; margin-bottom:36px; animation:fadeUp .4s ease; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 .city-results-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
@@ -317,9 +283,7 @@ body { background: #f5f1eb; }
 .no-city-results { text-align:center; padding:48px 24px; color:var(--muted); background:var(--sand); border-radius:18px; }
 .no-city-results i { font-size:36px; margin-bottom:12px; display:block; opacity:.4; }
 
-/* ══════════════════════════════════════════════════
-   FILTERS
-══════════════════════════════════════════════════ */
+/* ══ FILTERS ══ */
 .filters-wrapper { background:white; border-radius:20px; padding:10px 20px; margin-bottom:10px; box-shadow:0 2px 16px rgba(26,26,46,.06); border:1px solid var(--border); display:flex; align-items:center; overflow-x:auto; scrollbar-width:none; }
 .filters-wrapper::-webkit-scrollbar { display:none; }
 #filters { display:flex; flex-wrap:nowrap; align-items:center; flex:1; }
@@ -333,9 +297,7 @@ body { background: #f5f1eb; }
 .tax-toggle label { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; color:var(--ink); cursor:pointer; }
 .tax-info { display:none; }
 
-/* ══════════════════════════════════════════════════
-   SECTION HEADER
-══════════════════════════════════════════════════ */
+/* ══ SECTION HEADER ══ */
 .section-header { display:flex; align-items:center; justify-content:space-between; margin:28px 0 20px; flex-wrap:wrap; gap:12px; }
 .section-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:12px; margin:0; }
 .section-title::after { content:''; width:48px; height:2px; background:linear-gradient(90deg,var(--accent),transparent); border-radius:2px; display:inline-block; }
@@ -345,9 +307,7 @@ body { background: #f5f1eb; }
 .view-btn.active,.view-btn:hover { background:var(--ink); color:white; border-color:var(--ink); }
 .sort-select { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--ink); border:1px solid var(--border); border-radius:10px; padding:8px 28px 8px 14px; background:white; cursor:pointer; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7a8a'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; }
 
-/* ══════════════════════════════════════════════════
-   LISTING CARDS
-══════════════════════════════════════════════════ */
+/* ══ LISTING CARDS ══ */
 .listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:48px; }
 @media(max-width:992px) { .listings-grid { grid-template-columns:repeat(2,1fr); } }
 @media(max-width:600px)  { .listings-grid { grid-template-columns:1fr; } }
@@ -382,9 +342,7 @@ body { background: #f5f1eb; }
   #allListingsGrid.list-view .listing-img-wrap { width:100%; height:180px; }
 }
 
-/* ══════════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════════ */
+/* ══ RESPONSIVE ══ */
 @media(max-width:768px) {
   .hero-search-section { padding:40px 22px 44px; }
   .roulette-section { flex-direction:column; padding:32px 22px 36px; gap:30px; }
@@ -392,6 +350,10 @@ body { background: #f5f1eb; }
   .stats-strip { flex-wrap:wrap; }
   .stat-item { flex:1 1 45%; }
   .stat-item+.stat-item::before { display:none; }
+  .cab-section { padding:32px 22px 36px; }
+  .cab-modal-bdy { padding:20px 18px 24px; }
+  .cab-modal-hdr { padding:22px 20px 20px; }
+  .cab-row2 { grid-template-columns:1fr; }
 }
 @media(max-width:480px) {
   .search-input-wrap { padding:5px 5px 5px 14px; }
@@ -399,9 +361,7 @@ body { background: #f5f1eb; }
 }
 </style>
 
-<!-- ══════════════════════════════════════════════════
-     HERO
-══════════════════════════════════════════════════ -->
+<!-- ══ HERO ══ -->
 <div class="hero-search-section">
   <canvas id="heroCanvas"></canvas>
   <div class="hero-content">
@@ -437,17 +397,12 @@ body { background: #f5f1eb; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     🎰 DESTINATION ROULETTE — UNIQUE STAR FEATURE
-══════════════════════════════════════════════════ -->
+<!-- ══ ROULETTE ══ -->
 <div class="roulette-section">
   <div class="roulette-left">
     <div class="roulette-eyebrow">🎲 Feeling Lucky?</div>
     <h2 class="roulette-title">Spin the <em>Destination</em><br/>Roulette</h2>
-    <p class="roulette-desc">
-      Can't decide where to go? Let fate pick your next escape.
-      Hit spin — you might just discover your dream stay hiding in plain sight.
-    </p>
+    <p class="roulette-desc">Can't decide where to go? Let fate pick your next escape. Hit spin — you might just discover your dream stay hiding in plain sight.</p>
     <div class="slot-strip">
       <div class="slot-reel" id="reel1">?</div>
       <div class="slot-reel" id="reel2">?</div>
@@ -484,9 +439,53 @@ body { background: #f5f1eb; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     STATS STRIP
-══════════════════════════════════════════════════ -->
+<!-- ══ CAB SECTION ══ -->
+<div class="cab-section">
+  <div class="cab-top">
+    <div>
+      <div class="cab-eyebrow">🚕 Cab Facilities</div>
+      <h2 class="cab-title">Travel in <em>comfort</em> &amp; style</h2>
+      <p class="cab-subtitle">Pre-book your ride — airport, outstation &amp; local transfers</p>
+    </div>
+    <div class="cab-trust-badges">
+      <div class="cab-badge"><i class="fa-solid fa-shield-halved"></i> Safe &amp; Verified</div>
+      <div class="cab-badge"><i class="fa-solid fa-clock"></i> 24/7 Available</div>
+      <div class="cab-badge"><i class="fa-solid fa-indian-rupee-sign"></i> Fixed Fares</div>
+    </div>
+  </div>
+  <div class="cab-cards">
+    <div class="cab-card cab-card-1" onclick="openCabModal('Airport Transfer','🛫',8)">
+      <div class="cab-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="cab-card-icon">🛫</div>
+      <div class="cab-card-title">Airport Transfer</div>
+      <div class="cab-card-desc">Hassle-free airport pickup &amp; drop. AC sedan, on-time guaranteed.</div>
+      <div class="cab-card-price">₹799 <span>onwards</span></div>
+    </div>
+    <div class="cab-card cab-card-2" onclick="openCabModal('City Tour','🏙️',12)">
+      <div class="cab-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="cab-card-icon">🏙️</div>
+      <div class="cab-card-title">City Tour</div>
+      <div class="cab-card-desc">Full-day city exploration with a knowledgeable local driver.</div>
+      <div class="cab-card-price">₹1,299 <span>/ day</span></div>
+    </div>
+    <div class="cab-card cab-card-3" onclick="openCabModal('Outstation Trip','🗺️',18)">
+      <div class="cab-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="cab-card-icon">🗺️</div>
+      <div class="cab-card-title">Outstation Trip</div>
+      <div class="cab-card-desc">Long distance rides to hills, beaches or pilgrimage spots.</div>
+      <div class="cab-card-price">₹2,499 <span>onwards</span></div>
+    </div>
+    <div class="cab-card cab-card-4" onclick="openCabModal('Local Hourly','⏱️',8)">
+      <div class="cab-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="cab-card-icon">⏱️</div>
+      <div class="cab-card-title">Local Hourly</div>
+      <div class="cab-card-desc">Pay per hour for local errands, shopping or short transfers.</div>
+      <div class="cab-card-price">₹399 <span>/ hour</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STATS ══ -->
 <div class="stats-strip" style="margin-top:28px">
   <div class="stat-item"><div class="stat-num" id="statTotal"><span>—</span></div><div class="stat-label">Total Listings</div></div>
   <div class="stat-item"><div class="stat-num" id="statCities"><span>—</span></div><div class="stat-label">Cities Covered</div></div>
@@ -494,44 +493,26 @@ body { background: #f5f1eb; }
   <div class="stat-item"><div class="stat-num">4.8<span>★</span></div><div class="stat-label">Avg. Rating</div></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     CITY RESULTS
-══════════════════════════════════════════════════ -->
+<!-- ══ CITY RESULTS ══ -->
 <div id="cityResultsSection">
   <div class="city-results-header">
     <h3>Places in <span id="cityResultsTitle"></span></h3>
-    <button class="clear-search-btn" onclick="clearSearch()">
-      <i class="fa-solid fa-xmark"></i> Clear search
-    </button>
+    <button class="clear-search-btn" onclick="clearSearch()"><i class="fa-solid fa-xmark"></i> Clear search</button>
   </div>
   <div id="cityCardsContainer"></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     🌈 MOOD DISCOVERY
-══════════════════════════════════════════════════ -->
+<!-- ══ MOOD ══ -->
 <div class="mood-section">
   <div class="mood-header">
     <h2 class="mood-title">How do you want to <em style="font-style:italic;color:var(--accent)">feel?</em></h2>
     <span class="mood-subtitle">Pick a vibe — we'll match the perfect stays</span>
   </div>
   <div class="mood-cards">
-    <div class="mood-card mood-card-1" onclick="setMood(this,'adventure')">
-      <span class="mood-emoji">🧗</span>
-      <div><div class="mood-name">Adventure</div><div class="mood-desc">Mountains, treks &amp; the wild unknown</div></div>
-    </div>
-    <div class="mood-card mood-card-2" onclick="setMood(this,'romance')">
-      <span class="mood-emoji">🌹</span>
-      <div><div class="mood-name">Romance</div><div class="mood-desc">Sunsets, sea views &amp; intimate escapes</div></div>
-    </div>
-    <div class="mood-card mood-card-3" onclick="setMood(this,'peace')">
-      <span class="mood-emoji">🌿</span>
-      <div><div class="mood-name">Peace</div><div class="mood-desc">Nature retreats &amp; slow mornings</div></div>
-    </div>
-    <div class="mood-card mood-card-4" onclick="setMood(this,'culture')">
-      <span class="mood-emoji">🏛️</span>
-      <div><div class="mood-name">Culture</div><div class="mood-desc">Heritage, art &amp; iconic cities</div></div>
-    </div>
+    <div class="mood-card mood-card-1" onclick="setMood(this,'adventure')"><span class="mood-emoji">🧗</span><div><div class="mood-name">Adventure</div><div class="mood-desc">Mountains, treks &amp; the wild unknown</div></div></div>
+    <div class="mood-card mood-card-2" onclick="setMood(this,'romance')"><span class="mood-emoji">🌹</span><div><div class="mood-name">Romance</div><div class="mood-desc">Sunsets, sea views &amp; intimate escapes</div></div></div>
+    <div class="mood-card mood-card-3" onclick="setMood(this,'peace')"><span class="mood-emoji">🌿</span><div><div class="mood-name">Peace</div><div class="mood-desc">Nature retreats &amp; slow mornings</div></div></div>
+    <div class="mood-card mood-card-4" onclick="setMood(this,'culture')"><span class="mood-emoji">🏛️</span><div><div class="mood-name">Culture</div><div class="mood-desc">Heritage, art &amp; iconic cities</div></div></div>
   </div>
   <div class="mood-filter-bar" id="moodFilterBar">
     <div class="mood-filter-info">Showing stays for <strong id="moodFilterLabel"></strong> — <span id="moodFilterCount"></span> places found</div>
@@ -539,9 +520,7 @@ body { background: #f5f1eb; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     FILTERS
-══════════════════════════════════════════════════ -->
+<!-- ══ FILTERS ══ -->
 <div class="filters-wrapper">
   <div id="filters">
     <div class="filter active" data-filter="all"><i class="fa-solid fa-border-all"></i><p>All</p></div>
@@ -565,9 +544,7 @@ body { background: #f5f1eb; }
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     ALL LISTINGS
-══════════════════════════════════════════════════ -->
+<!-- ══ ALL LISTINGS ══ -->
 <div class="section-header">
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
     <h2 class="section-title">All Listings</h2>
@@ -623,21 +600,99 @@ body { background: #f5f1eb; }
   <% } %>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════════════ -->
+<!-- ══ CAB MODAL ══ -->
+<div class="cab-overlay" id="cabOverlay" onclick="closeCabOnOverlay(event)">
+  <div class="cab-modal-box" id="cabModalBox">
+    <div class="cab-modal-hdr">
+      <button class="cab-modal-x" onclick="closeCabModal()">✕</button>
+      <div class="cab-modal-ey" id="cabModalEy">🚗 Wanderlust Cabs</div>
+      <div class="cab-modal-ttl" id="cabModalTtl">Book Your Ride</div>
+      <div class="cab-modal-sub2" id="cabModalSub">Comfortable cabs for every journey</div>
+    </div>
+    <div class="cab-modal-bdy" id="cabFormBody">
+      <div class="cab-field">
+        <div class="cab-lbl">Choose Car Type</div>
+        <div class="cab-car-types">
+          <div class="cab-car-type selected" onclick="selectCar(this,'Micro',8)" data-car="Micro">
+            <span class="cab-car-emoji">🚗</span>
+            <div class="cab-car-name">Micro</div>
+            <div class="cab-car-seats">2 seats · ₹8/km</div>
+          </div>
+          <div class="cab-car-type" onclick="selectCar(this,'Sedan',12)" data-car="Sedan">
+            <span class="cab-car-emoji">🚙</span>
+            <div class="cab-car-name">Sedan</div>
+            <div class="cab-car-seats">4 seats · ₹12/km</div>
+          </div>
+          <div class="cab-car-type" onclick="selectCar(this,'SUV',18)" data-car="SUV">
+            <span class="cab-car-emoji">🚐</span>
+            <div class="cab-car-name">SUV</div>
+            <div class="cab-car-seats">6 seats · ₹18/km</div>
+          </div>
+        </div>
+      </div>
+      <div class="cab-field">
+        <div class="cab-lbl">Pickup Location</div>
+        <input type="text" class="cab-inp" id="cabPickup" placeholder="Enter pickup address…"/>
+      </div>
+      <div class="cab-swap-wrap">
+        <div class="cab-swap-line"></div>
+        <button class="cab-swap-btn" onclick="swapLocations()" title="Swap">⇅</button>
+        <div class="cab-swap-line"></div>
+      </div>
+      <div class="cab-field">
+        <div class="cab-lbl">Drop Location</div>
+        <input type="text" class="cab-inp" id="cabDrop" placeholder="Enter drop address…"/>
+      </div>
+      <div class="cab-row2">
+        <div class="cab-field">
+          <div class="cab-lbl">Date</div>
+          <input type="date" class="cab-inp" id="cabDate" onchange="updateFare()"/>
+        </div>
+        <div class="cab-field">
+          <div class="cab-lbl">Time</div>
+          <input type="time" class="cab-inp" id="cabTime" onchange="updateFare()"/>
+        </div>
+      </div>
+      <div class="cab-field">
+        <div class="cab-lbl">Passengers</div>
+        <select class="cab-sel" id="cabPassengers">
+          <option value="1">1 Passenger</option>
+          <option value="2">2 Passengers</option>
+          <option value="3">3 Passengers</option>
+          <option value="4">4 Passengers</option>
+          <option value="5">5 Passengers</option>
+          <option value="6">6 Passengers</option>
+        </select>
+      </div>
+      <div class="cab-fare-est" id="cabFareEst">
+        <div>
+          <div class="cab-fare-lbl">Estimated Fare</div>
+          <div class="cab-fare-amt" id="cabFareAmt">₹—</div>
+          <div class="cab-fare-note">Final fare may vary · Toll extra</div>
+        </div>
+        <div class="cab-fare-badge"><span id="cabCarLabel">Micro</span><br/><span style="font-size:10px;opacity:.7">Selected</span></div>
+      </div>
+      <button class="cab-submit-btn" onclick="submitCabBooking()">
+        <i class="fa-solid fa-car"></i> Confirm Booking
+      </button>
+    </div>
+    <div class="cab-success-box" id="cabSuccessBox">
+      <div class="cab-success-ico">✓</div>
+      <div class="cab-success-ttl">Ride Booked! 🎉</div>
+      <div class="cab-success-sub">Your cab has been confirmed.<br/>Driver details will be shared shortly.</div>
+      <div class="cab-success-dets" id="cabSuccessDets"></div>
+      <button class="cab-done-btn" onclick="closeCabModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCRIPTS ══ -->
 <script>
-/* ── Server data (unchanged) ── */
 const ALL_LISTINGS = <%- JSON.stringify(allListings.map(l => ({
-  _id: l._id,
-  title: l.title,
-  location: l.location,
-  country: l.country,
-  price: l.price,
-  image: l.image
+  _id: l._id, title: l.title, location: l.location,
+  country: l.country, price: l.price, image: l.image
 }))) %>;
 
-/* ── Stats ── */
 (function(){
   const cities    = new Set(ALL_LISTINGS.map(l=>(l.location||'').trim()).filter(Boolean));
   const countries = new Set(ALL_LISTINGS.map(l=>(l.country||'').trim()).filter(Boolean));
@@ -645,307 +700,217 @@ const ALL_LISTINGS = <%- JSON.stringify(allListings.map(l => ({
   document.getElementById('statCities').innerHTML    = `<span>${cities.size}</span>`;
   document.getElementById('statCountries').innerHTML = `<span>${countries.size}</span>`;
   document.getElementById('listingCount').textContent = `${ALL_LISTINGS.length} places`;
+  document.getElementById('cabDate').min = new Date().toISOString().split('T')[0];
 })();
 
-/* ═══════════════════════════════════════════
-   🎰 DESTINATION ROULETTE
-═══════════════════════════════════════════ */
+/* ═══ ROULETTE ═══ */
 let rouletteRunning = false;
-
 function spinRoulette() {
   if (rouletteRunning || ALL_LISTINGS.length === 0) return;
   rouletteRunning = true;
-
-  const btn    = document.getElementById('spinBtn');
-  const label  = document.getElementById('spinLabel');
-  const icon   = document.getElementById('spinIcon');
-  const reels  = ['reel1','reel2','reel3'].map(id=>document.getElementById(id));
-  const card   = document.getElementById('rouletteCard');
-  const ph     = document.getElementById('roulettePlaceholder');
-
-  btn.disabled = true;
-  icon.style.animation = 'spinIcon .5s linear infinite';
-
-  // Reset card
+  const btn=document.getElementById('spinBtn'),label=document.getElementById('spinLabel'),icon=document.getElementById('spinIcon');
+  const reels=['reel1','reel2','reel3'].map(id=>document.getElementById(id));
+  const card=document.getElementById('rouletteCard'),ph=document.getElementById('roulettePlaceholder');
+  btn.disabled=true; icon.style.animation='spinIcon .5s linear infinite';
   card.classList.remove('revealed');
-
-  const chars = ['🌍','🏖️','🏔️','🌿','🏰','💎','🌴','🕌','🌆','🎭','🗼','🌊','🏕️','🦁','🌺'];
-  const picked = ALL_LISTINGS[Math.floor(Math.random() * ALL_LISTINGS.length)];
-
-  // Spin all reels
-  const intervals = reels.map(reel =>
-    setInterval(() => {
-      reel.textContent = chars[Math.floor(Math.random() * chars.length)];
-      reel.style.color = ['var(--gold)','var(--accent)','#fff'][Math.floor(Math.random()*3)];
-    }, 80)
-  );
-
-  // Stop reel 1
-  setTimeout(() => {
-    clearInterval(intervals[0]);
-    reels[0].textContent = getEmoji(picked.location);
-    reels[0].style.color = 'var(--gold)';
-  }, 700);
-
-  // Stop reel 2
-  setTimeout(() => {
-    clearInterval(intervals[1]);
-    reels[1].textContent = picked.country ? picked.country[0] : '★';
-    reels[1].style.color = 'var(--accent)';
-  }, 1100);
-
-  // Stop reel 3 + reveal card
-  setTimeout(() => {
-    clearInterval(intervals[2]);
-    reels[2].textContent = '★';
-    reels[2].style.color = 'var(--gold)';
-
-    // Populate card
-    document.getElementById('rrcImg').src              = picked.image?.url || '';
-    document.getElementById('rrcImg').alt              = picked.title;
-    document.getElementById('rrcTitle').textContent    = picked.title;
-    document.getElementById('rrcLocationText').textContent = `${picked.location}, ${picked.country}`;
-    document.getElementById('rrcPrice').textContent    = picked.price ? picked.price.toLocaleString('en-IN') : 'N/A';
-    document.getElementById('rrcLink').href            = `/listings/${picked._id}`;
-    document.getElementById('rrcBadge').textContent    = `${getEmoji(picked.location)} Surprise Pick!`;
-
-    ph.style.display   = 'none';
-    card.style.display = 'block';
+  const chars=['🌍','🏖️','🏔️','🌿','🏰','💎','🌴','🕌','🌆','🎭','🗼','🌊','🏕️','🦁','🌺'];
+  const picked=ALL_LISTINGS[Math.floor(Math.random()*ALL_LISTINGS.length)];
+  const intervals=reels.map(reel=>setInterval(()=>{reel.textContent=chars[Math.floor(Math.random()*chars.length)];reel.style.color=['var(--gold)','var(--accent)','#fff'][Math.floor(Math.random()*3)];},80));
+  setTimeout(()=>{clearInterval(intervals[0]);reels[0].textContent=getEmoji(picked.location);reels[0].style.color='var(--gold)';},700);
+  setTimeout(()=>{clearInterval(intervals[1]);reels[1].textContent=picked.country?picked.country[0]:'★';reels[1].style.color='var(--accent)';},1100);
+  setTimeout(()=>{
+    clearInterval(intervals[2]);reels[2].textContent='★';reels[2].style.color='var(--gold)';
+    document.getElementById('rrcImg').src=picked.image?.url||'';
+    document.getElementById('rrcImg').alt=picked.title;
+    document.getElementById('rrcTitle').textContent=picked.title;
+    document.getElementById('rrcLocationText').textContent=`${picked.location}, ${picked.country}`;
+    document.getElementById('rrcPrice').textContent=picked.price?picked.price.toLocaleString('en-IN'):'N/A';
+    document.getElementById('rrcLink').href=`/listings/${picked._id}`;
+    document.getElementById('rrcBadge').textContent=`${getEmoji(picked.location)} Surprise Pick!`;
+    ph.style.display='none';card.style.display='block';
     requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('revealed')));
-
-    icon.style.animation = '';
-    btn.disabled  = false;
-    label.textContent = 'Spin Again!';
-    rouletteRunning   = false;
-  }, 1600);
+    icon.style.animation='';btn.disabled=false;label.textContent='Spin Again!';rouletteRunning=false;
+  },1600);
 }
 
-/* ═══════════════════════════════════════════
-   🌈 MOOD DISCOVERY
-═══════════════════════════════════════════ */
+/* ═══ MOOD ═══ */
 const MOOD_KEYWORDS = {
-  adventure: ['manali','shimla','mountain','hill','trek','camp','forest','valley','leh','ooty','munnar','coorg','rishikesh','auli','spiti'],
-  romance:   ['goa','beach','sea','ocean','lake','resort','villa','andaman','udaipur','alleppey','pondicherry','sunset','cozy'],
-  peace:     ['kerala','ooty','coorg','garden','farm','nature','retreat','lonavala','mussoorie','nainital','valley','mysore','serene'],
-  culture:   ['jaipur','delhi','agra','varanasi','kolkata','rajasthan','heritage','fort','palace','temple','city','historic','mumbai','chennai','hyderabad','banaras']
+  adventure:['manali','shimla','mountain','hill','trek','camp','forest','valley','leh','ooty','munnar','coorg','rishikesh','auli','spiti'],
+  romance:  ['goa','beach','sea','ocean','lake','resort','villa','andaman','udaipur','alleppey','pondicherry','sunset','cozy'],
+  peace:    ['kerala','ooty','coorg','garden','farm','nature','retreat','lonavala','mussoorie','nainital','valley','mysore','serene'],
+  culture:  ['jaipur','delhi','agra','varanasi','kolkata','rajasthan','heritage','fort','palace','temple','city','historic','mumbai','chennai','hyderabad','banaras']
 };
-let activeMood = null;
-
-function setMood(el, mood) {
-  if (activeMood === mood) { clearMood(); return; }
-  activeMood = mood;
+let activeMood=null;
+function setMood(el,mood){
+  if(activeMood===mood){clearMood();return;}
+  activeMood=mood;
   document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
-
-  const keywords = MOOD_KEYWORDS[mood] || [];
-  const cards    = document.querySelectorAll('#allListingsGrid .listing-link');
-  let count = 0;
-
-  cards.forEach(c => {
-    const loc   = (c.dataset.location||'').toLowerCase();
-    const cntry = (c.dataset.country ||'').toLowerCase();
-    const ttl   = (c.dataset.title   ||'').toLowerCase();
-    const match = keywords.some(k => loc.includes(k)||cntry.includes(k)||ttl.includes(k));
-    c.classList.toggle('hidden', !match);
-    if (match) count++;
+  const keywords=MOOD_KEYWORDS[mood]||[];
+  const cards=document.querySelectorAll('#allListingsGrid .listing-link');
+  let count=0;
+  cards.forEach(c=>{
+    const loc=(c.dataset.location||'').toLowerCase(),cntry=(c.dataset.country||'').toLowerCase(),ttl=(c.dataset.title||'').toLowerCase();
+    const match=keywords.some(k=>loc.includes(k)||cntry.includes(k)||ttl.includes(k));
+    c.classList.toggle('hidden',!match);if(match)count++;
   });
-
-  if (count === 0) {
-    cards.forEach(c=>c.classList.remove('hidden'));
-    count = cards.length;
-  }
-
-  const names = { adventure:'Adventure 🧗', romance:'Romance 🌹', peace:'Peace 🌿', culture:'Culture 🏛️' };
-  document.getElementById('moodFilterLabel').textContent  = names[mood];
-  document.getElementById('moodFilterCount').textContent  = count;
-  document.getElementById('listingCount').textContent     = `${count} places`;
+  if(count===0){cards.forEach(c=>c.classList.remove('hidden'));count=cards.length;}
+  const names={adventure:'Adventure 🧗',romance:'Romance 🌹',peace:'Peace 🌿',culture:'Culture 🏛️'};
+  document.getElementById('moodFilterLabel').textContent=names[mood];
+  document.getElementById('moodFilterCount').textContent=count;
+  document.getElementById('listingCount').textContent=`${count} places`;
   document.getElementById('moodFilterBar').classList.add('show');
   document.getElementById('allListingsGrid').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
-function clearMood() {
-  activeMood = null;
+function clearMood(){
+  activeMood=null;
   document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('#allListingsGrid .listing-link').forEach(c=>c.classList.remove('hidden'));
   document.getElementById('moodFilterBar').classList.remove('show');
-  document.getElementById('listingCount').textContent = `${ALL_LISTINGS.length} places`;
+  document.getElementById('listingCount').textContent=`${ALL_LISTINGS.length} places`;
 }
 
-/* ═══════════════════════════════════════════
-   ✨ HERO PARTICLES
-═══════════════════════════════════════════ */
+/* ═══ PARTICLES ═══ */
 (function(){
-  const canvas = document.getElementById('heroCanvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
-
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x  = Math.random()*W; this.y = Math.random()*H;
-      this.r  = Math.random()*1.6+0.3;
-      this.vx = (Math.random()-.5)*.3; this.vy = (Math.random()-.5)*.3;
-      this.a  = Math.random()*.6+.1;
-      this.color = Math.random()>.6 ? '#d4a843' : '#c9783a';
-    }
-    update() {
-      this.x+=this.vx; this.y+=this.vy;
-      if(this.x<0||this.x>W||this.y<0||this.y>H) this.reset();
-    }
-    draw() {
-      ctx.save(); ctx.globalAlpha=this.a; ctx.fillStyle=this.color;
-      ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); ctx.restore();
-    }
+  const canvas=document.getElementById('heroCanvas'),ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  class Particle{
+    constructor(){this.reset();}
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.6+0.3;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.a=Math.random()*.6+.1;this.color=Math.random()>.6?'#d4a843':'#c9783a';}
+    update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+    draw(){ctx.save();ctx.globalAlpha=this.a;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();ctx.restore();}
   }
-
-  function init() { resize(); particles = Array.from({length:80},()=>new Particle()); }
-  function loop() { ctx.clearRect(0,0,W,H); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(loop); }
-  window.addEventListener('resize',resize);
-  init(); loop();
+  function init(){resize();particles=Array.from({length:80},()=>new Particle());}
+  function loop(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(loop);}
+  window.addEventListener('resize',resize);init();loop();
 })();
 
-/* ═══════════════════════════════════════════
-   AUTOCOMPLETE
-═══════════════════════════════════════════ */
-const input      = document.getElementById('citySearchInput');
-const dropdown   = document.getElementById('autocompleteDropdown');
-const sugList    = document.getElementById('suggestionsList');
-const noSug      = document.getElementById('noSuggestion');
-let highlightIdx = -1, currentSuggestions = [];
-
-const cityEmojis = {
-  'goa':'🏖️','mumbai':'🌆','delhi':'🕌','jaipur':'🏰','manali':'🏔️',
-  'kerala':'🌴','udaipur':'💎','ooty':'🌿','shimla':'❄️','agra':'🕍',
-  'pune':'🏙️','bangalore':'💻','hyderabad':'🍛','kolkata':'🎨',
-  'paris':'🗼','london':'🎡','new york':'🗽','dubai':'🌇','bali':'🌺',
-  'default':'📍'
-};
-function getEmoji(city) {
-  const key=(city||'').toLowerCase();
-  for(const k in cityEmojis) if(key.includes(k)) return cityEmojis[k];
-  return cityEmojis['default'];
-}
-function getCityMap(query) {
-  const map={};
-  ALL_LISTINGS.forEach(l=>{
-    const city=(l.location||'').trim();
-    if(!city||!city.toLowerCase().includes(query.toLowerCase())) return;
-    if(!map[city]) map[city]={city,country:l.country,count:0};
-    map[city].count++;
-  });
-  return Object.values(map).sort((a,b)=>b.count-a.count);
-}
-function highlightMatch(text,query) {
-  const idx=text.toLowerCase().indexOf(query.toLowerCase());
-  if(idx===-1) return text;
-  return text.slice(0,idx)+`<strong style="color:var(--accent)">${text.slice(idx,idx+query.length)}</strong>`+text.slice(idx+query.length);
-}
-input.addEventListener('input',()=>{
-  const q=input.value.trim(); highlightIdx=-1;
-  if(q.length<1){closeDropdown();return;}
-  currentSuggestions=getCityMap(q); renderDropdown(currentSuggestions,q);
-});
-function renderDropdown(cities,q){
-  sugList.innerHTML='';
-  if(!cities.length){noSug.style.display='block';dropdown.classList.add('open');return;}
-  noSug.style.display='none';
-  cities.slice(0,8).forEach(c=>{
-    const item=document.createElement('div'); item.className='suggestion-item';
-    item.innerHTML=`<div class="suggestion-icon">${getEmoji(c.city)}</div><div class="suggestion-text"><div class="city-name">${highlightMatch(c.city,q)}</div><div class="city-sub">${c.country||''}</div></div><div class="suggestion-count">${c.count} stay${c.count>1?'s':''}</div>`;
-    item.addEventListener('mousedown',()=>selectCity(c.city));
-    sugList.appendChild(item);
-  });
-  dropdown.classList.add('open');
-}
-input.addEventListener('keydown',e=>{
-  const items=sugList.querySelectorAll('.suggestion-item');
-  if(e.key==='ArrowDown'){highlightIdx=Math.min(highlightIdx+1,items.length-1);updateHighlight(items);}
-  else if(e.key==='ArrowUp'){highlightIdx=Math.max(highlightIdx-1,-1);updateHighlight(items);}
-  else if(e.key==='Enter'){if(highlightIdx>=0&&currentSuggestions[highlightIdx])selectCity(currentSuggestions[highlightIdx].city);else triggerCitySearch();}
-  else if(e.key==='Escape')closeDropdown();
-});
+/* ═══ AUTOCOMPLETE ═══ */
+const input=document.getElementById('citySearchInput'),dropdown=document.getElementById('autocompleteDropdown'),sugList=document.getElementById('suggestionsList'),noSug=document.getElementById('noSuggestion');
+let highlightIdx=-1,currentSuggestions=[];
+const cityEmojis={'goa':'🏖️','mumbai':'🌆','delhi':'🕌','jaipur':'🏰','manali':'🏔️','kerala':'🌴','udaipur':'💎','ooty':'🌿','shimla':'❄️','agra':'🕍','pune':'🏙️','bangalore':'💻','hyderabad':'🍛','kolkata':'🎨','paris':'🗼','london':'🎡','new york':'🗽','dubai':'🌇','bali':'🌺','default':'📍'};
+function getEmoji(city){const key=(city||'').toLowerCase();for(const k in cityEmojis)if(key.includes(k))return cityEmojis[k];return cityEmojis['default'];}
+function getCityMap(query){const map={};ALL_LISTINGS.forEach(l=>{const city=(l.location||'').trim();if(!city||!city.toLowerCase().includes(query.toLowerCase()))return;if(!map[city])map[city]={city,country:l.country,count:0};map[city].count++;});return Object.values(map).sort((a,b)=>b.count-a.count);}
+function highlightMatch(text,query){const idx=text.toLowerCase().indexOf(query.toLowerCase());if(idx===-1)return text;return text.slice(0,idx)+`<strong style="color:var(--accent)">${text.slice(idx,idx+query.length)}</strong>`+text.slice(idx+query.length);}
+input.addEventListener('input',()=>{const q=input.value.trim();highlightIdx=-1;if(q.length<1){closeDropdown();return;}currentSuggestions=getCityMap(q);renderDropdown(currentSuggestions,q);});
+function renderDropdown(cities,q){sugList.innerHTML='';if(!cities.length){noSug.style.display='block';dropdown.classList.add('open');return;}noSug.style.display='none';cities.slice(0,8).forEach(c=>{const item=document.createElement('div');item.className='suggestion-item';item.innerHTML=`<div class="suggestion-icon">${getEmoji(c.city)}</div><div class="suggestion-text"><div class="city-name">${highlightMatch(c.city,q)}</div><div class="city-sub">${c.country||''}</div></div><div class="suggestion-count">${c.count} stay${c.count>1?'s':''}</div>`;item.addEventListener('mousedown',()=>selectCity(c.city));sugList.appendChild(item);});dropdown.classList.add('open');}
+input.addEventListener('keydown',e=>{const items=sugList.querySelectorAll('.suggestion-item');if(e.key==='ArrowDown'){highlightIdx=Math.min(highlightIdx+1,items.length-1);updateHighlight(items);}else if(e.key==='ArrowUp'){highlightIdx=Math.max(highlightIdx-1,-1);updateHighlight(items);}else if(e.key==='Enter'){if(highlightIdx>=0&&currentSuggestions[highlightIdx])selectCity(currentSuggestions[highlightIdx].city);else triggerCitySearch();}else if(e.key==='Escape')closeDropdown();});
 function updateHighlight(items){items.forEach((el,i)=>el.classList.toggle('highlighted',i===highlightIdx));}
 function closeDropdown(){dropdown.classList.remove('open');sugList.innerHTML='';noSug.style.display='none';}
 document.addEventListener('click',e=>{if(!e.target.closest('.search-box'))closeDropdown();});
 function selectCity(city){input.value=city;closeDropdown();showCityResults(city);}
 function quickSearch(city){input.value=city;showCityResults(city);}
 function triggerCitySearch(){const city=input.value.trim();if(city)showCityResults(city);}
-
 function showCityResults(city){
   closeDropdown();
   const matched=ALL_LISTINGS.filter(l=>(l.location||'').toLowerCase().includes(city.toLowerCase())||(l.country||'').toLowerCase().includes(city.toLowerCase()));
-  const section=document.getElementById('cityResultsSection');
-  const container=document.getElementById('cityCardsContainer');
+  const section=document.getElementById('cityResultsSection'),container=document.getElementById('cityCardsContainer');
   document.getElementById('cityResultsTitle').textContent=city;
   section.style.display='block';
-  if(!matched.length){
-    container.innerHTML=`<div class="no-city-results"><i class="fa-solid fa-map-location-dot"></i><p>No stays found in <strong>${city}</strong>.</p></div>`;
-    section.scrollIntoView({behavior:'smooth',block:'start'}); return;
-  }
-  container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`
-    <a href="/listings/${l._id}" class="city-listing-card">
-      <div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div>
-      <div class="city-card-body">
-        <div class="title">${l.title}</div>
-        <div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div>
-        <div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div>
-      </div>
-    </a>`).join('')}</div>`;
+  if(!matched.length){container.innerHTML=`<div class="no-city-results"><i class="fa-solid fa-map-location-dot"></i><p>No stays found in <strong>${city}</strong>.</p></div>`;section.scrollIntoView({behavior:'smooth',block:'start'});return;}
+  container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`<a href="/listings/${l._id}" class="city-listing-card"><div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div><div class="city-card-body"><div class="title">${l.title}</div><div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div><div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div></div></a>`).join('')}</div>`;
   section.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function clearSearch(){input.value='';document.getElementById('cityResultsSection').style.display='none';}
-
-/* ── Tax ── */
-document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){
-  document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});
-});
-
-/* ── Filters ── */
-document.querySelectorAll('#filters .filter').forEach(btn=>{
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('#filters .filter').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-/* ── Wishlist ── */
+document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});});
+document.querySelectorAll('#filters .filter').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#filters .filter').forEach(b=>b.classList.remove('active'));this.classList.add('active');});});
 const wishlist=new Set(JSON.parse(localStorage.getItem('wl_wishlist')||'[]'));
-function toggleWishlist(e,id){
-  e.preventDefault();e.stopPropagation();
-  const btn=e.currentTarget,icon=btn.querySelector('i');
-  if(wishlist.has(id)){wishlist.delete(id);icon.className='fa-regular fa-heart';btn.classList.remove('liked');}
-  else{wishlist.add(id);icon.className='fa-solid fa-heart';btn.classList.add('liked');btn.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300,easing:'ease'});}
-  localStorage.setItem('wl_wishlist',JSON.stringify([...wishlist]));
+function toggleWishlist(e,id){e.preventDefault();e.stopPropagation();const btn=e.currentTarget,icon=btn.querySelector('i');if(wishlist.has(id)){wishlist.delete(id);icon.className='fa-regular fa-heart';btn.classList.remove('liked');}else{wishlist.add(id);icon.className='fa-solid fa-heart';btn.classList.add('liked');btn.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300,easing:'ease'});}localStorage.setItem('wl_wishlist',JSON.stringify([...wishlist]));}
+document.querySelectorAll('.wishlist-btn').forEach(btn=>{const id=btn.closest('.listing-link')?.dataset.id;if(id&&wishlist.has(id)){btn.querySelector('i').className='fa-solid fa-heart';btn.classList.add('liked');}});
+function setView(mode){const grid=document.getElementById('allListingsGrid');document.getElementById('gridViewBtn').classList.toggle('active',mode==='grid');document.getElementById('listViewBtn').classList.toggle('active',mode==='list');grid.classList.toggle('list-view',mode==='list');}
+function sortListings(){const val=document.getElementById('sortSelect').value,grid=document.getElementById('allListingsGrid'),cards=[...grid.querySelectorAll('.listing-link')];cards.sort((a,b)=>{const dA=ALL_LISTINGS.find(l=>l._id==a.dataset.id),dB=ALL_LISTINGS.find(l=>l._id==b.dataset.id);if(!dA||!dB)return 0;if(val==='price-asc')return(dA.price||0)-(dB.price||0);if(val==='price-desc')return(dB.price||0)-(dA.price||0);if(val==='name-asc')return(dA.title||'').localeCompare(dB.title||'');return 0;});cards.forEach(c=>grid.appendChild(c));}
+
+/* ═══ CAB BOOKING ═══ */
+let selectedCar = { name:'Micro', rate:8 };
+
+function openCabModal(type, icon, rate) {
+  selectedCar = { name: type, rate: rate };
+  document.getElementById('cabModalTtl').textContent = icon + ' ' + type;
+  document.getElementById('cabModalSub').textContent = 'Fill in your details below';
+  document.getElementById('cabFormBody').style.display = 'block';
+  document.getElementById('cabSuccessBox').classList.remove('show');
+  document.getElementById('cabFareEst').classList.remove('show');
+  document.getElementById('cabOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Pre-select matching car type
+  document.querySelectorAll('.cab-car-type').forEach(c => {
+    c.classList.toggle('selected', c.dataset.car === (rate===8&&type==='Airport Transfer'?'Micro': rate===12?'Sedan':'SUV'));
+  });
+  document.getElementById('cabCarLabel').textContent = selectedCar.name;
 }
-document.querySelectorAll('.wishlist-btn').forEach(btn=>{
-  const id=btn.closest('.listing-link')?.dataset.id;
-  if(id&&wishlist.has(id)){btn.querySelector('i').className='fa-solid fa-heart';btn.classList.add('liked');}
+
+function closeCabModal() {
+  document.getElementById('cabOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeCabOnOverlay(e) { if(e.target===document.getElementById('cabOverlay'))closeCabModal(); }
+
+function selectCar(el, name, rate) {
+  document.querySelectorAll('.cab-car-type').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCar = { name, rate };
+  document.getElementById('cabCarLabel').textContent = name;
+  updateFare();
+}
+
+function swapLocations() {
+  const p=document.getElementById('cabPickup'),d=document.getElementById('cabDrop');
+  const tmp=p.value; p.value=d.value; d.value=tmp;
+}
+
+function updateFare() {
+  const pickup=document.getElementById('cabPickup').value.trim();
+  const drop=document.getElementById('cabDrop').value.trim();
+  const date=document.getElementById('cabDate').value;
+  const est=document.getElementById('cabFareEst');
+  if(pickup && drop && date) {
+    const seed=(pickup.length+drop.length)%28+8;
+    const fare=seed*selectedCar.rate;
+    document.getElementById('cabFareAmt').textContent=`₹${fare.toLocaleString('en-IN')}`;
+    est.classList.add('show');
+  } else { est.classList.remove('show'); }
+}
+
+['cabPickup','cabDrop'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updateFare);
 });
 
-/* ── View ── */
-function setView(mode){
-  const grid=document.getElementById('allListingsGrid');
-  document.getElementById('gridViewBtn').classList.toggle('active',mode==='grid');
-  document.getElementById('listViewBtn').classList.toggle('active',mode==='list');
-  grid.classList.toggle('list-view',mode==='list');
+function submitCabBooking() {
+  const pickup=document.getElementById('cabPickup').value.trim();
+  const drop=document.getElementById('cabDrop').value.trim();
+  const date=document.getElementById('cabDate').value;
+  const time=document.getElementById('cabTime').value;
+  const passengers=document.getElementById('cabPassengers').value;
+  if(!pickup){shake('cabPickup');return;}
+  if(!drop){shake('cabDrop');return;}
+  if(!date){shake('cabDate');return;}
+  if(!time){shake('cabTime');return;}
+  const seed=(pickup.length+drop.length)%28+8;
+  const fare=seed*selectedCar.rate;
+  const ref='CAB-'+Date.now().toString(36).toUpperCase();
+  const fd=new Date(date).toDateString();
+  const [h,m]=time.split(':');
+  const hr=parseInt(h);
+  const ft=`${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`;
+  document.getElementById('cabSuccessDets').innerHTML=`
+    <div class="cab-srow"><span>Pickup</span><span>${pickup}</span></div>
+    <div class="cab-srow"><span>Drop</span><span>${drop}</span></div>
+    <div class="cab-srow"><span>Date &amp; Time</span><span>${fd}, ${ft}</span></div>
+    <div class="cab-srow"><span>Car Type</span><span>${selectedCar.name}</span></div>
+    <div class="cab-srow"><span>Passengers</span><span>${passengers}</span></div>
+    <div class="cab-srow"><span>Est. Fare</span><span style="color:var(--accent);font-size:16px">₹${fare.toLocaleString('en-IN')}</span></div>
+    <div class="cab-srow"><span>Booking Ref</span><span style="color:var(--muted);font-size:12px">${ref}</span></div>`;
+  document.getElementById('cabFormBody').style.display='none';
+  document.getElementById('cabSuccessBox').classList.add('show');
 }
 
-/* ── Sort ── */
-function sortListings(){
-  const val=document.getElementById('sortSelect').value;
-  const grid=document.getElementById('allListingsGrid');
-  const cards=[...grid.querySelectorAll('.listing-link')];
-  cards.sort((a,b)=>{
-    const dA=ALL_LISTINGS.find(l=>l._id==a.dataset.id);
-    const dB=ALL_LISTINGS.find(l=>l._id==b.dataset.id);
-    if(!dA||!dB) return 0;
-    if(val==='price-asc')  return (dA.price||0)-(dB.price||0);
-    if(val==='price-desc') return (dB.price||0)-(dA.price||0);
-    if(val==='name-asc')   return (dA.title||'').localeCompare(dB.title||'');
-    return 0;
-  });
-  cards.forEach(c=>grid.appendChild(c));
+function shake(id){
+  const el=document.getElementById(id);
+  el.style.borderColor='#dc3545';
+  el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:300,easing:'ease'});
+  setTimeout(()=>el.style.borderColor='',1000);
 }
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCabModal();});
 </script>
