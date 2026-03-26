@@ -543,6 +543,240 @@ body { background: #f5f1eb; }
   </div>
 </div>
 
+
+<!-- ══ TEMPLES BY CITY ══ -->
+<div class="temples-section">
+  <div class="temples-header">
+    <div class="temples-eyebrow">🛕 Sacred India</div>
+    <h2 class="temples-title">Famous <em>Temples</em> across India</h2>
+    <p class="temples-subtitle">Click any city to explore its most sacred sites</p>
+  </div>
+
+  <div class="temples-city-pills">
+    <button class="temple-city-pill active" onclick="showTemples('Puri')">🌊 Puri</button>
+    <button class="temple-city-pill" onclick="showTemples('Varanasi')">🪔 Varanasi</button>
+    <button class="temple-city-pill" onclick="showTemples('Tirupati')">⛰️ Tirupati</button>
+    <button class="temple-city-pill" onclick="showTemples('Madurai')">🏛️ Madurai</button>
+    <button class="temple-city-pill" onclick="showTemples('Vrindavan')">🌸 Vrindavan</button>
+    <button class="temple-city-pill" onclick="showTemples('Amritsar')">✨ Amritsar</button>
+    <button class="temple-city-pill" onclick="showTemples('Dwarka')">🐚 Dwarka</button>
+    <button class="temple-city-pill" onclick="showTemples('Kedarnath')">🏔️ Kedarnath</button>
+    <button class="temple-city-pill" onclick="showTemples('Ujjain')">🌙 Ujjain</button>
+    <button class="temple-city-pill" onclick="showTemples('Kanchipuram')">🪷 Kanchipuram</button>
+  </div>
+
+  <div class="temples-grid" id="templesGrid"></div>
+</div>
+
+<style>
+.temples-section {
+  margin: 0 0 36px;
+  background: linear-gradient(135deg,#1a0a2e 0%,#2d1a50 60%,#1a0a2e 100%);
+  border-radius: 28px; padding: 44px 44px 48px;
+  position: relative; overflow: hidden;
+}
+.temples-section::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 50% 60% at 15% 40%, rgba(212,168,67,.13) 0%,transparent 65%),
+    radial-gradient(ellipse 35% 45% at 85% 20%, rgba(201,120,58,.10) 0%,transparent 60%);
+  pointer-events:none;
+}
+.temples-section::after {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:22px 22px; pointer-events:none;
+}
+.temples-header { text-align:center; margin-bottom:32px; position:relative; z-index:1; }
+.temples-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:14px;
+  background:rgba(212,168,67,.12); padding:5px 16px; border-radius:20px;
+  border:1px solid rgba(212,168,67,.25);
+}
+.temples-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,3.5vw,40px); font-weight:600; color:#fff; line-height:1.18; margin-bottom:8px;
+}
+.temples-title em { font-style:italic; color:var(--gold); }
+.temples-subtitle { font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(255,255,255,.45); font-weight:300; }
+
+.temples-city-pills {
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  margin-bottom:36px; position:relative; z-index:1;
+}
+.temple-city-pill {
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.75); font-family:'DM Sans',sans-serif;
+  font-size:13px; font-weight:500; padding:9px 20px; border-radius:30px;
+  cursor:pointer; transition:all .22s; backdrop-filter:blur(4px);
+}
+.temple-city-pill:hover {
+  background:rgba(212,168,67,.22); border-color:var(--gold);
+  color:white; transform:translateY(-2px); box-shadow:0 4px 14px rgba(212,168,67,.3);
+}
+.temple-city-pill.active {
+  background:linear-gradient(135deg,var(--gold),#b8882e);
+  border-color:var(--gold); color:#1a1a2e; font-weight:700;
+  box-shadow:0 4px 18px rgba(212,168,67,.45); transform:translateY(-2px);
+}
+
+.temples-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+  position:relative; z-index:1;
+  animation:fadeUp .4s ease;
+}
+@media(max-width:992px){ .temples-grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:576px) { .temples-grid { grid-template-columns:1fr; } }
+
+.temple-card {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  border-radius:20px; overflow:hidden; transition:all .3s ease;
+  cursor:pointer; text-decoration:none; display:block;
+}
+.temple-card:hover {
+  transform:translateY(-6px);
+  border-color:rgba(212,168,67,.5);
+  box-shadow:0 16px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(212,168,67,.2);
+}
+.temple-card-img {
+  width:100%; height:180px; object-fit:cover; display:block;
+  transition:transform .45s ease;
+}
+.temple-card:hover .temple-card-img { transform:scale(1.07); }
+.temple-card-img-wrap { overflow:hidden; position:relative; }
+.temple-card-img-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 45%, rgba(10,5,25,.75) 100%);
+}
+.temple-card-badge {
+  position:absolute; bottom:10px; left:12px;
+  background:rgba(212,168,67,.9); color:#1a1a2e;
+  font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700;
+  padding:3px 11px; border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+}
+.temple-card-body { padding:16px 18px 18px; }
+.temple-card-name {
+  font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600;
+  color:#fff; margin-bottom:6px; line-height:1.2;
+}
+.temple-card-deity {
+  font-family:'DM Sans',sans-serif; font-size:12px;
+  color:var(--gold); margin-bottom:6px; font-weight:500;
+}
+.temple-card-desc {
+  font-family:'DM Sans',sans-serif; font-size:12px;
+  color:rgba(255,255,255,.5); line-height:1.5;
+}
+.temple-card-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.1);
+}
+.temple-card-timing {
+  font-family:'DM Sans',sans-serif; font-size:11px;
+  color:rgba(255,255,255,.4); display:flex; align-items:center; gap:5px;
+}
+.temple-card-maps {
+  font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600;
+  color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:4px;
+  transition:opacity .2s;
+}
+.temple-card-maps:hover { opacity:.75; color:var(--gold); }
+</style>
+
+<script>
+const TEMPLES_DATA = {
+  Puri: [
+    { name:'Jagannath Temple', deity:'Lord Jagannath', desc:'One of the Char Dham pilgrimage sites, this 12th-century temple is among the holiest in India.', timing:'5:00 AM – 12:00 AM', img:'https://images.unsplash.com/photo-1609946860441-a51ffed1e386?w=600&q=80', maps:'Jagannath+Temple+Puri' },
+    { name:'Gundicha Temple', deity:'Lord Jagannath', desc:'The garden house of Lord Jagannath, visited during the famous Rath Yatra chariot festival.', timing:'6:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80', maps:'Gundicha+Temple+Puri' },
+    { name:'Lokanath Temple', deity:'Lord Shiva', desc:'An ancient Shiva temple near the sea, deeply revered by locals and pilgrims alike.', timing:'5:00 AM – 10:00 PM', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', maps:'Lokanath+Temple+Puri' }
+  ],
+  Varanasi: [
+    { name:'Kashi Vishwanath Temple', deity:'Lord Shiva', desc:'The most sacred Jyotirlinga shrine on the banks of the Ganges, radiating ancient spiritual energy.', timing:'3:00 AM – 11:00 PM', img:'https://images.unsplash.com/photo-1561361058-c24e022dd4bf?w=600&q=80', maps:'Kashi+Vishwanath+Temple+Varanasi' },
+    { name:'Sankat Mochan Hanuman Temple', deity:'Lord Hanuman', desc:'Founded by saint Tulsidas, this beloved temple is famous for its serene atmosphere and devotion.', timing:'5:00 AM – 10:00 PM', img:'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&q=80', maps:'Sankat+Mochan+Temple+Varanasi' },
+    { name:'Durga Kund Mandir', deity:'Goddess Durga', desc:'An 18th-century temple famous for its red-ochre colour and the sacred Durga Kund tank beside it.', timing:'6:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1600158731557-a0b0c5c9eb24?w=600&q=80', maps:'Durga+Kund+Temple+Varanasi' }
+  ],
+  Tirupati: [
+    { name:'Venkateswara Temple', deity:'Lord Venkateswara (Vishnu)', desc:'The richest and most visited temple on Earth, nestled atop the Tirumala hills, drawing millions annually.', timing:'2:30 AM – 1:00 AM', img:'https://images.unsplash.com/photo-1590077428593-a55bb07c4665?w=600&q=80', maps:'Venkateswara+Temple+Tirupati' },
+    { name:'Padmavathi Temple', deity:'Goddess Padmavathi', desc:'Dedicated to the consort of Lord Venkateswara, this is a major pilgrimage stop in Tiruchanur.', timing:'6:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1609757878032-1d5a3da7f0c8?w=600&q=80', maps:'Padmavathi+Temple+Tiruchanur' },
+    { name:'Kapila Theertham', deity:'Lord Shiva', desc:'The only Shiva temple managed by Tirumala Tirupati Devasthanams, with a sacred waterfall.', timing:'6:00 AM – 8:00 PM', img:'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80', maps:'Kapila+Theertham+Tirupati' }
+  ],
+  Madurai: [
+    { name:'Meenakshi Amman Temple', deity:'Goddess Meenakshi & Lord Sundareswarar', desc:'A towering Dravidian masterpiece with 14 gopurams covered in thousands of colourful sculptures.', timing:'5:00 AM – 12:30 PM, 4:00 PM – 10:00 PM', img:'https://images.unsplash.com/photo-1626015365107-338e44bbc5a2?w=600&q=80', maps:'Meenakshi+Amman+Temple+Madurai' },
+    { name:'Koodal Azhagar Temple', deity:'Lord Vishnu', desc:'A Divya Desam temple with three floors each depicting a different posture of Lord Vishnu.', timing:'6:00 AM – 12:00 PM, 4:00 PM – 9:00 PM', img:'https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?w=600&q=80', maps:'Koodal+Azhagar+Temple+Madurai' },
+    { name:'Thiruparankundram Murugan Temple', deity:'Lord Murugan', desc:'One of the six abodes of Murugan, carved into a hill with ancient rock-cut architecture.', timing:'6:00 AM – 1:00 PM, 3:00 PM – 9:00 PM', img:'https://images.unsplash.com/photo-1574236170880-0b196e6e8b72?w=600&q=80', maps:'Thiruparankundram+Temple+Madurai' }
+  ],
+  Vrindavan: [
+    { name:'Banke Bihari Temple', deity:'Lord Krishna', desc:'One of the most beloved Krishna temples with a unique swinging curtain darshan ritual that enchants devotees.', timing:'7:45 AM – 12:00 PM, 5:30 PM – 9:30 PM', img:'https://images.unsplash.com/photo-1617958082753-201071fcb456?w=600&q=80', maps:'Banke+Bihari+Temple+Vrindavan' },
+    { name:'ISKCON Vrindavan', deity:'Radha Madanmohan', desc:'A grand marble temple built by the International Society for Krishna Consciousness, famous worldwide.', timing:'4:30 AM – 1:00 PM, 4:00 PM – 9:00 PM', img:'https://images.unsplash.com/photo-1600697230109-571eb5e1c1e1?w=600&q=80', maps:'ISKCON+Temple+Vrindavan' },
+    { name:'Prem Mandir', deity:'Radha Krishna', desc:'A stunning white marble temple illuminated brilliantly at night, depicting scenes from Krishna\'s life.', timing:'5:30 AM – 12:00 PM, 4:30 PM – 9:30 PM', img:'https://images.unsplash.com/photo-1608106055806-f9a5b6f10588?w=600&q=80', maps:'Prem+Mandir+Vrindavan' }
+  ],
+  Amritsar: [
+    { name:'Harmandir Sahib (Golden Temple)', deity:'Guru Granth Sahib', desc:'The holiest Gurdwara of Sikhism, sheathed in gold and reflected in the sacred Amrit Sarovar lake.', timing:'2:00 AM – 11:00 PM', img:'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=600&q=80', maps:'Golden+Temple+Amritsar' },
+    { name:'Durgiana Temple', deity:'Goddess Durga', desc:'Called the Hindu Golden Temple, this silver-doored shrine is built in the style of the Golden Temple.', timing:'6:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80', maps:'Durgiana+Temple+Amritsar' },
+    { name:'Ram Tirath Temple', deity:'Lord Rama', desc:'The legendary birthplace of Luv and Kush, sons of Rama and Sita, set in peaceful surroundings.', timing:'6:00 AM – 8:00 PM', img:'https://images.unsplash.com/photo-1600158731557-a0b0c5c9eb24?w=600&q=80', maps:'Ram+Tirath+Temple+Amritsar' }
+  ],
+  Dwarka: [
+    { name:'Dwarkadhish Temple', deity:'Lord Krishna (Dwarkadhish)', desc:'One of the Char Dham, a 5-storey temple rising 78 metres, believed to have been built by Krishna\'s grandson.', timing:'6:30 AM – 1:00 PM, 5:00 PM – 9:30 PM', img:'https://images.unsplash.com/photo-1609946860441-a51ffed1e386?w=600&q=80', maps:'Dwarkadhish+Temple+Dwarka' },
+    { name:'Rukmini Devi Temple', deity:'Goddess Rukmini', desc:'Dedicated to Krishna\'s chief consort, adorned with fine medieval carvings and murals.', timing:'7:00 AM – 12:30 PM, 5:00 PM – 8:30 PM', img:'https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80', maps:'Rukmini+Temple+Dwarka' },
+    { name:'Nageshwar Jyotirlinga', deity:'Lord Shiva', desc:'One of the twelve Jyotirlingas, enshrined in a cave where Shiva is worshipped as Nageshwar.', timing:'5:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80', maps:'Nageshwar+Jyotirlinga+Dwarka' }
+  ],
+  Kedarnath: [
+    { name:'Kedarnath Temple', deity:'Lord Shiva (Jyotirlinga)', desc:'At 3,583m in the Himalayas, this 8th-century stone shrine is one of the holiest Shiva temples in existence.', timing:'6:00 AM – 7:00 PM (May–Nov)', img:'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=600&q=80', maps:'Kedarnath+Temple' },
+    { name:'Bhairavnath Temple', deity:'Lord Bhairav', desc:'The guardian deity of Kedarnath Valley, worshipped before and after visiting the main shrine.', timing:'7:00 AM – 6:00 PM', img:'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=600&q=80', maps:'Bhairavnath+Temple+Kedarnath' },
+    { name:'Triyuginarayan Temple', deity:'Lord Vishnu', desc:'The legendary marriage venue of Shiva and Parvati; the eternal flame here has been burning for ages.', timing:'6:00 AM – 8:00 PM', img:'https://images.unsplash.com/photo-1590077428593-a55bb07c4665?w=600&q=80', maps:'Triyuginarayan+Temple+Uttarakhand' }
+  ],
+  Ujjain: [
+    { name:'Mahakaleshwar Temple', deity:'Lord Shiva (Jyotirlinga)', desc:'One of the 12 Jyotirlingas, famous for its unique south-facing Shivalinga and the Bhasma Aarti at dawn.', timing:'4:00 AM – 11:00 PM', img:'https://images.unsplash.com/photo-1561361058-c24e022dd4bf?w=600&q=80', maps:'Mahakaleshwar+Temple+Ujjain' },
+    { name:'Kal Bhairav Temple', deity:'Lord Kal Bhairav', desc:'An ancient tantric shrine where prasad offered to the deity is traditionally wine, drawing curious visitors.', timing:'6:00 AM – 10:00 PM', img:'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&q=80', maps:'Kal+Bhairav+Temple+Ujjain' },
+    { name:'Chintaman Ganesh Temple', deity:'Lord Ganesha', desc:'Considered a swayambhu (self-manifested) Ganesha temple, one of the most important in Madhya Pradesh.', timing:'5:00 AM – 9:00 PM', img:'https://images.unsplash.com/photo-1617958082753-201071fcb456?w=600&q=80', maps:'Chintaman+Ganesh+Temple+Ujjain' }
+  ],
+  Kanchipuram: [
+    { name:'Kamakshi Amman Temple', deity:'Goddess Kamakshi', desc:'One of the three most sacred Shakti Peethas, dedicated to the goddess in her benevolent golden form.', timing:'5:30 AM – 12:30 PM, 4:00 PM – 8:30 PM', img:'https://images.unsplash.com/photo-1626015365107-338e44bbc5a2?w=600&q=80', maps:'Kamakshi+Amman+Temple+Kanchipuram' },
+    { name:'Ekambareswarar Temple', deity:'Lord Shiva', desc:'One of the Pancha Bhuta Stalas (Earth element), home to a sacred mango tree said to be 3,500 years old.', timing:'6:00 AM – 12:30 PM, 4:00 PM – 8:30 PM', img:'https://images.unsplash.com/photo-1574236170880-0b196e6e8b72?w=600&q=80', maps:'Ekambareswarar+Temple+Kanchipuram' },
+    { name:'Varadharaja Perumal Temple', deity:'Lord Vishnu', desc:'A grand Divya Desam temple known for its 100-pillared hall and the sacred lizard sculptures on its walls.', timing:'6:00 AM – 12:00 PM, 4:00 PM – 8:30 PM', img:'https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?w=600&q=80', maps:'Varadharaja+Perumal+Temple+Kanchipuram' }
+  ]
+};
+
+function showTemples(city) {
+  // Update active pill
+  document.querySelectorAll('.temple-city-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent.includes(city));
+  });
+
+  const temples = TEMPLES_DATA[city] || [];
+  const grid = document.getElementById('templesGrid');
+
+  grid.style.animation = 'none';
+  grid.offsetHeight; // reflow
+  grid.style.animation = 'fadeUp .4s ease';
+
+  grid.innerHTML = temples.map(t => `
+    <a class="temple-card" href="https://www.google.com/maps/search/?api=1&query=${t.maps}" target="_blank" rel="noopener">
+      <div class="temple-card-img-wrap">
+        <img class="temple-card-img" src="${t.img}" alt="${t.name}"
+          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png'"/>
+        <div class="temple-card-img-overlay"></div>
+        <div class="temple-card-badge">🛕 ${city}</div>
+      </div>
+      <div class="temple-card-body">
+        <div class="temple-card-name">${t.name}</div>
+        <div class="temple-card-deity">🙏 ${t.deity}</div>
+        <div class="temple-card-desc">${t.desc}</div>
+        <div class="temple-card-footer">
+          <span class="temple-card-timing"><i class="fa-regular fa-clock" style="font-size:10px"></i> ${t.timing}</span>
+          <span class="temple-card-maps"><i class="fa-solid fa-location-dot" style="font-size:10px"></i> Maps</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+// Show Puri on load
+showTemples('Puri');
+</script>
+
 <!-- ══ STATS ══ -->
 <div class="stats-strip" style="margin-top:28px">
   <div class="stat-item"><div class="stat-num" id="statTotal"><span>—</span></div><div class="stat-label">Total Listings</div></div>
