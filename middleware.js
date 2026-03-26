@@ -32,6 +32,17 @@ module.exports.isOwner=async(req, res, next) => {
 };
 
 
+
+
+module.exports.isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.isAdmin) {
+    return next();
+  }
+  req.flash("error", "You don't have admin permission to do that.");
+  res.redirect("/listings");
+};
+
+
 module.exports.validateListing=(req, res, next) => {
     let {error}=listingSchema.validate(req.body);
     if(error) {
