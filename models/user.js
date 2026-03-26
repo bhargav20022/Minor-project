@@ -7,17 +7,22 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-    isAdmin: {          // ← ADD THIS
+  isAdmin: {
     type: Boolean,
     default: false,
   },
+  // ── Forgot Password OTP fields ──
+  resetOtp: {
+    type: String,
+    default: null,
+  },
+  resetOtpExpiry: {
+    type: Date,
+    default: null,
+  },
 });
 
-
-
-
-userSchema.plugin(passportLocalMongoose); // now works
-console.log(typeof passportLocalMongoose); 
-
+userSchema.plugin(passportLocalMongoose);
+console.log(typeof passportLocalMongoose);
 
 module.exports = mongoose.model('User', userSchema);
