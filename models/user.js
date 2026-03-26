@@ -7,6 +7,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+    isAdmin: {          // ← ADD THIS
+    type: Boolean,
+    default: false,
+  },
 });
 
 
