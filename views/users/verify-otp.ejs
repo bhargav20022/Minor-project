@@ -1,0 +1,363 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.fp-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080810;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.fp-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(45,158,95,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 60%, rgba(212,168,67,.1) 0%, transparent 55%);
+}
+.fp-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.fp-card {
+  background: #faf7f2;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 440px;
+  padding: 48px 44px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+  animation: cardReveal .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes cardReveal {
+  from { opacity:0; transform:translateY(30px) scale(.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.fp-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(45,158,95,.3), rgba(212,168,67,.2), transparent 60%);
+  z-index: -1;
+}
+.fp-icon-wrap {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, #1a3a28, #2d9e5f);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 24px rgba(45,158,95,.35);
+  animation: iconPop .6s cubic-bezier(.34,1.56,.64,1) .2s both;
+}
+@keyframes iconPop {
+  from { opacity:0; transform:scale(.5); }
+  to   { opacity:1; transform:scale(1); }
+}
+.fp-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+.fp-step-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #e0d8cc;
+}
+.fp-step-dot.done   { background: #27ae60; }
+.fp-step-dot.active { background: #c9783a; box-shadow: 0 0 0 3px rgba(201,120,58,.2); }
+.fp-step-line {
+  width: 40px; height: 2px;
+  background: #e0d8cc;
+}
+.fp-step-line.done { background: #27ae60; }
+
+.fp-flash {
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fp-flash-error   { background: #fff1f0; border: 1px solid #ffd4d0; color: #c0392b; }
+.fp-flash-success { background: #f0fff4; border: 1px solid #b7ebc8; color: #27ae60; }
+
+.fp-eyebrow {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #2d9e5f;
+  margin-bottom: 10px;
+}
+.fp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.fp-title em { font-style: italic; color: #2d9e5f; }
+.fp-subtitle {
+  text-align: center;
+  font-size: 13.5px;
+  color: #7a7a8a;
+  margin-bottom: 32px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ── OTP boxes ── */
+.otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.otp-box {
+  width: 52px;
+  height: 60px;
+  border: 2px solid #e8e2d9;
+  border-radius: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: center;
+  background: #fff;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+  caret-color: transparent;
+}
+.otp-box:focus {
+  border-color: #2d9e5f;
+  box-shadow: 0 0 0 4px rgba(45,158,95,.12);
+  transform: scale(1.06);
+}
+.otp-box.filled {
+  border-color: #2d9e5f;
+  background: #f0fff4;
+}
+.otp-box.error {
+  border-color: #e74c3c;
+  background: #fff5f5;
+  animation: shake .3s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-5px); }
+  75%      { transform: translateX(5px); }
+}
+
+/* hidden real input */
+#otpHidden { display: none; }
+
+.fp-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #1a3a28, #2d9e5f);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.fp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(45,158,95,.4); }
+.fp-btn:disabled { opacity: .6; cursor: default; transform: none; }
+
+/* resend timer */
+.resend-wrap {
+  text-align: center;
+  font-size: 13px;
+  color: #7a7a8a;
+  margin-bottom: 16px;
+}
+.resend-link {
+  color: #c9783a;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 0;
+}
+.resend-link:disabled { color: #b0a8a0; cursor: default; }
+
+.fp-back {
+  text-align: center;
+  font-size: 13px;
+  color: #7a7a8a;
+}
+.fp-back a {
+  color: #c9783a;
+  font-weight: 600;
+  text-decoration: none;
+}
+.fp-back a:hover { text-decoration: underline; }
+</style>
+
+<div class="fp-wrapper">
+  <div class="fp-card">
+
+    <div class="fp-icon-wrap">✉️</div>
+
+    <!-- steps: step 2 active -->
+    <div class="fp-steps">
+      <div class="fp-step-dot done"></div>
+      <div class="fp-step-line done"></div>
+      <div class="fp-step-dot active"></div>
+      <div class="fp-step-line"></div>
+      <div class="fp-step-dot"></div>
+    </div>
+
+    <% if(success && success.length) { %>
+      <div class="fp-flash fp-flash-success">
+        <i class="fa-solid fa-circle-check"></i> <%= success %>
+      </div>
+    <% } %>
+    <% if(error && error.length) { %>
+      <div class="fp-flash fp-flash-error">
+        <i class="fa-solid fa-triangle-exclamation"></i> <%= error %>
+      </div>
+    <% } %>
+
+    <div class="fp-eyebrow">Step 2 of 3</div>
+    <h1 class="fp-title">Enter your<br/><em>OTP</em></h1>
+    <p class="fp-subtitle">We sent a 6-digit code to your email.<br/>It expires in <strong>10 minutes</strong>.</p>
+
+    <form action="/verify-otp" method="POST" id="otpForm">
+      <!-- 6 visual boxes -->
+      <div class="otp-boxes">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b0"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b1"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b2"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b3"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b4"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b5"/>
+      </div>
+
+      <!-- real hidden input that gets submitted -->
+      <input type="hidden" name="otp" id="otpHidden"/>
+
+      <button type="submit" class="fp-btn" id="verifyBtn" disabled>
+        <i class="fa-solid fa-shield-check"></i> Verify OTP
+      </button>
+    </form>
+
+    <div class="resend-wrap">
+      Didn't receive it?
+      <button class="resend-link" id="resendBtn" disabled onclick="resendOtp()">
+        Resend in <span id="timerDisplay">60s</span>
+      </button>
+    </div>
+
+    <div class="fp-back">
+      <a href="/forgot-password">← Try a different email</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const boxes     = Array.from({length:6}, (_,i) => document.getElementById('b'+i));
+const verifyBtn = document.getElementById('verifyBtn');
+const hidden    = document.getElementById('otpHidden');
+
+// auto-advance focus
+boxes.forEach((box, i) => {
+  box.addEventListener('input', (e) => {
+    const val = e.target.value.replace(/\D/g,'');
+    box.value = val;
+    if (val) {
+      box.classList.add('filled');
+      if (i < 5) boxes[i+1].focus();
+    } else {
+      box.classList.remove('filled');
+    }
+    syncHidden();
+  });
+
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !box.value && i > 0) {
+      boxes[i-1].focus();
+      boxes[i-1].value = '';
+      boxes[i-1].classList.remove('filled');
+      syncHidden();
+    }
+  });
+
+  // allow paste of full OTP
+  box.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);
+    pasted.split('').forEach((ch, idx) => {
+      if (boxes[idx]) {
+        boxes[idx].value = ch;
+        boxes[idx].classList.add('filled');
+      }
+    });
+    syncHidden();
+    (boxes[Math.min(pasted.length, 5)]).focus();
+  });
+});
+
+function syncHidden() {
+  const otp = boxes.map(b => b.value).join('');
+  hidden.value = otp;
+  verifyBtn.disabled = otp.length < 6;
+}
+
+// focus first box on load
+boxes[0].focus();
+
+// resend countdown (60s)
+let seconds = 60;
+const timerEl  = document.getElementById('timerDisplay');
+const resendBtn = document.getElementById('resendBtn');
+const countdown = setInterval(() => {
+  seconds--;
+  if (seconds <= 0) {
+    clearInterval(countdown);
+    resendBtn.disabled = false;
+    resendBtn.innerHTML = 'Resend OTP';
+  } else {
+    timerEl.textContent = seconds + 's';
+  }
+}, 1000);
+
+function resendOtp() {
+  window.location.href = '/forgot-password';
+}
+</script>
