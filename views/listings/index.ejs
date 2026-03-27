@@ -756,8 +756,8 @@ function showTemples(city) {
     <a class="temple-card" href="https://www.google.com/maps/search/?api=1&query=${t.maps}" target="_blank" rel="noopener">
       <div class="temple-card-img-wrap">
         <img class="temple-card-img" src="${t.img}" alt="${t.name}"
-          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png'"/>
-        <div class="temple-card-img-overlay"></div>
+onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"
+<div class="temple-card-img-overlay"></div>
         <div class="temple-card-badge">🛕 ${city}</div>
       </div>
       <div class="temple-card-body">
@@ -1113,7 +1113,7 @@ function showCityResults(city){
   document.getElementById('cityResultsTitle').textContent=city;
   section.style.display='block';
   if(!matched.length){container.innerHTML=`<div class="no-city-results"><i class="fa-solid fa-map-location-dot"></i><p>No stays found in <strong>${city}</strong>.</p></div>`;section.scrollIntoView({behavior:'smooth',block:'start'});return;}
-  container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`<a href="/listings/${l._id}" class="city-listing-card"><div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div><div class="city-card-body"><div class="title">${l.title}</div><div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div><div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div></div></a>`).join('')}</div>`;
+  container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`<a href="/listings/${l._id}" class="city-listing-card"><div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div><div class="city-card-body"><div class="title">${l.title}</div><div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div><div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div></div></a>`).join('')}</div>`;
   section.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function clearSearch() {
