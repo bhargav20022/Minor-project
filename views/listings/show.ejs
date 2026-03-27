@@ -7,168 +7,136 @@
 
 <style>
   :root {
-    --ink:          #1a1a2e;
-    --cream:        #faf7f2;
-    --accent:       #c9783a;
-    --accent-light: #f0dcc8;
-    --gold:         #d4a843;
-    --muted:        #6b6b7b;
-    --border:       #e0d8cc;
-    --success:      #2d7a4f;
-    --white:        #ffffff;
-    --radius:       16px;
-    --shadow:       0 8px 32px rgba(26,26,46,0.10);
+    --ink:#1a1a2e; --cream:#faf7f2; --accent:#c9783a; --accent-light:#f0dcc8;
+    --gold:#d4a843; --muted:#6b6b7b; --border:#e0d8cc; --success:#2d7a4f;
+    --white:#ffffff; --radius:16px; --shadow:0 8px 32px rgba(26,26,46,0.10);
   }
+  .show-page{max-width:900px;margin:0 auto;padding:28px 16px 80px;}
+  .show-hero{border-radius:20px;overflow:hidden;height:420px;position:relative;box-shadow:var(--shadow);margin-bottom:28px;}
+  .show-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+  .show-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(26,26,46,0.7) 100%);}
+  .show-hero-info{position:absolute;bottom:24px;left:28px;right:28px;color:white;}
+  .show-hero-info h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin:0 0 6px;}
+  .show-hero-loc{font-size:14px;color:rgba(255,255,255,0.75);display:flex;align-items:center;gap:6px;}
+  .show-grid{display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start;}
+  @media(max-width:768px){.show-grid{grid-template-columns:1fr;}}
+  .info-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;}
+  .info-card-header{background:var(--ink);padding:20px 24px;}
+  .info-card-header .tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px;}
+  .info-card-header h3{font-family:'Playfair Display',serif;font-size:1.25rem;color:white;margin:0;}
+  .info-card-body{padding:20px 24px;}
+  .info-row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px;align-items:flex-start;}
+  .info-row:last-child{border-bottom:none;}
+  .info-row i{color:var(--accent);font-size:13px;margin-top:3px;flex-shrink:0;width:16px;}
+  .info-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;}
+  .info-val{font-weight:600;color:var(--ink);line-height:1.5;}
+  .info-price{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--accent);}
+  .info-price-night{font-size:13px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;}
+  .booking-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:sticky;top:24px;}
+  .booking-card-header{background:linear-gradient(135deg,var(--ink),#2d2250);padding:20px 22px 16px;}
+  .booking-card-header .tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px;}
+  .booking-card-header h4{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;margin:0;}
+  .booking-card-body{padding:20px 20px 22px;}
+  .bc-label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .bc-input,.bc-select{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s;appearance:none;}
+  .bc-input:focus,.bc-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,120,58,0.1);background:white;}
+  .bc-stack{display:flex;flex-direction:column;gap:12px;margin-bottom:14px;}
+  .bc-field{margin-bottom:14px;}
+  .price-preview{display:none;background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+  .pp-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  .pp-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--ink);padding-top:8px;border-top:1px solid var(--border);}
+  .btn-book{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#a85e28);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;box-shadow:0 4px 16px rgba(201,120,58,0.35);}
+  .btn-book:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,120,58,0.45);}
+  .btn-login-book{display:block;width:100%;padding:14px;background:var(--success);color:white;border:none;border-radius:10px;text-align:center;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;}
+  .btn-login-book:hover{opacity:.9;color:white;}
+  .reviews-section{margin-top:4px;}
+  .section-head{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+  .review-form-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:20px;}
+  .review-textarea{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;min-height:90px;outline:none;background:var(--cream);transition:border-color .2s;}
+  .review-textarea:focus{border-color:var(--accent);background:white;}
+  .btn-review{margin-top:10px;padding:10px 22px;background:var(--ink);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-review:hover{background:#2d2250;}
+  .review-card{background:var(--white);border-radius:14px;padding:16px 20px;margin-bottom:12px;border:1px solid var(--border);}
+  .review-author{font-weight:700;color:var(--ink);font-size:14px;margin-bottom:4px;}
+  .review-comment{font-size:14px;color:var(--muted);line-height:1.6;}
+  .btn-del-review{margin-top:10px;padding:5px 14px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+  .btn-del-review:hover{border-color:#dc3545;color:#dc3545;}
+  .btn-gmaps{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:2px solid var(--border);background:white;color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;font-family:'DM Sans',sans-serif;}
+  .btn-gmaps:hover{border-color:var(--accent);color:var(--accent);}
+  .field-error{border-color:#dc3545!important;box-shadow:0 0 0 3px rgba(220,53,69,0.12)!important;background:#fff8f8!important;}
+  .error-msg{display:none;color:#dc3545;font-size:12px;font-weight:600;margin-top:5px;padding:6px 10px;background:#fff0f0;border-radius:7px;border-left:3px solid #dc3545;}
+  .error-msg.show{display:block;}
 
-  .show-page { max-width: 900px; margin: 0 auto; padding: 28px 16px 80px; }
-
-  .show-hero { border-radius: 20px; overflow: hidden; height: 420px; position: relative; box-shadow: var(--shadow); margin-bottom: 28px; }
-  .show-hero img { width:100%; height:100%; object-fit:cover; display:block; }
-  .show-hero-overlay { position:absolute; inset:0; background: linear-gradient(to bottom, transparent 40%, rgba(26,26,46,0.7) 100%); }
-  .show-hero-info { position:absolute; bottom:24px; left:28px; right:28px; color:white; }
-  .show-hero-info h2 { font-family:'Playfair Display',serif; font-size:clamp(1.4rem,3vw,2rem); font-weight:700; margin:0 0 6px; }
-  .show-hero-loc { font-size:14px; color:rgba(255,255,255,0.75); display:flex; align-items:center; gap:6px; }
-
-  .show-action-row { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; }
-  .btn-edit { padding:9px 20px; border-radius:10px; background:var(--ink); color:white; text-decoration:none; font-size:13px; font-weight:600; transition:all .2s; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; }
-  .btn-edit:hover { background:#2d2250; color:white; }
-  .btn-delete { padding:9px 20px; border-radius:10px; background:transparent; color:#dc3545; border:2px solid #dc3545; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; }
-  .btn-delete:hover { background:#dc3545; color:white; }
-
-  .show-grid { display:grid; grid-template-columns:1fr 320px; gap:28px; align-items:start; }
-  @media(max-width:768px){ .show-grid { grid-template-columns:1fr; } }
-
-  .info-card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:24px; }
-  .info-card-header { background:var(--ink); padding:20px 24px; }
-  .info-card-header .tag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:6px; }
-  .info-card-header h3 { font-family:'Playfair Display',serif; font-size:1.25rem; color:white; margin:0; }
-  .info-card-body { padding:20px 24px; }
-  .info-row { display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); font-size:14px; align-items:flex-start; }
-  .info-row:last-child { border-bottom:none; }
-  .info-row i { color:var(--accent); font-size:13px; margin-top:3px; flex-shrink:0; width:16px; }
-  .info-label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:3px; }
-  .info-val { font-weight:600; color:var(--ink); line-height:1.5; }
-  .info-price { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; color:var(--accent); }
-  .info-price-night { font-size:13px; font-weight:400; color:var(--muted); font-family:'DM Sans',sans-serif; }
-
-  .booking-card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:sticky; top:24px; }
-  .booking-card-header { background:linear-gradient(135deg,var(--ink),#2d2250); padding:20px 22px 16px; }
-  .booking-card-header .tag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:4px; }
-  .booking-card-header h4 { font-family:'Playfair Display',serif; font-size:1.05rem; color:white; margin:0; }
-  .booking-card-body { padding:20px 20px 22px; }
-
-  .bc-label { display:block; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-  .bc-input, .bc-select { width:100%; padding:11px 14px; border:2px solid var(--border); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); background:var(--cream); outline:none; transition:border-color .2s, box-shadow .2s; appearance:none; }
-  .bc-input:focus, .bc-select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(201,120,58,0.1); background:white; }
-  .bc-stack { display:flex; flex-direction:column; gap:12px; margin-bottom:14px; }
-  .bc-field { margin-bottom:14px; }
-
-  .price-preview { display:none; background:var(--cream); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:14px; }
-  .pp-row { display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:6px; }
-  .pp-total { display:flex; justify-content:space-between; font-size:15px; font-weight:700; color:var(--ink); padding-top:8px; border-top:1px solid var(--border); }
-
-  .btn-book { width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),#a85e28); color:white; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .25s; box-shadow:0 4px 16px rgba(201,120,58,0.35); }
-  .btn-book:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,120,58,0.45); }
-  .btn-login-book { display:block; width:100%; padding:14px; background:var(--success); color:white; border:none; border-radius:10px; text-align:center; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; text-decoration:none; transition:all .2s; }
-  .btn-login-book:hover { opacity:.9; color:white; }
-
-  .reviews-section { margin-top:4px; }
-  .section-head { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:600; color:var(--ink); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
-  .section-head::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-  .review-form-card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; margin-bottom:20px; }
-  .review-textarea { width:100%; padding:12px 14px; border:2px solid var(--border); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; resize:vertical; min-height:90px; outline:none; background:var(--cream); transition:border-color .2s; }
-  .review-textarea:focus { border-color:var(--accent); background:white; }
-  .btn-review { margin-top:10px; padding:10px 22px; background:var(--ink); color:white; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
-  .btn-review:hover { background:#2d2250; }
-  .review-card { background:var(--white); border-radius:14px; padding:16px 20px; margin-bottom:12px; border:1px solid var(--border); }
-  .review-author { font-weight:700; color:var(--ink); font-size:14px; margin-bottom:4px; }
-  .review-comment { font-size:14px; color:var(--muted); line-height:1.6; }
-  .btn-del-review { margin-top:10px; padding:5px 14px; background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; }
-  .btn-del-review:hover { border-color:#dc3545; color:#dc3545; }
-
-  .btn-gmaps { display:inline-flex; align-items:center; gap:6px; padding:9px 20px; border-radius:10px; border:2px solid var(--border); background:white; color:var(--ink); font-size:13px; font-weight:600; text-decoration:none; transition:all .2s; font-family:'DM Sans',sans-serif; }
-  .btn-gmaps:hover { border-color:var(--accent); color:var(--accent); }
-
-  /* ── Validation error styles ── */
-  .field-error { border-color: #dc3545 !important; box-shadow: 0 0 0 3px rgba(220,53,69,0.12) !important; background: #fff8f8 !important; }
-  .error-msg { display:none; color:#dc3545; font-size:12px; font-weight:600; margin-top:5px; padding:6px 10px; background:#fff0f0; border-radius:7px; border-left:3px solid #dc3545; }
-  .error-msg.show { display:block; }
-
-  @media(max-width:576px){
-    .show-hero { height:240px; }
-    .show-hero-info { left:16px; right:16px; bottom:14px; }
-  }
+  /* AI CHATBOT */
+  .ai-fab{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#2d2250);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(26,26,46,.45);z-index:8888;transition:all .25s;}
+  .ai-fab:hover{transform:scale(1.1);}
+  .ai-fab-icon{font-size:22px;}
+  .ai-fab .ai-pulse{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:#d4a843;border-radius:50%;border:2px solid white;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:.7;}}
+  .ai-chat-window{position:fixed;bottom:96px;right:28px;width:360px;height:500px;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);z-index:8888;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--border);}
+  .ai-chat-window.open{display:flex;}
+  .ai-chat-header{background:linear-gradient(135deg,#1a1a2e,#2d2250);padding:16px 18px;display:flex;align-items:center;gap:12px;}
+  .ai-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#c9783a,#d4a843);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .ai-header-info h5{margin:0;color:white;font-size:14px;font-weight:700;}
+  .ai-header-info p{margin:0;font-size:11px;color:rgba(255,255,255,.5);}
+  .ai-close{margin-left:auto;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:0;line-height:1;}
+  .ai-close:hover{color:white;}
+  .ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
+  .ai-messages::-webkit-scrollbar{width:4px;}
+  .ai-messages::-webkit-scrollbar-thumb{background:#e0d8cc;border-radius:4px;}
+  .msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.55;}
+  .msg-ai{background:var(--cream);color:var(--ink);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;}
+  .msg-user{background:linear-gradient(135deg,#1a1a2e,#2d2250);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
+  .msg-thinking{background:var(--cream);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;padding:12px 16px;}
+  .thinking-dots span{display:inline-block;width:7px;height:7px;background:#c9783a;border-radius:50%;animation:dot 1.2s infinite;margin:0 2px;}
+  .thinking-dots span:nth-child(2){animation-delay:.2s;}
+  .thinking-dots span:nth-child(3){animation-delay:.4s;}
+  @keyframes dot{0%,80%,100%{transform:scale(.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
+  .ai-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
+  .ai-sug-btn{padding:5px 11px;background:var(--cream);border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+  .ai-sug-btn:hover{background:var(--accent);color:white;border-color:var(--accent);}
+  .ai-input-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;}
+  .ai-input{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;background:var(--cream);color:var(--ink);transition:border-color .2s;}
+  .ai-input:focus{border-color:var(--accent);background:white;}
+  .ai-send{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#a85e28);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;transition:all .2s;flex-shrink:0;}
+  .ai-send:hover{transform:scale(1.08);}
+  .ai-send:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  @media(max-width:480px){.ai-chat-window{width:calc(100vw - 32px);right:16px;bottom:88px;}.show-hero{height:240px;}.show-hero-info{left:16px;right:16px;bottom:14px;}}
 </style>
 
-
 <div class="show-page">
-
   <div class="show-hero">
     <img src="<%= listing.image.url %>" alt="<%= listing.title %>"/>
     <div class="show-hero-overlay"></div>
     <div class="show-hero-info">
       <h2><%= listing.title %></h2>
-      <span class="show-hero-loc">
-        <i class="fa-solid fa-location-dot"></i>
-        <%= listing.location %>, <%= listing.country %>
-      </span>
+      <span class="show-hero-loc"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></span>
     </div>
   </div>
 
-  <!-- Owner buttons -->
-  <% if (currUser && listing.owner._id.equals(currUser._id)) { %>
+  <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
     <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark">Edit</a>
-    <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline"
-          onsubmit="return confirm('Delete your listing?')">
+    <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Delete your listing?')">
       <button class="btn btn-danger">Delete</button>
     </form>
   <% } %>
-
-  <!-- Admin delete -->
-  <% if (currUser && currUser.isAdmin && (!listing.owner._id.equals(currUser._id))) { %>
-    <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline"
-          onsubmit="return confirm('⚠️ Admin: Delete this listing permanently?')">
-      <button style="background:linear-gradient(135deg,#dc3545,#a71d2a);color:white;border:none;
-                     border-radius:8px;padding:9px 20px;font-weight:700;cursor:pointer;
-                     font-family:DM Sans,sans-serif;font-size:13px;">
-        🗑️ Admin Delete
-      </button>
+  <% if(currUser && currUser.isAdmin && (!listing.owner._id.equals(currUser._id))) { %>
+    <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Admin: Delete this listing?')">
+      <button style="background:linear-gradient(135deg,#dc3545,#a71d2a);color:white;border:none;border-radius:8px;padding:9px 20px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;font-size:13px;">🗑️ Admin Delete</button>
     </form>
   <% } %>
 
   <div class="show-grid">
     <div>
       <div class="info-card">
-        <div class="info-card-header">
-          <span class="tag">✦ Listing Details</span>
-          <h3><%= listing.title %></h3>
-        </div>
+        <div class="info-card-header"><span class="tag">✦ Listing Details</span><h3><%= listing.title %></h3></div>
         <div class="info-card-body">
-          <div class="info-row">
-            <i class="fa-solid fa-user"></i>
-            <div><div class="info-label">Hosted by</div><div class="info-val"><%= listing.owner.username %></div></div>
-          </div>
-          <div class="info-row">
-            <i class="fa-solid fa-align-left"></i>
-            <div><div class="info-label">Description</div><div class="info-val" style="font-weight:400;line-height:1.6"><%= listing.description %></div></div>
-          </div>
-          <% if(listing.category) { %>
-          <div class="info-row">
-            <i class="fa-solid fa-tag"></i>
-            <div><div class="info-label">Category</div><div class="info-val"><%= listing.category %></div></div>
-          </div>
-          <% } %>
-          <div class="info-row">
-            <i class="fa-solid fa-location-dot"></i>
-            <div><div class="info-label">Location</div><div class="info-val"><%= listing.location %>, <%= listing.country %></div></div>
-          </div>
-          <div class="info-row">
-            <i class="fa-solid fa-indian-rupee-sign"></i>
-            <div>
-              <div class="info-label">Price</div>
-              <div class="info-price">₹<%= listing.price.toLocaleString("en-IN") %> <span class="info-price-night">/ night</span></div>
-            </div>
-          </div>
+          <div class="info-row"><i class="fa-solid fa-user"></i><div><div class="info-label">Hosted by</div><div class="info-val"><%= listing.owner.username %></div></div></div>
+          <div class="info-row"><i class="fa-solid fa-align-left"></i><div><div class="info-label">Description</div><div class="info-val" style="font-weight:400;line-height:1.6"><%= listing.description %></div></div></div>
+          <% if(listing.category) { %><div class="info-row"><i class="fa-solid fa-tag"></i><div><div class="info-label">Category</div><div class="info-val"><%= listing.category %></div></div></div><% } %>
+          <div class="info-row"><i class="fa-solid fa-location-dot"></i><div><div class="info-label">Location</div><div class="info-val"><%= listing.location %>, <%= listing.country %></div></div></div>
+          <div class="info-row"><i class="fa-solid fa-indian-rupee-sign"></i><div><div class="info-label">Price</div><div class="info-price">₹<%= listing.price.toLocaleString("en-IN") %> <span class="info-price-night">/ night</span></div></div></div>
         </div>
       </div>
 
@@ -180,16 +148,11 @@
               <label class="bc-label">Rating</label>
               <fieldset class="starability-slot mb-3">
                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating."/>
-                <input type="radio" id="first-rate1" name="review[rating]" value="1"/>
-                <label for="first-rate1" title="Terrible">1 star</label>
-                <input type="radio" id="first-rate2" name="review[rating]" value="2"/>
-                <label for="first-rate2" title="Not good">2 stars</label>
-                <input type="radio" id="first-rate3" name="review[rating]" value="3"/>
-                <label for="first-rate3" title="Average">3 stars</label>
-                <input type="radio" id="first-rate4" name="review[rating]" value="4"/>
-                <label for="first-rate4" title="Very good">4 stars</label>
-                <input type="radio" id="first-rate5" name="review[rating]" value="5"/>
-                <label for="first-rate5" title="Amazing">5 stars</label>
+                <input type="radio" id="first-rate1" name="review[rating]" value="1"/><label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="review[rating]" value="2"/><label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="review[rating]" value="3"/><label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="review[rating]" value="4"/><label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="review[rating]" value="5"/><label for="first-rate5" title="Amazing">5 stars</label>
               </fieldset>
               <label class="bc-label">Comment</label>
               <textarea name="review[comment]" class="review-textarea" required placeholder="Share your experience…"></textarea>
@@ -198,15 +161,12 @@
             </form>
           </div>
         <% } %>
-
         <% if(listing.reviews.length > 0) { %>
           <div class="section-head">All Reviews</div>
           <% for(review of listing.reviews) { %>
             <div class="review-card">
               <div class="review-author">@<%= review.author.username %></div>
-              <% if(review.rating) { %>
-                <p class="starability-result" data-rating="<%= review.rating %>" style="margin:4px 0 6px"></p>
-              <% } %>
+              <% if(review.rating) { %><p class="starability-result" data-rating="<%= review.rating %>" style="margin:4px 0 6px"></p><% } %>
               <div class="review-comment"><%= review.comment %></div>
               <% if(currUser && review.author && review.author._id.equals(currUser._id)) { %>
                 <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
@@ -220,27 +180,18 @@
 
       <div class="map-section mt-4">
         <div class="section-head">Where you'll be</div>
-        <div style="border-radius:16px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.15);">
-          <iframe width="100%" height="380" style="border:0;" loading="lazy" allowfullscreen
-            src="https://www.google.com/maps?q=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>&output=embed">
-          </iframe>
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.15);">
+          <iframe width="100%" height="380" style="border:0;" loading="lazy" allowfullscreen src="https://www.google.com/maps?q=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>&output=embed"></iframe>
         </div>
         <div class="mt-3">
-          <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>"
-             target="_blank" class="btn-gmaps">
-            <i class="fa-solid fa-location-arrow"></i> Open in Google Maps
-          </a>
+          <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ' ' + listing.country) %>" target="_blank" class="btn-gmaps"><i class="fa-solid fa-location-arrow"></i> Open in Google Maps</a>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: Booking -->
     <div>
       <div class="booking-card">
-        <div class="booking-card-header">
-          <span class="tag">✦ Reserve Your Stay</span>
-          <h4><%= listing.title %></h4>
-        </div>
+        <div class="booking-card-header"><span class="tag">✦ Reserve Your Stay</span><h4><%= listing.title %></h4></div>
         <div class="booking-card-body">
           <% if(currUser) { %>
             <form action="/booking/<%= listing._id %>" method="POST" id="bookingForm" novalidate>
@@ -260,83 +211,52 @@
                 <label class="bc-label">Guests</label>
                 <select class="bc-select" id="guests" name="guests" required>
                   <option value="" disabled selected>Select guests</option>
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4 Guests</option>
-                  <option value="5">5 Guests</option>
-                  <option value="6">6+ Guests</option>
+                  <option value="1">1 Guest</option><option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option><option value="4">4 Guests</option>
+                  <option value="5">5 Guests</option><option value="6">6+ Guests</option>
                 </select>
                 <div class="error-msg" id="guestsError">⚠ Please select number of guests</div>
               </div>
               <div class="price-preview" id="pricePreview">
-                <div class="pp-row">
-                  <span>₹<%= listing.price.toLocaleString("en-IN") %> × <span id="nightCount">0</span> nights</span>
-                </div>
-                <div class="pp-total">
-                  <span>Total</span>
-                  <span>₹<span id="totalPreview">0</span></span>
-                </div>
+                <div class="pp-row"><span>₹<%= listing.price.toLocaleString("en-IN") %> x <span id="nightCount">0</span> nights</span></div>
+                <div class="pp-total"><span>Total</span><span>Rs.<span id="totalPreview">0</span></span></div>
               </div>
-              <button type="submit" class="btn-book">
-                <i class="fa-solid fa-lock"></i> Book Now
-              </button>
+              <button type="submit" class="btn-book"><i class="fa-solid fa-lock"></i> Book Now</button>
             </form>
           <% } else { %>
             <p style="font-size:13px;color:var(--muted);margin-bottom:16px;text-align:center;">Log in to book this stay</p>
             <a href="/login" class="btn-login-book"><i class="fa-solid fa-right-to-bracket me-2"></i>Login to Book</a>
           <% } %>
-
-          <!-- ✅ Contact Owner — only if logged in and NOT the owner -->
-          <% if (currUser && !listing.owner._id.equals(currUser._id)) { %>
+          <% if(currUser && !listing.owner._id.equals(currUser._id)) { %>
             <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:16px;">
               <p style="font-size:12px;color:var(--muted);margin-bottom:10px;text-align:center;">Have a question before booking?</p>
-              <button id="openContactModal"
-                style="width:100%;padding:12px;background:transparent;border:2px solid var(--accent);
-                       color:var(--accent);border-radius:10px;font-family:'DM Sans',sans-serif;
-                       font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;">
+              <button id="openContactModal" style="width:100%;padding:12px;background:transparent;border:2px solid var(--accent);color:var(--accent);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;">
                 <i class="fa-solid fa-envelope me-2"></i> Contact Owner
               </button>
             </div>
           <% } %>
-
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- ✅ Contact Owner Modal — OUTSIDE show-page div, OUTSIDE any script tag -->
-<div id="contactModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
-     z-index:9999;align-items:center;justify-content:center;padding:16px;">
+<!-- Contact Owner Modal -->
+<div id="contactModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:16px;">
   <div style="background:white;border-radius:16px;width:100%;max-width:480px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:#1a1a2e;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
       <div>
         <p style="margin:0 0 2px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#d4a843;">✦ Wanderlust</p>
         <h4 style="margin:0;color:white;font-family:'Playfair Display',serif;font-size:1.1rem;">Contact Owner</h4>
       </div>
-      <button id="closeContactModal"
-        style="background:transparent;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;line-height:1;">✕</button>
+      <button id="closeContactModal" style="background:transparent;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;line-height:1;">✕</button>
     </div>
     <div style="padding:24px;">
-      <p style="font-size:13px;color:#6b6b7b;margin-bottom:16px;">
-        Your message will be sent to <strong><%= listing.owner.username %></strong>.
-        They can reply directly to your email <strong><%= currUser ? currUser.email : '' %></strong>.
-      </p>
+      <p style="font-size:13px;color:#6b6b7b;margin-bottom:16px;">Your message will be sent to <strong><%= listing.owner.username %></strong>. They can reply to your email <strong><%= currUser ? currUser.email : '' %></strong>.</p>
       <form action="/listings/<%= listing._id %>/contact" method="POST">
-        <label style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;display:block;margin-bottom:6px;">
-          Your Message
-        </label>
-        <textarea name="message" required rows="4"
-          placeholder="Hi! I'm interested in your listing and wanted to ask..."
-          style="width:100%;padding:12px 14px;border:2px solid #e0d8cc;border-radius:10px;
-                 font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;
-                 outline:none;background:#faf7f2;box-sizing:border-box;"></textarea>
-        <button type="submit"
-          style="margin-top:12px;width:100%;padding:13px;background:linear-gradient(135deg,#c9783a,#a85e28);
-                 color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;
-                 font-size:14px;font-weight:700;cursor:pointer;">
+        <label style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;display:block;margin-bottom:6px;">Your Message</label>
+        <textarea name="message" required rows="4" placeholder="Hi! I'm interested in your listing..." style="width:100%;padding:12px 14px;border:2px solid #e0d8cc;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;outline:none;background:#faf7f2;box-sizing:border-box;"></textarea>
+        <button type="submit" style="margin-top:12px;width:100%;padding:13px;background:linear-gradient(135deg,#c9783a,#a85e28);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">
           <i class="fa-solid fa-paper-plane me-2"></i> Send Message
         </button>
       </form>
@@ -344,149 +264,162 @@
   </div>
 </div>
 
+<!-- AI FAB -->
+<button class="ai-fab" id="aiFab" title="Ask AI about this listing">
+  <span class="ai-fab-icon">✨</span>
+  <span class="ai-pulse"></span>
+</button>
+
+<!-- AI Chat Window -->
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="ai-chat-header">
+    <div class="ai-avatar">✨</div>
+    <div class="ai-header-info">
+      <h5>Wanderlust AI</h5>
+      <p>Ask me about this listing</p>
+    </div>
+    <button class="ai-close" id="aiClose">✕</button>
+  </div>
+  <div class="ai-messages" id="aiMessages">
+    <div class="msg msg-ai">Hi! I know all about <strong><%= listing.title %></strong> in <strong><%= listing.location %></strong>. Ask me anything! 👋</div>
+  </div>
+  <div class="ai-suggestions" id="aiSuggestions">
+    <button class="ai-sug-btn">What's nearby?</button>
+    <button class="ai-sug-btn">Best time to visit?</button>
+    <button class="ai-sug-btn">Is it family friendly?</button>
+    <button class="ai-sug-btn">What's included?</button>
+  </div>
+  <div class="ai-input-row">
+    <input class="ai-input" id="aiInput" type="text" placeholder="Ask anything about this stay…" autocomplete="off"/>
+    <button class="ai-send" id="aiSend"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="/js/map.js"></script>
 
 <script>
-  (function(){
-    const mapEl = document.getElementById('map');
-    const token = "<%= process.env.MAP_TOKEN %>";
-    if (mapEl && (!token || token === 'undefined' || token.trim() === '')) {
-      mapEl.style.display = 'none';
-    }
-  })();
+(function(){
+  const mapEl=document.getElementById('map');
+  const token="<%= process.env.MAP_TOKEN %>";
+  if(mapEl&&(!token||token==='undefined'||token.trim()===''))mapEl.style.display='none';
+})();
 
-  /* ── Booking logic ── */
-  (function () {
-    const bookingForm = document.getElementById('bookingForm');
-    if (!bookingForm) return;
+(function(){
+  const bookingForm=document.getElementById('bookingForm');
+  if(!bookingForm)return;
+  const ci=document.getElementById('checkIn'),co=document.getElementById('checkOut');
+  const ppn=<%- listing.price %>;
+  const today=new Date().toISOString().split('T')[0];
+  ci.min=today;co.min=today;
+  function updatePreview(){
+    if(ci.value){const nd=new Date(ci.value);nd.setDate(nd.getDate()+1);co.min=nd.toISOString().split('T')[0];}
+    if(ci.value&&co.value){const n=Math.round((new Date(co.value)-new Date(ci.value))/86400000);if(n>0){document.getElementById('nightCount').textContent=n;document.getElementById('totalPreview').textContent=(ppn*n).toLocaleString('en-IN');document.getElementById('pricePreview').style.display='block';}else{document.getElementById('pricePreview').style.display='none';}}
+  }
+  bookingForm.addEventListener('submit',function(e){
+    let v=true;
+    ['checkIn','checkOut','guests'].forEach(id=>document.getElementById(id).classList.remove('field-error'));
+    ['checkInError','checkOutError','guestsError'].forEach(id=>document.getElementById(id).classList.remove('show'));
+    if(!ci.value){ci.classList.add('field-error');document.getElementById('checkInError').classList.add('show');v=false;}
+    if(!co.value){co.classList.add('field-error');document.getElementById('checkOutError').classList.add('show');v=false;}
+    if(ci.value&&co.value&&new Date(co.value)<=new Date(ci.value)){co.classList.add('field-error');const m=document.getElementById('checkOutError');m.textContent='⚠ Check-out must be after check-in';m.classList.add('show');v=false;}
+    const g=document.getElementById('guests');
+    if(!g.value){g.classList.add('field-error');document.getElementById('guestsError').classList.add('show');v=false;}
+    if(!v){e.preventDefault();e.stopPropagation();bookingForm.scrollIntoView({behavior:'smooth',block:'center'});}
+  });
+  ci.addEventListener('change',function(){this.classList.remove('field-error');document.getElementById('checkInError').classList.remove('show');updatePreview();});
+  co.addEventListener('change',function(){this.classList.remove('field-error');const m=document.getElementById('checkOutError');m.textContent='⚠ Please select a check-out date';m.classList.remove('show');updatePreview();});
+  document.getElementById('guests').addEventListener('change',function(){this.classList.remove('field-error');document.getElementById('guestsError').classList.remove('show');});
+})();
 
-    const checkInEl     = document.getElementById('checkIn');
-    const checkOutEl    = document.getElementById('checkOut');
-    const pricePerNight = <%= listing.price %>;
-    const today         = new Date().toISOString().split('T')[0];
+(function(){
+  const modal=document.getElementById('contactModal');
+  const openBtn=document.getElementById('openContactModal');
+  const closeBtn=document.getElementById('closeContactModal');
+  if(!modal)return;
+  if(openBtn)openBtn.addEventListener('click',()=>modal.style.display='flex');
+  if(closeBtn)closeBtn.addEventListener('click',()=>modal.style.display='none');
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.style.display='none';});
+})();
 
-    checkInEl.min  = today;
-    checkOutEl.min = today;
+(function(){
+  const fab=document.getElementById('aiFab');
+  const win=document.getElementById('aiChatWindow');
+  const closeBtn=document.getElementById('aiClose');
+  const msgs=document.getElementById('aiMessages');
+  const input=document.getElementById('aiInput');
+  const sendBtn=document.getElementById('aiSend');
+  const sugsEl=document.getElementById('aiSuggestions');
+  let history=[];
+  let loading=false;
 
-    function updatePreview() {
-      const ci = checkInEl.value;
-      const co = checkOutEl.value;
-      if (ci) {
-        const nd = new Date(ci);
-        nd.setDate(nd.getDate() + 1);
-        checkOutEl.min = nd.toISOString().split('T')[0];
-      }
-      if (ci && co) {
-        const nights = Math.round((new Date(co) - new Date(ci)) / 86400000);
-        if (nights > 0) {
-          document.getElementById('nightCount').textContent   = nights;
-          document.getElementById('totalPreview').textContent = (pricePerNight * nights).toLocaleString('en-IN');
-          document.getElementById('pricePreview').style.display = 'block';
-        } else {
-          document.getElementById('pricePreview').style.display = 'none';
-        }
-      }
-    }
+  const sysPrompt=`You are a friendly travel assistant for Wanderlust.
+Listing: ${listing.title}
+Description: ${listing.description||'Not provided'}
+Location: ${listing.location}, ${listing.country}
+Price: Rs.${listing.price} per night
+Category: ${listing.category||'Villa/Stay'}
 
-    bookingForm.addEventListener('submit', function (e) {
-      let valid = true;
+Help guests with questions about this listing, nearby attractions, travel tips, best time to visit, what to expect, etc.
+Keep replies friendly and concise (2-4 sentences). Use emojis sparingly.`;
 
-      // Reset all errors
-      ['checkIn', 'checkOut', 'guests'].forEach(id => {
-        document.getElementById(id).classList.remove('field-error');
+  fab.addEventListener('click',()=>{win.classList.toggle('open');if(win.classList.contains('open'))input.focus();});
+  closeBtn.addEventListener('click',()=>win.classList.remove('open'));
+
+  sugsEl.querySelectorAll('.ai-sug-btn').forEach(b=>{
+    b.addEventListener('click',()=>{input.value=b.textContent;send();});
+  });
+
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+  sendBtn.addEventListener('click',send);
+
+  function addMsg(text,role){
+    const d=document.createElement('div');
+    d.className='msg '+(role==='user'?'msg-user':'msg-ai');
+    d.textContent=text;
+    msgs.appendChild(d);
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+
+  function showThinking(){
+    const d=document.createElement('div');
+    d.className='msg msg-thinking';d.id='thinkingMsg';
+    d.innerHTML='<div class="thinking-dots"><span></span><span></span><span></span></div>';
+    msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+  }
+
+  function removeThinking(){const t=document.getElementById('thinkingMsg');if(t)t.remove();}
+
+  async function send(){
+    const text=input.value.trim();
+    if(!text||loading)return;
+    input.value='';loading=true;sendBtn.disabled=true;
+    sugsEl.style.display='none';
+    addMsg(text,'user');
+    history.push({role:'user',content:text});
+    showThinking();
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:1000,
+          system:sysPrompt,
+          messages:history
+        })
       });
-      ['checkInError', 'checkOutError', 'guestsError'].forEach(id => {
-        document.getElementById(id).classList.remove('show');
-      });
-
-      // Check-in empty
-      if (!checkInEl.value) {
-        checkInEl.classList.add('field-error');
-        document.getElementById('checkInError').classList.add('show');
-        valid = false;
-      }
-
-      // Check-out empty
-      if (!checkOutEl.value) {
-        checkOutEl.classList.add('field-error');
-        document.getElementById('checkOutError').classList.add('show');
-        valid = false;
-      }
-
-      // Check-out before check-in
-      if (checkInEl.value && checkOutEl.value) {
-        const ci = new Date(checkInEl.value);
-        const co = new Date(checkOutEl.value);
-        if (co <= ci) {
-          checkOutEl.classList.add('field-error');
-          const msg = document.getElementById('checkOutError');
-          msg.textContent = '⚠ Check-out must be after check-in';
-          msg.classList.add('show');
-          valid = false;
-        }
-      }
-
-      // Guests not selected
-      const guestsEl = document.getElementById('guests');
-      if (!guestsEl.value) {
-        guestsEl.classList.add('field-error');
-        document.getElementById('guestsError').classList.add('show');
-        valid = false;
-      }
-
-      if (!valid) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Scroll booking card into view smoothly
-        bookingForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    // Clear error on input change
-    checkInEl.addEventListener('change', function () {
-      this.classList.remove('field-error');
-      document.getElementById('checkInError').classList.remove('show');
-      updatePreview();
-    });
-    checkOutEl.addEventListener('change', function () {
-      this.classList.remove('field-error');
-      const msg = document.getElementById('checkOutError');
-      msg.textContent = '⚠ Please select a check-out date';
-      msg.classList.remove('show');
-      updatePreview();
-    });
-    document.getElementById('guests').addEventListener('change', function () {
-      this.classList.remove('field-error');
-      document.getElementById('guestsError').classList.remove('show');
-    });
-  })(); // end booking IIFE
-
-  /* ── Contact Owner Modal ── */
-  (function () {
-    const modal     = document.getElementById('contactModal');
-    const openBtn   = document.getElementById('openContactModal');
-    const closeBtn  = document.getElementById('closeContactModal');
-
-    if (!modal) return;
-
-    if (openBtn) {
-      openBtn.addEventListener('click', function () {
-        modal.style.display = 'flex';
-      });
+      const data=await res.json();
+      removeThinking();
+      const reply=(data.content&&data.content[0]&&data.content[0].text)?data.content[0].text:'Sorry, I could not respond. Please try again!';
+      history.push({role:'assistant',content:reply});
+      addMsg(reply,'ai');
+    }catch(err){
+      removeThinking();
+      addMsg('Oops! Something went wrong. Please try again. 🙏','ai');
     }
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
-        modal.style.display = 'none';
-      });
-    }
-
-    // Close when clicking outside the modal box
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) modal.style.display = 'none';
-    });
-  })();
+    loading=false;sendBtn.disabled=false;input.focus();
+  }
+})();
 </script>
