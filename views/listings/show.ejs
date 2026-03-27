@@ -68,41 +68,6 @@
   .error-msg{display:none;color:#dc3545;font-size:12px;font-weight:600;margin-top:5px;padding:6px 10px;background:#fff0f0;border-radius:7px;border-left:3px solid #dc3545;}
   .error-msg.show{display:block;}
 
-  /* AI CHATBOT */
-  .ai-fab{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#2d2250);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(26,26,46,.45);z-index:8888;transition:all .25s;}
-  .ai-fab:hover{transform:scale(1.1);}
-  .ai-fab-icon{font-size:22px;}
-  .ai-fab .ai-pulse{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:#d4a843;border-radius:50%;border:2px solid white;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:.7;}}
-  .ai-chat-window{position:fixed;bottom:96px;right:28px;width:360px;height:500px;background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);z-index:8888;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--border);}
-  .ai-chat-window.open{display:flex;}
-  .ai-chat-header{background:linear-gradient(135deg,#1a1a2e,#2d2250);padding:16px 18px;display:flex;align-items:center;gap:12px;}
-  .ai-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#c9783a,#d4a843);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-  .ai-header-info h5{margin:0;color:white;font-size:14px;font-weight:700;}
-  .ai-header-info p{margin:0;font-size:11px;color:rgba(255,255,255,.5);}
-  .ai-close{margin-left:auto;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:0;line-height:1;}
-  .ai-close:hover{color:white;}
-  .ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
-  .ai-messages::-webkit-scrollbar{width:4px;}
-  .ai-messages::-webkit-scrollbar-thumb{background:#e0d8cc;border-radius:4px;}
-  .msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.55;}
-  .msg-ai{background:var(--cream);color:var(--ink);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;}
-  .msg-user{background:linear-gradient(135deg,#1a1a2e,#2d2250);color:white;border-bottom-right-radius:4px;align-self:flex-end;}
-  .msg-thinking{background:var(--cream);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;padding:12px 16px;}
-  .thinking-dots span{display:inline-block;width:7px;height:7px;background:#c9783a;border-radius:50%;animation:dot 1.2s infinite;margin:0 2px;}
-  .thinking-dots span:nth-child(2){animation-delay:.2s;}
-  .thinking-dots span:nth-child(3){animation-delay:.4s;}
-  @keyframes dot{0%,80%,100%{transform:scale(.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
-  .ai-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
-  .ai-sug-btn{padding:5px 11px;background:var(--cream);border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
-  .ai-sug-btn:hover{background:var(--accent);color:white;border-color:var(--accent);}
-  .ai-input-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;}
-  .ai-input{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;background:var(--cream);color:var(--ink);transition:border-color .2s;}
-  .ai-input:focus{border-color:var(--accent);background:white;}
-  .ai-send{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#a85e28);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;transition:all .2s;flex-shrink:0;}
-  .ai-send:hover{transform:scale(1.08);}
-  .ai-send:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-  @media(max-width:480px){.ai-chat-window{width:calc(100vw - 32px);right:16px;bottom:88px;}.show-hero{height:240px;}.show-hero-info{left:16px;right:16px;bottom:14px;}}
 </style>
 
 <div class="show-page">
@@ -264,162 +229,83 @@
   </div>
 </div>
 
-<!-- AI FAB -->
-<button class="ai-fab" id="aiFab" title="Ask AI about this listing">
-  <span class="ai-fab-icon">✨</span>
-  <span class="ai-pulse"></span>
-</button>
 
-<!-- AI Chat Window -->
-<div class="ai-chat-window" id="aiChatWindow">
-  <div class="ai-chat-header">
-    <div class="ai-avatar">✨</div>
-    <div class="ai-header-info">
-      <h5>Wanderlust AI</h5>
-      <p>Ask me about this listing</p>
-    </div>
-    <button class="ai-close" id="aiClose">✕</button>
-  </div>
-  <div class="ai-messages" id="aiMessages">
-    <div class="msg msg-ai">Hi! I know all about <strong><%= listing.title %></strong> in <strong><%= listing.location %></strong>. Ask me anything! 👋</div>
-  </div>
-  <div class="ai-suggestions" id="aiSuggestions">
-    <button class="ai-sug-btn">What's nearby?</button>
-    <button class="ai-sug-btn">Best time to visit?</button>
-    <button class="ai-sug-btn">Is it family friendly?</button>
-    <button class="ai-sug-btn">What's included?</button>
-  </div>
-  <div class="ai-input-row">
-    <input class="ai-input" id="aiInput" type="text" placeholder="Ask anything about this stay…" autocomplete="off"/>
-    <button class="ai-send" id="aiSend"><i class="fa-solid fa-paper-plane"></i></button>
-  </div>
-</div>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script src="/js/map.js"></script>
 
+
+
 <script>
-(function(){
-  const mapEl=document.getElementById('map');
-  const token="<%= process.env.MAP_TOKEN %>";
-  if(mapEl&&(!token||token==='undefined'||token.trim()===''))mapEl.style.display='none';
-})();
+document.addEventListener("DOMContentLoaded", function () {
 
-(function(){
-  const bookingForm=document.getElementById('bookingForm');
-  if(!bookingForm)return;
-  const ci=document.getElementById('checkIn'),co=document.getElementById('checkOut');
-  const ppn=<%- listing.price %>;
-  const today=new Date().toISOString().split('T')[0];
-  ci.min=today;co.min=today;
-  function updatePreview(){
-    if(ci.value){const nd=new Date(ci.value);nd.setDate(nd.getDate()+1);co.min=nd.toISOString().split('T')[0];}
-    if(ci.value&&co.value){const n=Math.round((new Date(co.value)-new Date(ci.value))/86400000);if(n>0){document.getElementById('nightCount').textContent=n;document.getElementById('totalPreview').textContent=(ppn*n).toLocaleString('en-IN');document.getElementById('pricePreview').style.display='block';}else{document.getElementById('pricePreview').style.display='none';}}
-  }
-  bookingForm.addEventListener('submit',function(e){
-    let v=true;
-    ['checkIn','checkOut','guests'].forEach(id=>document.getElementById(id).classList.remove('field-error'));
-    ['checkInError','checkOutError','guestsError'].forEach(id=>document.getElementById(id).classList.remove('show'));
-    if(!ci.value){ci.classList.add('field-error');document.getElementById('checkInError').classList.add('show');v=false;}
-    if(!co.value){co.classList.add('field-error');document.getElementById('checkOutError').classList.add('show');v=false;}
-    if(ci.value&&co.value&&new Date(co.value)<=new Date(ci.value)){co.classList.add('field-error');const m=document.getElementById('checkOutError');m.textContent='⚠ Check-out must be after check-in';m.classList.add('show');v=false;}
-    const g=document.getElementById('guests');
-    if(!g.value){g.classList.add('field-error');document.getElementById('guestsError').classList.add('show');v=false;}
-    if(!v){e.preventDefault();e.stopPropagation();bookingForm.scrollIntoView({behavior:'smooth',block:'center'});}
-  });
-  ci.addEventListener('change',function(){this.classList.remove('field-error');document.getElementById('checkInError').classList.remove('show');updatePreview();});
-  co.addEventListener('change',function(){this.classList.remove('field-error');const m=document.getElementById('checkOutError');m.textContent='⚠ Please select a check-out date';m.classList.remove('show');updatePreview();});
-  document.getElementById('guests').addEventListener('change',function(){this.classList.remove('field-error');document.getElementById('guestsError').classList.remove('show');});
-})();
+  // ================= BOOKING VALIDATION =================
+  const form = document.getElementById("bookingForm");
 
-(function(){
-  const modal=document.getElementById('contactModal');
-  const openBtn=document.getElementById('openContactModal');
-  const closeBtn=document.getElementById('closeContactModal');
-  if(!modal)return;
-  if(openBtn)openBtn.addEventListener('click',()=>modal.style.display='flex');
-  if(closeBtn)closeBtn.addEventListener('click',()=>modal.style.display='none');
-  modal.addEventListener('click',e=>{if(e.target===modal)modal.style.display='none';});
-})();
+  if (form) {
+    const checkIn = document.getElementById("checkIn");
+    const checkOut = document.getElementById("checkOut");
+    const guests = document.getElementById("guests");
 
-(function(){
-  const fab=document.getElementById('aiFab');
-  const win=document.getElementById('aiChatWindow');
-  const closeBtn=document.getElementById('aiClose');
-  const msgs=document.getElementById('aiMessages');
-  const input=document.getElementById('aiInput');
-  const sendBtn=document.getElementById('aiSend');
-  const sugsEl=document.getElementById('aiSuggestions');
-  let history=[];
-  let loading=false;
+    form.addEventListener("submit", function (e) {
+      let valid = true;
 
-  const sysPrompt=`You are a friendly travel assistant for Wanderlust.
-Listing: ${listing.title}
-Description: ${listing.description||'Not provided'}
-Location: ${listing.location}, ${listing.country}
-Price: Rs.${listing.price} per night
-Category: ${listing.category||'Villa/Stay'}
-
-Help guests with questions about this listing, nearby attractions, travel tips, best time to visit, what to expect, etc.
-Keep replies friendly and concise (2-4 sentences). Use emojis sparingly.`;
-
-  fab.addEventListener('click',()=>{win.classList.toggle('open');if(win.classList.contains('open'))input.focus();});
-  closeBtn.addEventListener('click',()=>win.classList.remove('open'));
-
-  sugsEl.querySelectorAll('.ai-sug-btn').forEach(b=>{
-    b.addEventListener('click',()=>{input.value=b.textContent;send();});
-  });
-
-  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-  sendBtn.addEventListener('click',send);
-
-  function addMsg(text,role){
-    const d=document.createElement('div');
-    d.className='msg '+(role==='user'?'msg-user':'msg-ai');
-    d.textContent=text;
-    msgs.appendChild(d);
-    msgs.scrollTop=msgs.scrollHeight;
-  }
-
-  function showThinking(){
-    const d=document.createElement('div');
-    d.className='msg msg-thinking';d.id='thinkingMsg';
-    d.innerHTML='<div class="thinking-dots"><span></span><span></span><span></span></div>';
-    msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
-  }
-
-  function removeThinking(){const t=document.getElementById('thinkingMsg');if(t)t.remove();}
-
-  async function send(){
-    const text=input.value.trim();
-    if(!text||loading)return;
-    input.value='';loading=true;sendBtn.disabled=true;
-    sugsEl.style.display='none';
-    addMsg(text,'user');
-    history.push({role:'user',content:text});
-    showThinking();
-    try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:1000,
-          system:sysPrompt,
-          messages:history
-        })
+      ["checkIn","checkOut","guests"].forEach(id => {
+        document.getElementById(id).classList.remove("field-error");
       });
-      const data=await res.json();
-      removeThinking();
-      const reply=(data.content&&data.content[0]&&data.content[0].text)?data.content[0].text:'Sorry, I could not respond. Please try again!';
-      history.push({role:'assistant',content:reply});
-      addMsg(reply,'ai');
-    }catch(err){
-      removeThinking();
-      addMsg('Oops! Something went wrong. Please try again. 🙏','ai');
-    }
-    loading=false;sendBtn.disabled=false;input.focus();
+
+      ["checkInError","checkOutError","guestsError"].forEach(id => {
+        document.getElementById(id).classList.remove("show");
+      });
+
+      if (!checkIn.value) {
+        checkIn.classList.add("field-error");
+        document.getElementById("checkInError").classList.add("show");
+        valid = false;
+      }
+
+      if (!checkOut.value) {
+        checkOut.classList.add("field-error");
+        document.getElementById("checkOutError").classList.add("show");
+        valid = false;
+      }
+
+      if (checkIn.value && checkOut.value) {
+        if (new Date(checkOut.value) <= new Date(checkIn.value)) {
+          checkOut.classList.add("field-error");
+          const msg = document.getElementById("checkOutError");
+          msg.innerText = "⚠ Check-out must be after check-in";
+          msg.classList.add("show");
+          valid = false;
+        }
+      }
+
+      if (!guests.value) {
+        guests.classList.add("field-error");
+        document.getElementById("guestsError").classList.add("show");
+        valid = false;
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
   }
-})();
+
+  // ================= CONTACT MODAL =================
+  const modal = document.getElementById("contactModal");
+  const openBtn = document.getElementById("openContactModal");
+  const closeBtn = document.getElementById("closeContactModal");
+
+  if (modal) {
+    if (openBtn) openBtn.onclick = () => modal.style.display = "flex";
+    if (closeBtn) closeBtn.onclick = () => modal.style.display = "none";
+
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    };
+  }
+
+});
 </script>
