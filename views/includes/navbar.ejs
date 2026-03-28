@@ -181,6 +181,120 @@
     color: white !important;
   }
 
+  /* ── PROFILE ICON + DROPDOWN ── */
+  .wl-profile-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .wl-profile-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #a85e28);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: white;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .wl-profile-btn:hover {
+    box-shadow: 0 0 0 3px rgba(201,120,58,0.35);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* admin badge */
+  .wl-admin-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    color: var(--ink);
+    font-weight: 800;
+  }
+
+  /* dropdown */
+  .wl-profile-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: #1e1d30;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    min-width: 200px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    overflow: hidden;
+    z-index: 2000;
+    animation: fadeDropdown 0.18s ease;
+  }
+
+  @keyframes fadeDropdown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .wl-profile-dropdown.open { display: block; }
+
+  .wl-pd-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .wl-pd-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .wl-pd-role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-top: 2px;
+  }
+
+  .wl-pd-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .wl-pd-item i { width: 16px; text-align: center; font-size: 13px; }
+
+  .wl-pd-item:hover {
+    background: rgba(255,255,255,0.07);
+    color: white;
+  }
+
+  .wl-pd-item.danger {
+    color: #ff6b6b;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .wl-pd-item.danger:hover { background: rgba(255,107,107,0.1); }
+
   /* ── HAMBURGER ── */
   .wl-toggler {
     display: none;
@@ -329,10 +443,48 @@
         <a href="/signup" class="wl-link wl-link-ghost">Sign Up</a>
         <a href="/login" class="wl-link wl-link-auth">Log In</a>
       <% } %>
-      <% if(currUser) { %>
-        <a href="/logout" class="wl-link wl-link-ghost">Log Out</a>
-      <% } %>
     </div>
+
+    <!-- Profile Icon (only when logged in) -->
+    <% if(currUser) { %>
+    <div class="wl-profile-wrap" id="wlProfileWrap">
+      <button class="wl-profile-btn" id="wlProfileBtn" aria-label="Profile menu">
+        <i class="fa-solid fa-user"></i>
+        <% if(currUser.isAdmin) { %>
+          <span class="wl-admin-badge" title="Admin">A</span>
+        <% } %>
+      </button>
+
+      <div class="wl-profile-dropdown" id="wlProfileDropdown">
+        <!-- Header -->
+        <div class="wl-pd-header">
+          <div class="wl-pd-name"><%= currUser.username %></div>
+          <% if(currUser.isAdmin) { %>
+            <div class="wl-pd-role"><i class="fa-solid fa-shield-halved" style="font-size:10px;"></i> Admin</div>
+          <% } else { %>
+            <div class="wl-pd-role" style="color:rgba(255,255,255,0.4);">Member</div>
+          <% } %>
+        </div>
+
+        <!-- My Bookings -->
+        <a href="/booking/my-bookings" class="wl-pd-item">
+          <i class="fa-solid fa-calendar-check"></i> My Bookings
+        </a>
+
+        <!-- Admin Dashboard (only for admin) -->
+        <% if(currUser.isAdmin) { %>
+          <a href="/admin" class="wl-pd-item">
+            <i class="fa-solid fa-gauge-high"></i> Admin Dashboard
+          </a>
+        <% } %>
+
+        <!-- Log Out -->
+        <a href="/logout" class="wl-pd-item danger">
+          <i class="fa-solid fa-right-from-bracket"></i> Log Out
+        </a>
+      </div>
+    </div>
+    <% } %>
 
     <!-- Hamburger (mobile) -->
     <button class="wl-toggler" id="wlToggler" aria-label="Menu">
@@ -356,16 +508,35 @@
       <a href="/login" class="wl-link-auth">Log In</a>
     <% } %>
     <% if(currUser) { %>
+      <a href="/booking/my-bookings"><i class="fa-solid fa-calendar-check me-2"></i>My Bookings</a>
+      <% if(currUser.isAdmin) { %>
+        <a href="/admin" style="color:var(--gold) !important;"><i class="fa-solid fa-gauge-high me-2"></i>Admin Dashboard</a>
+      <% } %>
       <a href="/logout" class="wl-link-ghost">Log Out</a>
     <% } %>
   </div>
 </nav>
 
 <script>
+  // Hamburger
   const toggler = document.getElementById('wlToggler');
   const drawer  = document.getElementById('wlDrawer');
   toggler.addEventListener('click', () => {
     toggler.classList.toggle('open');
     drawer.classList.toggle('open');
   });
+
+  // Profile dropdown toggle
+  const profileBtn      = document.getElementById('wlProfileBtn');
+  const profileDropdown = document.getElementById('wlProfileDropdown');
+  if (profileBtn) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('open');
+    });
+    // Close on outside click
+    document.addEventListener('click', () => {
+      profileDropdown.classList.remove('open');
+    });
+  }
 </script>
