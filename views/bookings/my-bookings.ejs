@@ -1,0 +1,275 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+:root {
+  --void: #050508;
+  --surface: #11111c;
+  --panel: #16162a;
+  --line: rgba(255,255,255,0.07);
+  --ink: #e8e4f0;
+  --muted: rgba(232,228,240,0.42);
+  --dim: rgba(232,228,240,0.22);
+  --gold: #e4b84a;
+  --amber: #d4783a;
+  --success: #3a9e6e;
+  --danger: #e05577;
+  --radius: 16px;
+  --radius-lg: 22px;
+}
+
+html.light-mode {
+  --void: #f5f1eb;
+  --surface: #ffffff;
+  --panel: #f0ebe0;
+  --line: rgba(26,26,46,0.1);
+  --ink: #1a1a2e;
+  --muted: rgba(26,26,46,0.5);
+  --dim: rgba(26,26,46,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.mb-page { max-width: 860px; margin: 0 auto; padding: 36px 18px 80px; }
+
+/* ── PAGE HEADER ── */
+.mb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+}
+.mb-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 300; color: var(--ink); margin: 0;
+  display: flex; align-items: center; gap: 12px;
+}
+.mb-title::after {
+  content: ''; width: 40px; height: 2px;
+  background: linear-gradient(90deg, var(--amber), transparent);
+  display: inline-block; border-radius: 2px;
+}
+.mb-count {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  background: var(--panel); border: 1px solid var(--line);
+  padding: 5px 14px; border-radius: 20px;
+}
+
+/* ── EMPTY STATE ── */
+.mb-empty {
+  text-align: center; padding: 72px 24px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.mb-empty-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(212,120,58,0.1); border: 1px solid rgba(212,120,58,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 28px; color: var(--amber);
+}
+.mb-empty h3 { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 300; color: var(--ink); margin-bottom: 8px; }
+.mb-empty p { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+.btn-explore {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--amber), #b8622e);
+  color: white; border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-explore:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,120,58,0.4); color: white; }
+
+/* ── BOOKING CARD ── */
+.booking-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden; margin-bottom: 18px;
+  transition: all 0.3s ease;
+  display: flex;
+}
+.booking-card:hover { border-color: rgba(255,255,255,0.13); box-shadow: 0 12px 36px rgba(0,0,0,0.25); transform: translateY(-2px); }
+
+.booking-card-img {
+  width: 180px; flex-shrink: 0;
+  position: relative; overflow: hidden;
+}
+.booking-card-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; filter: brightness(0.88);
+  transition: transform 0.4s ease;
+}
+.booking-card:hover .booking-card-img img { transform: scale(1.05); }
+
+.booking-card-body {
+  flex: 1; padding: 20px 22px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.booking-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.booking-listing-title {
+  font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+  text-decoration: none; display: block;
+  transition: color 0.2s;
+}
+.booking-listing-title:hover { color: var(--amber); }
+.booking-location { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.booking-location i { color: var(--amber); font-size: 10px; }
+
+/* Status badge */
+.status-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 20px;
+  flex-shrink: 0;
+}
+.status-pending   { background: rgba(228,184,74,0.15);  color: var(--gold);    border: 1px solid rgba(228,184,74,0.3); }
+.status-confirmed { background: rgba(58,158,110,0.15);  color: #4ade80;        border: 1px solid rgba(58,158,110,0.3); }
+.status-cancelled { background: rgba(224,85,119,0.12);  color: var(--danger);  border: 1px solid rgba(224,85,119,0.25); }
+.status-paid      { background: rgba(74,184,212,0.12);  color: #4ab8d4;        border: 1px solid rgba(74,184,212,0.25); }
+
+/* Details row */
+.booking-details {
+  display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px;
+}
+.booking-detail-item { display: flex; flex-direction: column; gap: 2px; }
+.detail-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
+.detail-val { font-size: 13px; font-weight: 600; color: var(--ink); }
+
+/* Footer */
+.booking-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 14px; margin-top: 14px;
+  border-top: 1px solid var(--line); flex-wrap: wrap; gap: 10px;
+}
+.booking-price {
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 500; color: var(--amber);
+}
+.booking-price-label { font-size: 11px; color: var(--muted); font-family: 'Outfit', sans-serif; }
+
+.btn-cancel {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid rgba(224,85,119,0.3);
+  color: var(--danger); border-radius: 8px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; font-family: 'Outfit', sans-serif;
+}
+.btn-cancel:hover { background: rgba(224,85,119,0.1); border-color: rgba(224,85,119,0.5); }
+
+.btn-view {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  background: var(--panel); border: 1px solid var(--line);
+  color: var(--ink); border-radius: 8px;
+  font-size: 12px; font-weight: 600; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-view:hover { border-color: rgba(255,255,255,0.2); color: var(--ink); }
+
+/* ── CANCELLED OVERLAY ── */
+.booking-card.is-cancelled { opacity: 0.55; }
+.booking-card.is-cancelled:hover { transform: none; box-shadow: none; }
+
+@media(max-width:600px) {
+  .booking-card { flex-direction: column; }
+  .booking-card-img { width: 100%; height: 180px; }
+  .booking-details { gap: 12px; }
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<div class="mb-page">
+
+  <div class="mb-header">
+    <h1 class="mb-title">My Bookings</h1>
+    <span class="mb-count"><%= bookings.length %> booking<%= bookings.length !== 1 ? 's' : '' %></span>
+  </div>
+
+  <% if(bookings.length === 0) { %>
+    <div class="mb-empty">
+      <div class="mb-empty-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+      <h3>No bookings yet</h3>
+      <p>Looks like you haven't booked any stays. Start exploring!</p>
+      <a href="/listings" class="btn-explore"><i class="fa-solid fa-compass"></i> Explore Stays</a>
+    </div>
+  <% } else { %>
+    <% for(let booking of bookings) { %>
+      <div class="booking-card <%= booking.status === 'Cancelled' ? 'is-cancelled' : '' %>">
+
+        <!-- Image -->
+        <div class="booking-card-img">
+          <% if(booking.listing && booking.listing.image) { %>
+            <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>"/>
+          <% } else { %>
+            <div style="width:100%;height:100%;background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:32px;">🏠</div>
+          <% } %>
+        </div>
+
+        <!-- Body -->
+        <div class="booking-card-body">
+          <div>
+            <div class="booking-card-top">
+              <div>
+                <% if(booking.listing) { %>
+                  <a href="/listings/<%= booking.listing._id %>" class="booking-listing-title"><%= booking.listing.title %></a>
+                  <div class="booking-location">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <%= booking.listing.location %>, <%= booking.listing.country %>
+                  </div>
+                <% } else { %>
+                  <div class="booking-listing-title" style="color:var(--muted);">Listing removed</div>
+                <% } %>
+              </div>
+              <span class="status-badge status-<%= booking.status.toLowerCase() %>"><%= booking.status %></span>
+            </div>
+
+            <div class="booking-details">
+              <div class="booking-detail-item">
+                <span class="detail-label">Check-in</span>
+                <span class="detail-val"><%= new Date(booking.checkIn).toDateString() %></span>
+              </div>
+              <div class="booking-detail-item">
+                <span class="detail-label">Check-out</span>
+                <span class="detail-val"><%= new Date(booking.checkOut).toDateString() %></span>
+              </div>
+              <div class="booking-detail-item">
+                <span class="detail-label">Guests</span>
+                <span class="detail-val"><%= booking.guests %></span>
+              </div>
+              <div class="booking-detail-item">
+                <span class="detail-label">Nights</span>
+                <span class="detail-val">
+                  <%= Math.round((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000*60*60*24)) %>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="booking-card-footer">
+            <div>
+              <div class="booking-price-label">Total Paid</div>
+              <div class="booking-price">₹<%= booking.totalPrice ? booking.totalPrice.toLocaleString('en-IN') : 'N/A' %></div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <% if(booking.listing) { %>
+                <a href="/listings/<%= booking.listing._id %>" class="btn-view">
+                  <i class="fa-solid fa-eye"></i> View Listing
+                </a>
+              <% } %>
+              <% if(booking.status !== 'Cancelled') { %>
+                <form action="/booking/<%= booking._id %>/cancel" method="POST"
+                      onsubmit="return confirm('Cancel this booking?')">
+                  <button type="submit" class="btn-cancel">
+                    <i class="fa-solid fa-xmark"></i> Cancel
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    <% } %>
+  <% } %>
+
+</div>
