@@ -11,7 +11,6 @@
     --white: #ffffff;
   }
 
-  /* ── NAV BASE ── */
   .wl-nav {
     background: var(--ink);
     border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -31,7 +30,6 @@
     gap: 1rem;
   }
 
-  /* ── BRAND ── */
   .wl-brand {
     display: flex;
     align-items: center;
@@ -41,42 +39,29 @@
   }
 
   .wl-brand-icon {
-    width: 36px;
-    height: 36px;
+    width: 36px; height: 36px;
     background: linear-gradient(135deg, var(--accent), #a85e28);
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: white;
     box-shadow: 0 2px 10px rgba(201,120,58,0.4);
   }
 
   .wl-brand-text {
     font-family: 'Playfair Display', 'Georgia', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.05em;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--white); letter-spacing: 0.05em;
   }
 
-  .wl-brand-text span {
-    color: var(--gold);
-  }
+  .wl-brand-text span { color: var(--gold); }
 
-  /* ── SEARCH ── */
   .wl-search {
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 50px;
-    padding: 0 6px 0 16px;
-    gap: 6px;
-    transition: all 0.2s;
-    flex: 1;
-    max-width: 340px;
+    padding: 0 6px 0 16px; gap: 6px;
+    transition: all 0.2s; flex: 1; max-width: 340px;
   }
 
   .wl-search:focus-within {
@@ -86,86 +71,49 @@
   }
 
   .wl-search input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    width: 100%;
-    padding: 9px 0;
+    background: transparent; border: none; outline: none;
+    color: var(--white); font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; width: 100%; padding: 9px 0;
   }
 
-  .wl-search input::placeholder {
-    color: rgba(255,255,255,0.35);
-  }
+  .wl-search input::placeholder { color: rgba(255,255,255,0.35); }
 
   .wl-search-btn {
     background: linear-gradient(135deg, #fe424d, #d42b36);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    padding: 7px 16px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.2s;
-    white-space: nowrap;
+    border: none; border-radius: 50px; color: white;
+    padding: 7px 16px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    transition: opacity 0.2s; white-space: nowrap;
     font-family: 'DM Sans', sans-serif;
   }
 
   .wl-search-btn:hover { opacity: 0.88; }
 
-  /* ── NAV LINKS ── */
   .wl-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
+    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
   }
 
   .wl-link {
     color: rgba(255,255,255,0.7);
-    text-decoration: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    padding: 7px 14px;
-    border-radius: 8px;
-    transition: all 0.2s;
-    white-space: nowrap;
+    text-decoration: none; font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 500;
+    padding: 7px 14px; border-radius: 8px;
+    transition: all 0.2s; white-space: nowrap;
   }
 
-  .wl-link:hover {
-    color: var(--white);
-    background: rgba(255,255,255,0.08);
-  }
+  .wl-link:hover { color: var(--white); background: rgba(255,255,255,0.08); }
 
-  .wl-link-host {
-    color: var(--gold);
-    border: 1px solid rgba(212,168,67,0.3);
-  }
-
-  .wl-link-host:hover {
-    background: rgba(212,168,67,0.1);
-    color: var(--gold);
-  }
+  .wl-link-host { color: var(--gold); border: 1px solid rgba(212,168,67,0.3); }
+  .wl-link-host:hover { background: rgba(212,168,67,0.1); color: var(--gold); }
 
   .wl-link-auth {
     background: linear-gradient(135deg, var(--accent), #a85e28);
-    color: white !important;
-    border-radius: 8px;
-    font-weight: 600;
+    color: white !important; border-radius: 8px; font-weight: 600;
     box-shadow: 0 2px 10px rgba(201,120,58,0.3);
   }
 
   .wl-link-auth:hover {
-    opacity: 0.9;
-    background: linear-gradient(135deg, var(--accent), #a85e28) !important;
-    color: white !important;
+    opacity: 0.9; color: white !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(201,120,58,0.4);
   }
@@ -181,25 +129,16 @@
     color: white !important;
   }
 
-  /* ── PROFILE ICON + DROPDOWN ── */
-  .wl-profile-wrap {
-    position: relative;
-    flex-shrink: 0;
-  }
+  /* ── PROFILE ── */
+  .wl-profile-wrap { position: relative; flex-shrink: 0; }
 
   .wl-profile-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 40px; height: 40px; border-radius: 50%;
     background: linear-gradient(135deg, var(--accent), #a85e28);
     border: 2px solid rgba(255,255,255,0.15);
-    color: white;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
+    color: white; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative;
     transition: box-shadow 0.2s, border-color 0.2s;
   }
 
@@ -208,37 +147,23 @@
     border-color: rgba(255,255,255,0.3);
   }
 
-  /* admin badge */
   .wl-admin-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 16px;
-    height: 16px;
-    background: var(--gold);
-    border-radius: 50%;
+    position: absolute; top: -4px; right: -4px;
+    width: 16px; height: 16px;
+    background: var(--gold); border-radius: 50%;
     border: 2px solid var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7px;
-    color: var(--ink);
-    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7px; color: var(--ink); font-weight: 800;
   }
 
-  /* dropdown */
   .wl-profile-dropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
+    display: none; position: absolute;
+    top: calc(100% + 10px); right: 0;
     background: #1e1d30;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    min-width: 200px;
+    border-radius: 14px; min-width: 210px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-    overflow: hidden;
-    z-index: 2000;
+    overflow: hidden; z-index: 2000;
     animation: fadeDropdown 0.18s ease;
   }
 
@@ -256,37 +181,25 @@
 
   .wl-pd-name {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: white;
+    font-size: 0.88rem; font-weight: 600; color: white;
   }
 
   .wl-pd-role {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.75rem;
-    color: var(--gold);
-    margin-top: 2px;
+    font-size: 0.75rem; color: var(--gold); margin-top: 2px;
   }
 
   .wl-pd-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: flex; align-items: center; gap: 10px;
     padding: 11px 16px;
     color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.87rem;
-    font-weight: 500;
+    text-decoration: none; font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem; font-weight: 500;
     transition: background 0.15s, color 0.15s;
   }
 
   .wl-pd-item i { width: 16px; text-align: center; font-size: 13px; }
-
-  .wl-pd-item:hover {
-    background: rgba(255,255,255,0.07);
-    color: white;
-  }
+  .wl-pd-item:hover { background: rgba(255,255,255,0.07); color: white; }
 
   .wl-pd-item.danger {
     color: #ff6b6b;
@@ -300,25 +213,15 @@
     display: none;
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px;
-    width: 40px;
-    height: 40px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    cursor: pointer;
-    padding: 0;
-    flex-shrink: 0;
+    border-radius: 8px; width: 40px; height: 40px;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; cursor: pointer; padding: 0; flex-shrink: 0;
   }
 
   .wl-toggler span {
-    display: block;
-    width: 20px;
-    height: 2px;
+    display: block; width: 20px; height: 2px;
     background: rgba(255,255,255,0.8);
-    border-radius: 2px;
-    transition: all 0.3s;
+    border-radius: 2px; transition: all 0.3s;
   }
 
   .wl-toggler.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -331,8 +234,7 @@
     background: #12111e;
     border-top: 1px solid rgba(255,255,255,0.07);
     padding: 1.2rem 1.5rem 1.5rem;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: column; gap: 6px;
     animation: slideDown 0.25s ease;
   }
 
@@ -344,50 +246,32 @@
   .wl-drawer.open { display: flex; }
 
   .wl-drawer-search {
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 0 8px 0 14px;
-    margin-bottom: 10px;
+    border-radius: 12px; padding: 0 8px 0 14px; margin-bottom: 10px;
   }
 
   .wl-drawer-search input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    font-size: 0.9rem;
-    padding: 11px 0;
-    width: 100%;
-    font-family: 'DM Sans', sans-serif;
+    background: transparent; border: none; outline: none;
+    color: white; font-size: 0.9rem; padding: 11px 0;
+    width: 100%; font-family: 'DM Sans', sans-serif;
   }
 
   .wl-drawer-search input::placeholder { color: rgba(255,255,255,0.35); }
 
   .wl-drawer-search button {
     background: linear-gradient(135deg, #fe424d, #d42b36);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    padding: 7px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    border: none; border-radius: 8px; color: white;
+    padding: 7px 14px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
   }
 
   .wl-drawer a {
     color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    padding: 11px 14px;
-    border-radius: 10px;
-    display: block;
-    transition: all 0.2s;
+    text-decoration: none; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    padding: 11px 14px; border-radius: 10px; display: block; transition: all 0.2s;
   }
 
   .wl-drawer a:hover { background: rgba(255,255,255,0.07); color: white; }
@@ -395,7 +279,6 @@
   .wl-drawer .wl-link-ghost { text-align: center; border-color: rgba(255,255,255,0.18); }
   .wl-drawer hr { border-color: rgba(255,255,255,0.08); margin: 6px 0; }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .wl-search { max-width: 220px; }
     .wl-link { padding: 7px 10px; font-size: 0.82rem; }
@@ -408,7 +291,6 @@
   }
 </style>
 
-<!-- Fonts needed by navbar -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
@@ -417,15 +299,13 @@
 
     <!-- Brand -->
     <a href="/listings" class="wl-brand">
-      <div class="wl-brand-icon">
-        <i class="fa-solid fa-compass"></i>
-      </div>
+      <div class="wl-brand-icon"><i class="fa-solid fa-compass"></i></div>
       <span class="wl-brand-text">Wander<span>lust</span></span>
     </a>
 
     <!-- Search (desktop) -->
     <form class="wl-search" role="search" action="/listings" method="GET">
-      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3); font-size:13px;"></i>
+      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3);font-size:13px;"></i>
       <input type="search" name="search" placeholder="Search destinations…"/>
       <button type="submit" class="wl-search-btn">
         <i class="fa-solid fa-magnifying-glass"></i> Search
@@ -438,14 +318,13 @@
       <a href="/listings/new" class="wl-link wl-link-host">
         <i class="fa-solid fa-plus" style="font-size:11px;"></i> Host
       </a>
-
       <% if(!currUser) { %>
         <a href="/signup" class="wl-link wl-link-ghost">Sign Up</a>
         <a href="/login" class="wl-link wl-link-auth">Log In</a>
       <% } %>
     </div>
 
-    <!-- Profile Icon (only when logged in) -->
+    <!-- Profile Icon (logged in only) -->
     <% if(currUser) { %>
     <div class="wl-profile-wrap" id="wlProfileWrap">
       <button class="wl-profile-btn" id="wlProfileBtn" aria-label="Profile menu">
@@ -456,7 +335,7 @@
       </button>
 
       <div class="wl-profile-dropdown" id="wlProfileDropdown">
-        <!-- Header -->
+
         <div class="wl-pd-header">
           <div class="wl-pd-name"><%= currUser.username %></div>
           <% if(currUser.isAdmin) { %>
@@ -466,12 +345,17 @@
           <% } %>
         </div>
 
-        <!-- My Bookings -->
+        <!-- ✅ My Bookings -->
         <a href="/booking/my-bookings" class="wl-pd-item">
           <i class="fa-solid fa-calendar-check"></i> My Bookings
         </a>
 
-        <!-- Admin Dashboard (only for admin) -->
+        <!-- ✅ Host Dashboard -->
+        <a href="/booking/host-dashboard" class="wl-pd-item">
+          <i class="fa-solid fa-house-chimney"></i> Host Dashboard
+        </a>
+
+        <!-- Admin Dashboard (admin only) -->
         <% if(currUser.isAdmin) { %>
           <a href="/admin" class="wl-pd-item">
             <i class="fa-solid fa-gauge-high"></i> Admin Dashboard
@@ -482,6 +366,7 @@
         <a href="/logout" class="wl-pd-item danger">
           <i class="fa-solid fa-right-from-bracket"></i> Log Out
         </a>
+
       </div>
     </div>
     <% } %>
@@ -496,7 +381,7 @@
   <!-- Mobile Drawer -->
   <div class="wl-drawer" id="wlDrawer">
     <form class="wl-drawer-search" role="search" action="/listings" method="GET">
-      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3); font-size:13px;"></i>
+      <i class="fa-solid fa-magnifying-glass" style="color:rgba(255,255,255,0.3);font-size:13px;"></i>
       <input type="search" name="search" placeholder="Search destinations…"/>
       <button type="submit">Search</button>
     </form>
@@ -508,9 +393,18 @@
       <a href="/login" class="wl-link-auth">Log In</a>
     <% } %>
     <% if(currUser) { %>
-      <a href="/booking/my-bookings"><i class="fa-solid fa-calendar-check me-2"></i>My Bookings</a>
+      <!-- ✅ My Bookings -->
+      <a href="/booking/my-bookings">
+        <i class="fa-solid fa-calendar-check me-2"></i>My Bookings
+      </a>
+      <!-- ✅ Host Dashboard -->
+      <a href="/booking/host-dashboard">
+        <i class="fa-solid fa-house-chimney me-2"></i>Host Dashboard
+      </a>
       <% if(currUser.isAdmin) { %>
-        <a href="/admin" style="color:var(--gold) !important;"><i class="fa-solid fa-gauge-high me-2"></i>Admin Dashboard</a>
+        <a href="/admin" style="color:var(--gold) !important;">
+          <i class="fa-solid fa-gauge-high me-2"></i>Admin Dashboard
+        </a>
       <% } %>
       <a href="/logout" class="wl-link-ghost">Log Out</a>
     <% } %>
@@ -526,7 +420,7 @@
     drawer.classList.toggle('open');
   });
 
-  // Profile dropdown toggle
+  // Profile dropdown
   const profileBtn      = document.getElementById('wlProfileBtn');
   const profileDropdown = document.getElementById('wlProfileDropdown');
   if (profileBtn) {
@@ -534,7 +428,6 @@
       e.stopPropagation();
       profileDropdown.classList.toggle('open');
     });
-    // Close on outside click
     document.addEventListener('click', () => {
       profileDropdown.classList.remove('open');
     });
