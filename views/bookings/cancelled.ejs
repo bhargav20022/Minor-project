@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+:root {
+  --surface: #11111c;
+  --panel: #16162a;
+  --line: rgba(255,255,255,0.07);
+  --ink: #e8e4f0;
+  --muted: rgba(232,228,240,0.42);
+  --amber: #d4783a;
+  --danger: #e05577;
+  --radius-lg: 22px;
+}
+html.light-mode {
+  --surface: #ffffff;
+  --panel: #f0ebe0;
+  --line: rgba(26,26,46,0.1);
+  --ink: #1a1a2e;
+  --muted: rgba(26,26,46,0.5);
+}
+*, *::before, *::after { box-sizing: border-box; }
+
+.cancelled-wrap {
+  min-height: 70vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 18px;
+}
+.cancelled-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 52px 44px;
+  text-align: center;
+  max-width: 420px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.cancelled-icon {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: rgba(224,85,119,0.1);
+  border: 1px solid rgba(224,85,119,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 22px; font-size: 30px; color: var(--danger);
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+.cancelled-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.7rem; font-weight: 300; color: var(--ink); margin-bottom: 10px;
+}
+.cancelled-msg {
+  font-size: 14px; color: var(--muted);
+  line-height: 1.7; margin-bottom: 32px;
+}
+.btn-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--amber), #b8622e);
+  color: white; border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: all 0.2s; cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+}
+.btn-back:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,120,58,0.4); color: white; }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Outfit:wght@400;600&display=swap" rel="stylesheet"/>
+
+<div class="cancelled-wrap">
+  <div class="cancelled-card">
+    <div class="cancelled-icon">
+      <i class="fa-solid fa-calendar-xmark"></i>
+    </div>
+    <div class="cancelled-title">Booking Cancelled</div>
+    <p class="cancelled-msg">
+      Your booking has been successfully cancelled.
+    </p>
+    <a href="/booking/my-bookings" class="btn-back">
+      <i class="fa-solid fa-arrow-left"></i> Back to My Bookings
+    </a>
+  </div>
+</div>
