@@ -1,0 +1,432 @@
+<% layout("/layouts/boilerplate") %>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --void: #050508;
+  --surface: #11111c;
+  --panel: #16162a;
+  --edge: #1e1e38;
+  --line: rgba(255,255,255,0.07);
+  --ink: #e8e4f0;
+  --muted: rgba(232,228,240,0.42);
+  --dim: rgba(232,228,240,0.22);
+  --gold: #e4b84a;
+  --amber: #d4783a;
+  --success: #3a9e6e;
+  --danger: #e05577;
+  --cyan: #4ab8d4;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+html.light-mode {
+  --void: #f5f1eb;
+  --surface: #ffffff;
+  --panel: #f0ebe0;
+  --edge: #e8e0d0;
+  --line: rgba(26,26,46,0.1);
+  --ink: #1a1a2e;
+  --muted: rgba(26,26,46,0.5);
+  --dim: rgba(26,26,46,0.3);
+}
+*, *::before, *::after { box-sizing: border-box; }
+
+.hd-page { max-width: 1080px; margin: 0 auto; padding: 36px 18px 80px; }
+
+/* ── PAGE HEADER ── */
+.hd-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 14px;
+}
+.hd-greeting { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+.hd-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 300; color: var(--ink); margin: 0; line-height: 1.1;
+}
+.hd-title em { font-style: italic; color: var(--amber); }
+.btn-new-listing {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--amber), #b8622e);
+  color: white; border: none; border-radius: var(--radius);
+  font-size: 13px; font-weight: 700; text-decoration: none;
+  transition: all 0.2s; flex-shrink: 0; font-family: 'Outfit', sans-serif;
+}
+.btn-new-listing:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,120,58,0.4); color: white; }
+
+/* ── STAT CARDS ── */
+.hd-stats {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+  margin-bottom: 32px;
+}
+@media(max-width:768px) { .hd-stats { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:400px) { .hd-stats { grid-template-columns: 1fr; } }
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  position: relative; overflow: hidden;
+  transition: all 0.3s ease;
+}
+.stat-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.13); }
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.stat-card-1::before { background: linear-gradient(90deg, var(--amber), #b8622e); }
+.stat-card-2::before { background: linear-gradient(90deg, var(--gold), #c49830); }
+.stat-card-3::before { background: linear-gradient(90deg, var(--success), #2d7a55); }
+.stat-card-4::before { background: linear-gradient(90deg, var(--cyan), #3a8fa8); }
+
+.stat-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; margin-bottom: 14px;
+}
+.stat-card-1 .stat-icon { background: rgba(212,120,58,0.12); color: var(--amber); }
+.stat-card-2 .stat-icon { background: rgba(228,184,74,0.12); color: var(--gold); }
+.stat-card-3 .stat-icon { background: rgba(58,158,110,0.12); color: #4ade80; }
+.stat-card-4 .stat-icon { background: rgba(74,184,212,0.12); color: var(--cyan); }
+
+.stat-num {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem; font-weight: 500; color: var(--ink); line-height: 1; margin-bottom: 4px;
+}
+.stat-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── SECTION TITLE ── */
+.hd-section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem; font-weight: 300; color: var(--ink);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.hd-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+
+/* ── MY LISTINGS GRID ── */
+.hd-listings-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+  margin-bottom: 36px;
+}
+@media(max-width:768px) { .hd-listings-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:500px) { .hd-listings-grid { grid-template-columns: 1fr; } }
+
+.hd-listing-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: all 0.3s ease;
+}
+.hd-listing-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.13); box-shadow: 0 14px 36px rgba(0,0,0,0.25); }
+.hd-listing-img { position: relative; height: 150px; overflow: hidden; }
+.hd-listing-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.88); transition: transform 0.4s; }
+.hd-listing-card:hover .hd-listing-img img { transform: scale(1.06); }
+.hd-listing-body { padding: 14px 16px 16px; }
+.hd-listing-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hd-listing-loc { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-bottom: 12px; }
+.hd-listing-loc i { color: var(--amber); font-size: 9px; }
+.hd-listing-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--line); }
+.hd-listing-price { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; color: var(--amber); }
+.hd-listing-price span { font-family: 'Outfit', sans-serif; font-size: 10px; color: var(--muted); }
+.hd-listing-actions { display: flex; gap: 6px; }
+.btn-sm-edit {
+  padding: 5px 12px; border-radius: 7px;
+  background: var(--panel); border: 1px solid var(--line);
+  color: var(--ink); font-size: 11px; font-weight: 600;
+  text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
+}
+.btn-sm-edit:hover { border-color: rgba(255,255,255,0.2); color: var(--ink); }
+.btn-sm-del {
+  padding: 5px 12px; border-radius: 7px;
+  background: transparent; border: 1px solid rgba(224,85,119,0.25);
+  color: var(--danger); font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; font-family: 'Outfit', sans-serif;
+}
+.btn-sm-del:hover { background: rgba(224,85,119,0.1); border-color: rgba(224,85,119,0.45); }
+
+/* ── EMPTY LISTING STATE ── */
+.hd-no-listings {
+  grid-column: 1/-1; text-align: center; padding: 48px 24px;
+  background: var(--panel); border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); color: var(--muted); font-size: 14px;
+}
+.hd-no-listings i { font-size: 32px; display: block; margin-bottom: 12px; opacity: 0.35; }
+
+/* ── BOOKINGS TABLE ── */
+.hd-bookings-wrap {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden;
+  margin-bottom: 32px;
+}
+
+/* Tabs */
+.hd-tabs {
+  display: flex; border-bottom: 1px solid var(--line);
+  background: var(--panel); overflow-x: auto; scrollbar-width: none;
+}
+.hd-tabs::-webkit-scrollbar { display: none; }
+.hd-tab {
+  padding: 14px 22px; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px; color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  white-space: nowrap; background: transparent; border-top: none;
+  border-left: none; border-right: none; font-family: 'Outfit', sans-serif;
+}
+.hd-tab:hover { color: var(--ink); }
+.hd-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* Table */
+.hd-table-wrap { overflow-x: auto; }
+table.hd-table { width: 100%; border-collapse: collapse; }
+.hd-table th {
+  padding: 12px 18px; font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim);
+  text-align: left; background: var(--panel); border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.hd-table td {
+  padding: 14px 18px; font-size: 13px; color: var(--ink);
+  border-bottom: 1px solid var(--line); vertical-align: middle;
+}
+.hd-table tr:last-child td { border-bottom: none; }
+.hd-table tr:hover td { background: rgba(255,255,255,0.02); }
+.hd-table-guest { font-weight: 600; color: var(--ink); }
+.hd-table-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.hd-status {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 20px;
+  display: inline-block;
+}
+.hd-status-pending   { background: rgba(228,184,74,0.12); color: var(--gold);   border: 1px solid rgba(228,184,74,0.25); }
+.hd-status-confirmed { background: rgba(58,158,110,0.12); color: #4ade80;       border: 1px solid rgba(58,158,110,0.25); }
+.hd-status-cancelled { background: rgba(224,85,119,0.1);  color: var(--danger); border: 1px solid rgba(224,85,119,0.2); }
+.hd-status-paid      { background: rgba(74,184,212,0.1);  color: var(--cyan);   border: 1px solid rgba(74,184,212,0.2); }
+
+.hd-no-bookings {
+  text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px;
+}
+.hd-no-bookings i { font-size: 28px; display: block; margin-bottom: 10px; opacity: 0.3; }
+
+/* Revenue card */
+.hd-revenue-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 36px;
+}
+@media(max-width:600px) { .hd-revenue-row { grid-template-columns: 1fr; } }
+.hd-rev-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 24px 22px;
+}
+.hd-rev-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.hd-rev-amount {
+  font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 500; color: var(--amber); line-height: 1;
+}
+.hd-rev-note { font-size: 11px; color: var(--dim); margin-top: 6px; }
+.hd-top-listing { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.hd-top-listing img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+.hd-top-listing-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.hd-top-listing-sub { font-size: 11px; color: var(--muted); }
+</style>
+
+<div class="hd-page">
+
+  <!-- Header -->
+  <div class="hd-header">
+    <div>
+      <div class="hd-greeting">Host Dashboard</div>
+      <h1 class="hd-title">Welcome back, <em><%= currUser.username %></em></h1>
+    </div>
+    <a href="/listings/new" class="btn-new-listing">
+      <i class="fa-solid fa-plus"></i> New Listing
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="hd-stats">
+    <div class="stat-card stat-card-1">
+      <div class="stat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+      <div class="stat-num">₹<%= totalRevenue.toLocaleString('en-IN') %></div>
+      <div class="stat-label">Total Revenue</div>
+    </div>
+    <div class="stat-card stat-card-2">
+      <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="stat-num"><%= totalBookings %></div>
+      <div class="stat-label">Total Bookings</div>
+    </div>
+    <div class="stat-card stat-card-3">
+      <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="stat-num"><%= activeBookings %></div>
+      <div class="stat-label">Active Bookings</div>
+    </div>
+    <div class="stat-card stat-card-4">
+      <div class="stat-icon"><i class="fa-solid fa-house"></i></div>
+      <div class="stat-num"><%= totalListings %></div>
+      <div class="stat-label">My Listings</div>
+    </div>
+  </div>
+
+  <!-- Revenue + Top listing -->
+  <div class="hd-revenue-row">
+    <div class="hd-rev-card">
+      <div class="hd-rev-label">Total Earnings (excl. cancelled)</div>
+      <div class="hd-rev-amount">₹<%= totalRevenue.toLocaleString('en-IN') %></div>
+      <div class="hd-rev-note">Across <%= totalListings %> listing<%= totalListings !== 1 ? 's' : '' %></div>
+    </div>
+    <div class="hd-rev-card">
+      <div class="hd-rev-label">Most Booked Listing</div>
+      <%
+        // find listing with most bookings
+        const listingBookingCount = {};
+        bookings.forEach(b => {
+          if(b.listing) {
+            const id = b.listing._id.toString();
+            listingBookingCount[id] = (listingBookingCount[id] || 0) + 1;
+          }
+        });
+        const topId = Object.keys(listingBookingCount).sort((a,b) => listingBookingCount[b] - listingBookingCount[a])[0];
+        const topListing = topId ? bookings.find(b => b.listing && b.listing._id.toString() === topId)?.listing : null;
+      %>
+      <% if(topListing) { %>
+        <div class="hd-top-listing">
+          <img src="<%= topListing.image.url %>" alt="<%= topListing.title %>"/>
+          <div>
+            <div class="hd-top-listing-name"><%= topListing.title %></div>
+            <div class="hd-top-listing-sub"><%= listingBookingCount[topId] %> booking<%= listingBookingCount[topId] !== 1 ? 's' : '' %> · <%= topListing.location %></div>
+          </div>
+        </div>
+      <% } else { %>
+        <div style="color:var(--muted);font-size:13px;margin-top:10px;">No bookings yet</div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- My Listings -->
+  <div class="hd-section-title">My Listings</div>
+  <div class="hd-listings-grid">
+    <% if(listings.length === 0) { %>
+      <div class="hd-no-listings">
+        <i class="fa-solid fa-house-circle-xmark"></i>
+        <p>You haven't created any listings yet.</p>
+        <a href="/listings/new" class="btn-new-listing" style="margin-top:12px;">Create your first listing</a>
+      </div>
+    <% } %>
+    <% for(let listing of listings) { %>
+      <div class="hd-listing-card">
+        <div class="hd-listing-img">
+          <img src="<%= listing.image.url %>" alt="<%= listing.title %>"/>
+        </div>
+        <div class="hd-listing-body">
+          <div class="hd-listing-title"><%= listing.title %></div>
+          <div class="hd-listing-loc">
+            <i class="fa-solid fa-location-dot"></i>
+            <%= listing.location %>, <%= listing.country %>
+          </div>
+          <div class="hd-listing-footer">
+            <div class="hd-listing-price">
+              ₹<%= listing.price.toLocaleString('en-IN') %>
+              <span>/ night</span>
+            </div>
+            <div class="hd-listing-actions">
+              <a href="/listings/<%= listing._id %>/edit" class="btn-sm-edit">
+                <i class="fa-solid fa-pen"></i> Edit
+              </a>
+              <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST"
+                    style="display:inline" onsubmit="return confirm('Delete this listing?')">
+                <button type="submit" class="btn-sm-del">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Bookings on my listings -->
+  <div class="hd-section-title">Bookings on My Listings</div>
+  <div class="hd-bookings-wrap">
+    <!-- Tabs -->
+    <div class="hd-tabs">
+      <button class="hd-tab active" onclick="filterBookings('all', this)">All (<%= bookings.length %>)</button>
+      <button class="hd-tab" onclick="filterBookings('active', this)">Active</button>
+      <button class="hd-tab" onclick="filterBookings('pending', this)">Pending</button>
+      <button class="hd-tab" onclick="filterBookings('cancelled', this)">Cancelled</button>
+    </div>
+
+    <% if(bookings.length === 0) { %>
+      <div class="hd-no-bookings">
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <p>No bookings yet on your listings.</p>
+      </div>
+    <% } else { %>
+      <div class="hd-table-wrap">
+        <table class="hd-table" id="bookingsTable">
+          <thead>
+            <tr>
+              <th>Guest</th>
+              <th>Listing</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Guests</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let b of bookings) { %>
+              <tr data-status="<%= b.status.toLowerCase() %>"
+                  data-active="<%= (b.status !== 'Cancelled' && new Date(b.checkOut) >= new Date()) ? 'true' : 'false' %>">
+                <td>
+                  <div class="hd-table-guest"><%= b.user ? b.user.username : 'Unknown' %></div>
+                  <div class="hd-table-sub"><%= b.user ? b.user.email : '' %></div>
+                </td>
+                <td>
+                  <% if(b.listing) { %>
+                    <div class="hd-table-guest" style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= b.listing.title %></div>
+                    <div class="hd-table-sub"><%= b.listing.location %></div>
+                  <% } else { %>
+                    <span style="color:var(--muted)">Removed</span>
+                  <% } %>
+                </td>
+                <td><%= new Date(b.checkIn).toDateString() %></td>
+                <td><%= new Date(b.checkOut).toDateString() %></td>
+                <td><%= b.guests %></td>
+                <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--amber);">
+                  ₹<%= b.totalPrice ? b.totalPrice.toLocaleString('en-IN') : '—' %>
+                </td>
+                <td>
+                  <span class="hd-status hd-status-<%= b.status.toLowerCase() %>"><%= b.status %></span>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<script>
+function filterBookings(filter, tabEl) {
+  // Update active tab
+  document.querySelectorAll('.hd-tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+
+  const rows = document.querySelectorAll('#bookingsTable tbody tr');
+  rows.forEach(row => {
+    const status = row.dataset.status;
+    const isActive = row.dataset.active === 'true';
+    let show = false;
+    if (filter === 'all')       show = true;
+    if (filter === 'active')    show = isActive;
+    if (filter === 'pending')   show = status === 'pending';
+    if (filter === 'cancelled') show = status === 'cancelled';
+    row.style.display = show ? '' : 'none';
+  });
+}
+</script>
