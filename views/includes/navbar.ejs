@@ -345,6 +345,11 @@
           <% } %>
         </div>
 
+        <a href="/listings/my-listings" class="wl-pd-item">
+  <i class="fa-solid fa-list"></i> My Listings
+</a>
+
+
         <!-- ✅ My Bookings -->
         <a href="/booking/my-bookings" class="wl-pd-item">
           <i class="fa-solid fa-calendar-check"></i> My Bookings
@@ -356,11 +361,11 @@
         </a>
 
         <!-- Admin Dashboard (admin only) -->
-        <% if(currUser.isAdmin) { %>
-          <a href="/admin" class="wl-pd-item">
-            <i class="fa-solid fa-gauge-high"></i> Admin Dashboard
-          </a>
-        <% } %>
+      <% if(currUser.isAdmin) { %>
+  <a href="/admin" class="wl-pd-item" style="color:var(--gold);">
+    <i class="fa-solid fa-shield-halved"></i> Admin Dashboard
+  </a>
+<% } %>
 
         <!-- Log Out -->
         <a href="/logout" class="wl-pd-item danger">
