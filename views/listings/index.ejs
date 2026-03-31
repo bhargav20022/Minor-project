@@ -862,13 +862,13 @@ showTemples('Puri');
       <option value="name-asc">Name: A–Z</option>
     </select>
     <div class="view-toggle">
-      <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid"><i class="fa-solid fa-grip"></i></button>
-      <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="List"><i class="fa-solid fa-list"></i></button>
+      <button class="view-btn" id="gridBtn" onclick="setView('grid')" title="Grid"><i class="fa-solid fa-grip"></i></button>
+      <button class="view-btn active" id="listBtn" onclick="setView('list')" title="List"><i class="fa-solid fa-list"></i></button>
     </div>
   </div>
 </div>
 
-<div class="listings-grid" id="allListingsGrid">
+<div class="listings-grid list-view" id="allListingsGrid">
   <% for(let listing of allListings) { %>
   <a href="/listings/<%= listing._id %>" class="listing-link"
      data-id="<%= listing._id %>"
