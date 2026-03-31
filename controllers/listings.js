@@ -5,7 +5,7 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 // ==================== INDEX ====================
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
+  const allListings = await Listing.find({ status: "approved" });
   res.render("listings/index.ejs", { allListings });
 };
 
@@ -35,6 +35,7 @@ module.exports.showListing = async (req, res) => {
 // ==================== CREATE LISTING ====================
 module.exports.createListing = async (req, res) => {
   const newListing = new Listing(req.body.listing);
+  newListing.status = "pending";
 
   // Image upload (Cloudinary)
   if (req.file) {
@@ -63,8 +64,8 @@ module.exports.createListing = async (req, res) => {
 
   newListing.owner = req.user._id;
   await newListing.save();
-  req.flash("success", "New listing created successfully!");
-  return res.redirect("/listings");
+  req.flash("success", "Listing submitted for review! You'll be notified by email once approved.");
+  res.redirect("/listings/my-listings");   // redirect to their listings, not the new listing
 };
 
 // ==================== EDIT FORM ====================
