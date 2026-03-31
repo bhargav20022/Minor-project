@@ -1,0 +1,371 @@
+<% layout("/layouts/boilerplate") %>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+:root{
+  --void:#050508;--surface:#11111c;--panel:#16162a;--edge:#1e1e38;
+  --line:rgba(255,255,255,0.07);--ink:#e8e4f0;--muted:rgba(232,228,240,0.42);
+  --dim:rgba(232,228,240,0.22);--gold:#e4b84a;--amber:#d4783a;
+  --success:#3a9e6e;--danger:#e05577;--cyan:#4ab8d4;
+  --radius:14px;--radius-lg:22px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+.ad-page{max-width:1100px;margin:0 auto;padding:36px 18px 80px;}
+
+/* ── HEADER ── */
+.ad-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:14px;}
+.ad-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+.ad-title{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.5rem);font-weight:300;color:var(--ink);margin:0;line-height:1.1;}
+.ad-title em{font-style:italic;color:var(--amber);}
+
+/* ── STAT CARDS ── */
+.ad-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+@media(max-width:768px){.ad-stats{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px 20px;position:relative;overflow:hidden;transition:all .3s;}
+.stat-card:hover{transform:translateY(-3px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.sc1::before{background:linear-gradient(90deg,var(--amber),#b8622e);}
+.sc2::before{background:linear-gradient(90deg,var(--gold),#c49830);}
+.sc3::before{background:linear-gradient(90deg,var(--danger),#c0334f);}
+.sc4::before{background:linear-gradient(90deg,var(--success),#2d7a55);}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px;}
+.sc1 .stat-icon{background:rgba(212,120,58,.12);color:var(--amber);}
+.sc2 .stat-icon{background:rgba(228,184,74,.12);color:var(--gold);}
+.sc3 .stat-icon{background:rgba(224,85,119,.12);color:var(--danger);}
+.sc4 .stat-icon{background:rgba(58,158,110,.12);color:#4ade80;}
+.stat-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:500;color:var(--ink);line-height:1;margin-bottom:4px;}
+.stat-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+
+/* ── SECTION TITLE ── */
+.ad-section-title{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:300;color:var(--ink);display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.ad-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+.ad-section-badge{font-size:10px;font-weight:700;background:rgba(224,85,119,.15);color:var(--danger);border:1px solid rgba(224,85,119,.3);padding:3px 10px;border-radius:20px;}
+
+/* ── PENDING LISTINGS ── */
+.pending-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px;}
+@media(max-width:900px){.pending-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.pending-grid{grid-template-columns:1fr;}}
+
+.pending-card{background:var(--surface);border:1px solid rgba(228,184,74,.3);border-radius:var(--radius-lg);overflow:hidden;transition:all .3s;}
+.pending-card:hover{border-color:rgba(228,184,74,.5);transform:translateY(-3px);}
+.pc-img{height:140px;overflow:hidden;position:relative;}
+.pc-img img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85);}
+.pc-badge{position:absolute;top:10px;left:10px;background:rgba(228,184,74,.9);color:#1a1a2e;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.pc-body{padding:14px 16px 16px;}
+.pc-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-owner{font-size:11px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:4px;}
+.pc-loc{font-size:11px;color:var(--dim);margin-bottom:14px;}
+.pc-price{font-family:'Fraunces',serif;font-size:15px;color:var(--amber);margin-bottom:14px;}
+
+.pc-actions{display:flex;gap:8px;}
+.btn-approve{flex:1;padding:9px;background:linear-gradient(135deg,var(--success),#236241);color:white;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-approve:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(58,158,110,.35);}
+
+.btn-reject-open{flex:1;padding:9px;background:transparent;border:1px solid rgba(224,85,119,.35);color:var(--danger);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-reject-open:hover{background:rgba(224,85,119,.1);border-color:rgba(224,85,119,.55);}
+
+/* Reject modal */
+.reject-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:9000;align-items:center;justify-content:center;padding:16px;}
+.reject-modal-overlay.open{display:flex;}
+.reject-modal{background:#1e1d30;border:1px solid rgba(255,255,255,.1);border-radius:20px;width:100%;max-width:480px;padding:28px;animation:fadeDropdown .2s ease;}
+@keyframes fadeDropdown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.rm-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:300;color:var(--ink);margin-bottom:6px;}
+.rm-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
+.rm-textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:var(--ink);font-family:'Outfit',sans-serif;font-size:13px;resize:vertical;min-height:90px;outline:none;transition:border-color .2s;}
+.rm-textarea:focus{border-color:var(--danger);}
+.rm-actions{display:flex;gap:10px;margin-top:16px;}
+.rm-cancel{flex:1;padding:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;}
+.rm-cancel:hover{color:var(--ink);}
+.rm-submit{flex:1;padding:11px;background:var(--danger);border:none;color:white;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+.rm-submit:hover{opacity:.88;}
+
+/* No pending */
+.no-pending{text-align:center;padding:44px;background:rgba(58,158,110,.05);border:1px solid rgba(58,158,110,.18);border-radius:var(--radius-lg);color:var(--success);}
+.no-pending i{font-size:28px;display:block;margin-bottom:12px;opacity:.6;}
+
+/* ── COMPLAINTS TABLE ── */
+.ad-table-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:36px;}
+.ad-tabs{display:flex;border-bottom:1px solid var(--line);background:var(--panel);overflow-x:auto;scrollbar-width:none;}
+.ad-tabs::-webkit-scrollbar{display:none;}
+.ad-tab{padding:13px 20px;font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;background:transparent;border-top:none;border-left:none;border-right:none;font-family:'Outfit',sans-serif;}
+.ad-tab:hover{color:var(--ink);}
+.ad-tab.active{color:var(--amber);border-bottom-color:var(--amber);}
+.ad-table-inner{overflow-x:auto;}
+table.ad-table{width:100%;border-collapse:collapse;}
+.ad-table th{padding:12px 16px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);text-align:left;background:var(--panel);border-bottom:1px solid var(--line);white-space:nowrap;}
+.ad-table td{padding:13px 16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line);vertical-align:middle;}
+.ad-table tr:last-child td{border-bottom:none;}
+.ad-table tr:hover td{background:rgba(255,255,255,.02);}
+
+.c-status{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;}
+.c-open    {background:rgba(224,85,119,.12);color:var(--danger);border:1px solid rgba(224,85,119,.25);}
+.c-reviewed{background:rgba(228,184,74,.12);color:var(--gold);border:1px solid rgba(228,184,74,.25);}
+.c-resolved{background:rgba(58,158,110,.12);color:#4ade80;border:1px solid rgba(58,158,110,.25);}
+
+.btn-update-status{padding:5px 12px;border-radius:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.btn-update-status:hover{color:var(--ink);border-color:rgba(255,255,255,.22);}
+
+/* Complaint update mini-form */
+.c-update-form{display:none;margin-top:10px;}
+.c-update-form.open{display:block;}
+.c-sel{width:100%;padding:7px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--ink);font-size:12px;font-family:'Outfit',sans-serif;outline:none;margin-bottom:7px;}
+.c-note{width:100%;padding:7px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--ink);font-size:12px;font-family:'Outfit',sans-serif;outline:none;resize:none;min-height:56px;}
+.c-save{padding:7px 16px;background:var(--amber);border:none;color:white;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;margin-top:7px;font-family:'Outfit',sans-serif;}
+
+.no-complaints{text-align:center;padding:44px;color:var(--muted);font-size:13px;}
+.no-complaints i{font-size:26px;display:block;margin-bottom:10px;opacity:.3;}
+
+/* ── ALL LISTINGS TABLE ── */
+.al-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:36px;}
+.al-status{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;}
+.als-pending {background:rgba(228,184,74,.12);color:var(--gold);border:1px solid rgba(228,184,74,.25);}
+.als-approved{background:rgba(58,158,110,.12);color:#4ade80;border:1px solid rgba(58,158,110,.25);}
+.als-rejected{background:rgba(224,85,119,.12);color:var(--danger);border:1px solid rgba(224,85,119,.25);}
+
+.btn-del-listing{padding:5px 12px;border-radius:7px;background:transparent;border:1px solid rgba(224,85,119,.25);color:var(--danger);font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.btn-del-listing:hover{background:rgba(224,85,119,.1);}
+</style>
+
+<div class="ad-page">
+
+  <!-- Header -->
+  <div class="ad-header">
+    <div>
+      <div class="ad-eyebrow">Admin Dashboard</div>
+      <h1 class="ad-title">Control <em>Centre</em></h1>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="ad-stats">
+    <div class="stat-card sc1">
+      <div class="stat-icon"><i class="fa-solid fa-house"></i></div>
+      <div class="stat-num"><%= totalListings %></div>
+      <div class="stat-label">Total Listings</div>
+    </div>
+    <div class="stat-card sc2">
+      <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+      <div class="stat-num"><%= pendingCount %></div>
+      <div class="stat-label">Awaiting Approval</div>
+    </div>
+    <div class="stat-card sc3">
+      <div class="stat-icon"><i class="fa-solid fa-flag"></i></div>
+      <div class="stat-num"><%= openComplaints %></div>
+      <div class="stat-label">Open Complaints</div>
+    </div>
+    <div class="stat-card sc4">
+      <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-num"><%= totalUsers %></div>
+      <div class="stat-label">Total Users</div>
+    </div>
+  </div>
+
+  <!-- ══ PENDING LISTINGS ══ -->
+  <div class="ad-section-title">
+    Pending Approval
+    <% if(pendingCount > 0) { %>
+      <span class="ad-section-badge"><%= pendingCount %> waiting</span>
+    <% } %>
+  </div>
+
+  <% if(pendingListings.length === 0) { %>
+    <div class="no-pending" style="margin-bottom:36px;">
+      <i class="fa-solid fa-circle-check"></i>
+      <p>All caught up! No listings waiting for review.</p>
+    </div>
+  <% } else { %>
+    <div class="pending-grid">
+      <% for(let listing of pendingListings) { %>
+        <div class="pending-card">
+          <div class="pc-img">
+            <img src="<%= listing.image.url %>" alt="<%= listing.title %>"/>
+            <span class="pc-badge">⏳ Pending</span>
+          </div>
+          <div class="pc-body">
+            <div class="pc-title"><%= listing.title %></div>
+            <div class="pc-owner"><i class="fa-solid fa-user" style="font-size:9px;color:var(--amber);"></i> <%= listing.owner ? listing.owner.username : 'Unknown' %></div>
+            <div class="pc-loc"><i class="fa-solid fa-location-dot" style="font-size:9px;margin-right:3px;color:var(--dim);"></i><%= listing.location %>, <%= listing.country %></div>
+            <div class="pc-price">₹<%= listing.price ? listing.price.toLocaleString('en-IN') : '—' %> <span style="font-family:'Outfit',sans-serif;font-size:10px;color:var(--muted);">/ night</span></div>
+            <div class="pc-actions">
+              <!-- APPROVE -->
+              <form action="/admin/listings/<%= listing._id %>/approve" method="POST" style="flex:1;">
+                <button type="submit" class="btn-approve" style="width:100%;">
+                  <i class="fa-solid fa-check"></i> Approve
+                </button>
+              </form>
+              <!-- REJECT (opens modal) -->
+              <button class="btn-reject-open" style="flex:1;" onclick="openRejectModal('<%= listing._id %>', '<%= listing.title.replace(/'/g, `\\'`) %>')">
+                <i class="fa-solid fa-xmark"></i> Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <!-- ══ COMPLAINTS ══ -->
+  <div class="ad-section-title">
+    Customer Complaints
+    <% if(openComplaints > 0) { %>
+      <span class="ad-section-badge"><%= openComplaints %> open</span>
+    <% } %>
+  </div>
+
+  <div class="ad-table-wrap">
+    <div class="ad-tabs">
+      <button class="ad-tab active" onclick="filterComplaints('all', this)">All (<%= complaints.length %>)</button>
+      <button class="ad-tab" onclick="filterComplaints('open', this)">Open (<%= openComplaints %>)</button>
+      <button class="ad-tab" onclick="filterComplaints('reviewed', this)">Reviewed</button>
+      <button class="ad-tab" onclick="filterComplaints('resolved', this)">Resolved</button>
+    </div>
+
+    <% if(complaints.length === 0) { %>
+      <div class="no-complaints">
+        <i class="fa-solid fa-face-smile"></i>
+        <p>No complaints filed yet.</p>
+      </div>
+    <% } else { %>
+      <div class="ad-table-inner">
+        <table class="ad-table" id="complaintsTable">
+          <thead>
+            <tr>
+              <th>From</th>
+              <th>Subject</th>
+              <th>Listing</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let c of complaints) { %>
+              <tr data-cstatus="<%= c.status %>">
+                <td>
+                  <div style="font-weight:600;color:var(--ink)"><%= c.name %></div>
+                  <div style="font-size:11px;color:var(--muted)"><%= c.email %></div>
+                </td>
+                <td>
+                  <div style="font-weight:600;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= c.subject %></div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:3px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= c.message %></div>
+                  <% if(c.adminNote) { %>
+                    <div style="font-size:10px;color:var(--gold);margin-top:3px;"><i class="fa-solid fa-note-sticky"></i> <%= c.adminNote %></div>
+                  <% } %>
+                </td>
+                <td>
+                  <% if(c.listing) { %>
+                    <a href="/listings/<%= c.listing._id %>" style="font-size:12px;color:var(--amber);text-decoration:none;" target="_blank"><%= c.listing.title %></a>
+                  <% } else { %>
+                    <span style="color:var(--dim);font-size:12px;">Removed</span>
+                  <% } %>
+                </td>
+                <td style="font-size:11px;color:var(--muted);white-space:nowrap;"><%= new Date(c.createdAt).toDateString() %></td>
+                <td><span class="c-status c-<%= c.status %>"><%= c.status %></span></td>
+                <td>
+                  <button class="btn-update-status" onclick="toggleComplaintForm('<%= c._id %>')">
+                    <i class="fa-solid fa-pen-to-square"></i> Update
+                  </button>
+                  <div class="c-update-form" id="cf-<%= c._id %>">
+                    <form action="/admin/complaints/<%= c._id %>/update" method="POST">
+                      <select name="status" class="c-sel">
+                        <option value="open"     <%= c.status==='open'     ? 'selected' : '' %>>Open</option>
+                        <option value="reviewed" <%= c.status==='reviewed' ? 'selected' : '' %>>Reviewed</option>
+                        <option value="resolved" <%= c.status==='resolved' ? 'selected' : '' %>>Resolved</option>
+                      </select>
+                      <textarea name="adminNote" class="c-note" placeholder="Admin note (optional)…"><%= c.adminNote %></textarea>
+                      <button type="submit" class="c-save">Save</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- ══ ALL LISTINGS TABLE ══ -->
+  <div class="ad-section-title">All Listings</div>
+  <div class="al-wrap">
+    <div class="ad-table-inner">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Owner</th>
+            <th>Location</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let l of allListings) { %>
+            <tr>
+              <td style="font-weight:600;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= l.title %></td>
+              <td style="font-size:12px;color:var(--muted);"><%= l.owner ? l.owner.username : '—' %></td>
+              <td style="font-size:12px;color:var(--muted);"><%= l.location %></td>
+              <td style="font-family:'Fraunces',serif;color:var(--amber);">₹<%= l.price ? l.price.toLocaleString('en-IN') : '—' %></td>
+              <td><span class="al-status als-<%= l.status %>"><%= l.status %></span></td>
+              <td>
+                <form action="/admin/listings/<%= l._id %>/delete" method="POST"
+                      onsubmit="return confirm('Permanently delete this listing?')" style="display:inline;">
+                  <button type="submit" class="btn-del-listing"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ REJECT MODAL ══ -->
+<div class="reject-modal-overlay" id="rejectOverlay">
+  <div class="reject-modal">
+    <div class="rm-title">Reject Listing</div>
+    <div class="rm-sub" id="rmSub">Provide a reason — this will be emailed to the owner.</div>
+    <form id="rejectForm" method="POST">
+      <textarea name="reason" class="rm-textarea" placeholder="e.g. Images are low quality, description is incomplete…" required></textarea>
+      <div class="rm-actions">
+        <button type="button" class="rm-cancel" onclick="closeRejectModal()">Cancel</button>
+        <button type="submit" class="rm-submit"><i class="fa-solid fa-xmark"></i> Reject &amp; Notify</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ── Reject modal ── */
+function openRejectModal(id, title) {
+  document.getElementById('rejectForm').action = `/admin/listings/${id}/reject`;
+  document.getElementById('rmSub').textContent = `Rejecting: "${title}" — reason will be emailed to owner.`;
+  document.getElementById('rejectOverlay').classList.add('open');
+}
+function closeRejectModal() {
+  document.getElementById('rejectOverlay').classList.remove('open');
+}
+document.getElementById('rejectOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('rejectOverlay')) closeRejectModal();
+});
+
+/* ── Complaints filter ── */
+function filterComplaints(filter, tabEl) {
+  document.querySelectorAll('.ad-tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.querySelectorAll('#complaintsTable tbody tr').forEach(row => {
+    const s = row.dataset.cstatus;
+    row.style.display = (filter === 'all' || s === filter) ? '' : 'none';
+  });
+}
+
+/* ── Complaint inline update form toggle ── */
+function toggleComplaintForm(id) {
+  const el = document.getElementById('cf-' + id);
+  el.classList.toggle('open');
+}
+</script>
