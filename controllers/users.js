@@ -12,6 +12,14 @@ module.exports.renderSignupForm = (req, res) => {
 module.exports.signup = async (req, res) => {
   try {
     let { username, email, password } = req.body;
+
+    // ── ✅ CHECK: email already registered ──
+    const existingEmail = await User.findOne({ email: email.toLowerCase().trim() });
+    if (existingEmail) {
+      req.flash("error", "This email address is already registered. Please log in or use a different email.");
+      return res.redirect("/signup");
+    }
+
     const newUser = new User({ email, username });
     const registeredUser = await User.register(newUser, password);
     console.log(registeredUser);
@@ -72,27 +80,20 @@ module.exports.renderForgotPassword = (req, res) => {
 module.exports.sendOtp = async (req, res) => {
   const { email } = req.body;
 
-  // Find user by email
   const user = await User.findOne({ email: email.toLowerCase().trim() });
 
-  // Always show same message (security: don't reveal if email exists)
   if (!user) {
     req.flash("success", "If that email exists, an OTP has been sent.");
     return res.redirect("/forgot-password");
   }
 
-  // Generate 6-digit OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // OTP expires in 10 minutes
   const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
-  // Save OTP + expiry to user document
   user.resetOtp = otp;
   user.resetOtpExpiry = expiry;
   await user.save();
 
-  // Send OTP email via Brevo
   await sendEmail({
     toEmail: user.email,
     toName: user.username,
@@ -125,19 +126,15 @@ module.exports.sendOtp = async (req, res) => {
     `,
   });
 
-  // Store email in session so next steps know which user
   req.session.resetEmail = user.email;
-
   req.flash("success", "OTP sent! Check your inbox.");
   res.redirect("/verify-otp");
 };
 
 // ══════════════════════════════════════════
 //  VERIFY OTP — STEP 3
-//  GET /verify-otp → show OTP input form
 // ══════════════════════════════════════════
 module.exports.renderVerifyOtp = (req, res) => {
-  // Must have a resetEmail in session
   if (!req.session.resetEmail) {
     req.flash("error", "Please start the password reset process again.");
     return res.redirect("/forgot-password");
@@ -147,7 +144,6 @@ module.exports.renderVerifyOtp = (req, res) => {
 
 // ══════════════════════════════════════════
 //  VERIFY OTP — STEP 4
-//  POST /verify-otp → validate OTP
 // ══════════════════════════════════════════
 module.exports.verifyOtp = async (req, res) => {
   const { otp } = req.body;
@@ -165,7 +161,6 @@ module.exports.verifyOtp = async (req, res) => {
     return res.redirect("/forgot-password");
   }
 
-  // Check expiry
   if (user.resetOtpExpiry < new Date()) {
     user.resetOtp = null;
     user.resetOtpExpiry = null;
@@ -174,21 +169,17 @@ module.exports.verifyOtp = async (req, res) => {
     return res.redirect("/forgot-password");
   }
 
-  // Check OTP match
   if (user.resetOtp !== otp.trim()) {
     req.flash("error", "Invalid OTP. Please try again.");
     return res.redirect("/verify-otp");
   }
 
-  // OTP verified — mark session as verified
   req.session.otpVerified = true;
-
   res.redirect("/reset-password");
 };
 
 // ══════════════════════════════════════════
 //  RESET PASSWORD — STEP 5
-//  GET /reset-password → show new password form
 // ══════════════════════════════════════════
 module.exports.renderResetPassword = (req, res) => {
   if (!req.session.resetEmail || !req.session.otpVerified) {
@@ -200,7 +191,6 @@ module.exports.renderResetPassword = (req, res) => {
 
 // ══════════════════════════════════════════
 //  RESET PASSWORD — STEP 6
-//  POST /reset-password → save new password
 // ══════════════════════════════════════════
 module.exports.resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
@@ -211,13 +201,11 @@ module.exports.resetPassword = async (req, res) => {
     return res.redirect("/forgot-password");
   }
 
-  // Match passwords
   if (password !== confirmPassword) {
     req.flash("error", "Passwords do not match.");
     return res.redirect("/reset-password");
   }
 
-  // Min length check
   if (password.length < 6) {
     req.flash("error", "Password must be at least 6 characters.");
     return res.redirect("/reset-password");
@@ -229,19 +217,14 @@ module.exports.resetPassword = async (req, res) => {
     return res.redirect("/forgot-password");
   }
 
-  // passport-local-mongoose provides setPassword()
   await user.setPassword(password);
-
-  // Clear OTP fields
   user.resetOtp = null;
   user.resetOtpExpiry = null;
   await user.save();
 
-  // Clear session reset data
   req.session.resetEmail = null;
   req.session.otpVerified = null;
 
-  // Send confirmation email
   await sendEmail({
     toEmail: user.email,
     toName: user.username,
