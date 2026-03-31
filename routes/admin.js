@@ -75,8 +75,73 @@ router.post("/listings/:id/reject", isLoggedIn, isAdmin, wrapAsync(async (req, r
 /* ── UPDATE COMPLAINT STATUS ── */
 router.post("/complaints/:id/update", isLoggedIn, isAdmin, wrapAsync(async (req, res) => {
   const { status, adminNote } = req.body;
-  await Complaint.findByIdAndUpdate(req.params.id, { status, adminNote });
-  req.flash("success", "Complaint updated.");
+  const complaint = await Complaint.findByIdAndUpdate(
+    req.params.id,
+    { status, adminNote },
+    { new: true }
+  ).populate("listing");
+
+  /* ── Send email to customer only when status changes to reviewed or resolved ── */
+  if (status === "reviewed" || status === "resolved") {
+    const statusLabel = status === "resolved" ? "✅ Resolved" : "👀 Under Review";
+    const statusColor = status === "resolved" ? "#2d7a4f" : "#c9783a";
+
+    const html = `
+<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f0e8;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+<tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+<tr><td style="background:#1a1a2e;border-radius:18px 18px 0 0;padding:32px 40px;text-align:center;">
+  <p style="margin:0 0 4px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#d4a843;">✦ Wanderlust</p>
+  <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">Complaint Update</h1>
+</td></tr>
+<tr><td style="background:#ffffff;padding:36px 40px;">
+  <p style="font-size:15px;color:#1a1a2e;">Hi <strong>${complaint.name}</strong> 👋</p>
+  <p style="font-size:14px;color:#6b6b7b;line-height:1.7;">
+    Your complaint has been updated by our team.
+  </p>
+
+  <!-- Status badge -->
+  <div style="text-align:center;margin:24px 0;">
+    <span style="display:inline-block;background:${statusColor};color:white;font-size:14px;font-weight:700;padding:10px 28px;border-radius:30px;letter-spacing:0.5px;">
+      ${statusLabel}
+    </span>
+  </div>
+
+  <!-- Complaint details -->
+  <div style="background:#faf7f2;border:1px solid #e0d8cc;border-radius:12px;padding:18px 22px;margin-bottom:20px;">
+    <p style="margin:0 0 6px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;">Your Complaint</p>
+    <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1a1a2e;">${complaint.subject}</p>
+    <p style="margin:4px 0 0;font-size:13px;color:#6b6b7b;line-height:1.6;">${complaint.message}</p>
+  </div>
+
+  <!-- Admin note if any -->
+  ${adminNote ? `
+  <div style="background:#fff8ec;border-left:4px solid #c9783a;border-radius:8px;padding:14px 18px;margin-bottom:20px;">
+    <p style="margin:0 0 4px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;">Message from our team</p>
+    <p style="margin:0;font-size:14px;color:#1a1a2e;line-height:1.6;">${adminNote}</p>
+  </div>` : ""}
+
+  <p style="font-size:13px;color:#6b6b7b;line-height:1.7;">
+    ${status === "resolved"
+      ? "Your complaint has been fully resolved. Thank you for helping us maintain quality on Wanderlust."
+      : "Our team is actively reviewing your complaint and will take necessary action shortly."}
+  </p>
+</td></tr>
+<tr><td style="background:#1a1a2e;border-radius:0 0 18px 18px;padding:24px 40px;text-align:center;">
+  <p style="margin:0;font-size:16px;color:#d4a843;font-family:Georgia,serif;letter-spacing:2px;">WANDERLUST</p>
+  <p style="margin:6px 0 0;font-size:12px;color:rgba(255,255,255,0.35);">Curated Journeys · Extraordinary Experiences</p>
+</td></tr>
+</table></td></tr></table></body></html>`;
+
+    await sendEmail({
+      toEmail: complaint.email,
+      toName:  complaint.name,
+      subject: `Your Wanderlust complaint is ${statusLabel}`,
+      htmlContent: html,
+    });
+  }
+
+  req.flash("success", "Complaint updated and customer notified.");
   res.redirect("/admin");
 }));
 
