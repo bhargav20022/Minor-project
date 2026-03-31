@@ -1,0 +1,161 @@
+<% layout("/layouts/boilerplate") %>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --surface:#ffffff; --panel:#f5f1eb; --line:rgba(26,26,46,0.09);
+  --ink:#1a1a2e; --muted:rgba(26,26,46,0.5); --dim:rgba(26,26,46,0.3);
+  --amber:#c9783a; --gold:#d4a843; --success:#2d7a4f;
+  --danger:#dc3545; --radius:16px; --radius-lg:22px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+.ml-page{max-width:960px;margin:0 auto;padding:36px 18px 80px;}
+
+.ml-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:12px;}
+.ml-title{font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:300;color:var(--ink);margin:0;display:flex;align-items:center;gap:12px;}
+.ml-title::after{content:'';width:40px;height:2px;background:linear-gradient(90deg,var(--amber),transparent);display:inline-block;border-radius:2px;}
+
+.ml-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+
+.btn-new{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:linear-gradient(135deg,var(--amber),#a85e28);color:white;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;}
+.btn-new:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,120,58,.4);color:white;}
+
+/* Status pills */
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:20px;}
+.sp-pending  {background:rgba(212,168,67,.12);color:#b8921e;border:1px solid rgba(212,168,67,.3);}
+.sp-approved {background:rgba(45,122,79,.12);color:#1e6b40;border:1px solid rgba(45,122,79,.3);}
+.sp-rejected {background:rgba(220,53,69,.08);color:#842029;border:1px solid rgba(220,53,69,.25);}
+
+/* Legend */
+.ml-legend{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);}
+.leg-dot{width:9px;height:9px;border-radius:50%;}
+
+/* Grid */
+.ml-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:768px){.ml-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.ml-grid{grid-template-columns:1fr;}}
+
+.ml-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;transition:all .3s ease;position:relative;}
+.ml-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(26,26,46,.1);}
+
+/* Dim rejected/pending cards slightly */
+.ml-card.is-pending{border-color:rgba(212,168,67,.35);}
+.ml-card.is-rejected{border-color:rgba(220,53,69,.3);opacity:.85;}
+
+.ml-card-img{position:relative;height:160px;overflow:hidden;}
+.ml-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.ml-card:hover .ml-card-img img{transform:scale(1.05);}
+
+/* Status banner on image */
+.ml-img-banner{position:absolute;top:0;left:0;right:0;padding:7px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.ml-img-banner.pending {background:rgba(212,168,67,.88);color:#1a1a2e;}
+.ml-img-banner.approved{background:rgba(45,122,79,.88);color:white;}
+.ml-img-banner.rejected{background:rgba(220,53,69,.88);color:white;}
+
+.ml-card-body{padding:14px 16px 16px;}
+.ml-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ml-card-loc{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px;margin-bottom:10px;}
+.ml-card-loc i{color:var(--amber);font-size:9px;}
+
+.ml-rejection-note{font-size:11px;color:#842029;background:rgba(220,53,69,.06);border:1px solid rgba(220,53,69,.2);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;}
+.ml-rejection-note i{margin-right:4px;}
+
+.ml-pending-note{font-size:11px;color:#8a6200;background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.25);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;}
+
+.ml-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line);}
+.ml-price{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--amber);}
+.ml-price span{font-family:'Outfit',sans-serif;font-size:10px;color:var(--muted);}
+
+.ml-actions{display:flex;gap:6px;}
+.btn-sm-edit{padding:5px 12px;border-radius:7px;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-size:11px;font-weight:600;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:4px;}
+.btn-sm-edit:hover{border-color:rgba(26,26,46,.2);color:var(--ink);}
+.btn-sm-del{padding:5px 12px;border-radius:7px;background:transparent;border:1px solid rgba(220,53,69,.25);color:var(--danger);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;}
+.btn-sm-del:hover{background:rgba(220,53,69,.08);border-color:rgba(220,53,69,.45);}
+
+/* Empty state */
+.ml-empty{text-align:center;padding:64px 24px;background:var(--panel);border:1px dashed rgba(26,26,46,.15);border-radius:var(--radius-lg);color:var(--muted);}
+.ml-empty i{font-size:32px;display:block;margin-bottom:14px;opacity:.3;}
+</style>
+
+<div class="ml-page">
+
+  <div class="ml-header">
+    <div>
+      <div class="ml-eyebrow">My Listings</div>
+      <h1 class="ml-title">Your Properties</h1>
+    </div>
+    <a href="/listings/new" class="btn-new"><i class="fa-solid fa-plus"></i> Add New Listing</a>
+  </div>
+
+  <!-- Legend -->
+  <div class="ml-legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#d4a843;"></div> Pending admin review</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2d7a4f;"></div> Approved &amp; live</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#dc3545;"></div> Rejected — needs edit</div>
+  </div>
+
+  <% if(listings.length === 0) { %>
+    <div class="ml-empty">
+      <i class="fa-solid fa-house-circle-xmark"></i>
+      <p>You haven't created any listings yet.</p>
+      <a href="/listings/new" class="btn-new" style="margin-top:14px;display:inline-flex;">Create your first listing</a>
+    </div>
+  <% } else { %>
+    <div class="ml-grid">
+      <% for(let listing of listings) { %>
+        <div class="ml-card is-<%= listing.status %>">
+          <div class="ml-card-img">
+            <img src="<%= listing.image.url %>" alt="<%= listing.title %>"/>
+            <div class="ml-img-banner <%= listing.status %>">
+              <% if(listing.status === 'pending') { %>
+                <i class="fa-solid fa-clock"></i> Awaiting Approval
+              <% } else if(listing.status === 'approved') { %>
+                <i class="fa-solid fa-circle-check"></i> Live
+              <% } else { %>
+                <i class="fa-solid fa-circle-xmark"></i> Rejected
+              <% } %>
+            </div>
+          </div>
+
+          <div class="ml-card-body">
+            <div class="ml-card-title"><%= listing.title %></div>
+            <div class="ml-card-loc">
+              <i class="fa-solid fa-location-dot"></i>
+              <%= listing.location %>, <%= listing.country %>
+            </div>
+
+            <% if(listing.status === 'pending') { %>
+              <div class="ml-pending-note">
+                <i class="fa-solid fa-hourglass-half"></i>
+                Your listing is under review. We'll notify you by email once approved.
+              </div>
+            <% } else if(listing.status === 'rejected') { %>
+              <div class="ml-rejection-note">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <strong>Reason:</strong> <%= listing.rejectionReason || "Did not meet our quality standards." %>
+              </div>
+            <% } %>
+
+            <div class="ml-card-footer">
+              <div class="ml-price">₹<%= listing.price.toLocaleString('en-IN') %><span> / night</span></div>
+              <div class="ml-actions">
+                <a href="/listings/<%= listing._id %>/edit" class="btn-sm-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </a>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST"
+                      style="display:inline" onsubmit="return confirm('Delete this listing?')">
+                  <button type="submit" class="btn-sm-del">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+</div>
