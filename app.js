@@ -33,6 +33,7 @@ const userRouter=require("./routes/user.js");
 const bookingRoute = require("./routes/booking");
 const paymentRoute = require("./routes/payment");
 const adminRouter = require("./routes/admin.js");
+const complaintRouter = require("./models/complaint.js");
 
 
 const dbUrl=process.env.ATLASDB_URL;
