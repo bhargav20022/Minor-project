@@ -154,6 +154,67 @@
       </div>
     </div>
 
+<style>
+.complaint-section { margin-top: 28px; }
+.complaint-card {
+  background: var(--white); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 22px;
+  border-left: 3px solid #dc3545;
+}
+.complaint-card .section-head { color: #dc3545; }
+.complaint-card .section-head::after { background: linear-gradient(90deg, rgba(220,53,69,0.3), transparent); }
+.complaint-input {
+  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+  border-radius: 10px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--ink); background: var(--cream);
+  outline: none; transition: border-color .2s; margin-bottom: 12px;
+}
+.complaint-input:focus { border-color: #dc3545; background: white; }
+.complaint-textarea {
+  width: 100%; padding: 11px 14px; border: 2px solid var(--border);
+  border-radius: 10px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; resize: vertical; min-height: 80px;
+  outline: none; background: var(--cream); transition: border-color .2s;
+  margin-bottom: 12px;
+}
+.complaint-textarea:focus { border-color: #dc3545; background: white; }
+.btn-complaint {
+  padding: 10px 22px; background: transparent;
+  border: 2px solid #dc3545; color: #dc3545;
+  border-radius: 10px; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+}
+.btn-complaint:hover { background: #dc3545; color: white; }
+</style>
+
+<div class="complaint-section">
+  <% if(currUser) { %>
+    <div class="section-head" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#dc3545;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+      Report a Problem
+      <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(220,53,69,0.3),transparent);display:block;"></span>
+    </div>
+    <div class="complaint-card">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+        Something wrong with this listing? Let us know — our team will review it within 24 hours.
+      </p>
+      <form action="/listings/<%= listing._id %>/complaint" method="POST">
+        <input type="text" name="name" class="complaint-input"
+               placeholder="Your name" value="<%= currUser.username %>" required/>
+        <input type="email" name="email" class="complaint-input"
+               placeholder="Your email" value="<%= currUser.email || '' %>" required/>
+        <input type="text" name="subject" class="complaint-input"
+               placeholder="Subject — e.g. Fake listing, Misleading photos…" required/>
+        <textarea name="message" class="complaint-textarea" required
+                  placeholder="Describe the issue in detail…"></textarea>
+        <button type="submit" class="btn-complaint">
+          <i class="fa-solid fa-flag me-1"></i> Submit Complaint
+        </button>
+      </form>
+    </div>
+  <% } %>
+</div>
+
+
     <div>
       <div class="booking-card">
         <div class="booking-card-header"><span class="tag">✦ Reserve Your Stay</span><h4><%= listing.title %></h4></div>
