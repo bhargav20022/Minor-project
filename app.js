@@ -32,6 +32,7 @@ const userRouter=require("./routes/user.js");
 
 const bookingRoute = require("./routes/booking");
 const paymentRoute = require("./routes/payment");
+const adminRouter = require("./routes/admin.js");
 
 
 const dbUrl=process.env.ATLASDB_URL;
@@ -130,7 +131,7 @@ app.use((req, res, next) => {
 
 
 
-
+app.use("/admin", adminRouter);
 
 app.use("/listings", listingRouter);
 
