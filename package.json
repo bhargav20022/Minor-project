@@ -1,7 +1,7 @@
 {
-  "engines": {
-    "node": "16.13.0"
-  },
+"engines": {
+  "node": ">=20.0.0"
+}
   "name": "minor-project",
   "version": "1.0.0",
   "description": "",
