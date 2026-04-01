@@ -753,11 +753,11 @@ function showTemples(city) {
   grid.style.animation = 'fadeUp .4s ease';
 
   grid.innerHTML = temples.map(t => `
-    <a class="temple-card" href="https://www.google.com/maps/search/?api=1&query=${t.maps}" target="_blank" rel="noopener">
+    <a class="temple-card" href="https://www.google.com/maps/search/?q=${encodeURIComponent(t.maps)}" target="_blank" rel="noopener">
       <div class="temple-card-img-wrap">
         <img class="temple-card-img" src="${t.img}" alt="${t.name}"
-onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"
-<div class="temple-card-img-overlay"></div>
+           onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"/>
+      <div class="temple-card-img-overlay"></div>
         <div class="temple-card-badge">🛕 ${city}</div>
       </div>
       <div class="temple-card-body">
