@@ -333,6 +333,23 @@
 
 <div class="pay-wrapper">
 
+
+ <div style="
+    grid-column: 1 / -1;
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #856404;
+    margin-bottom: 8px;
+  ">
+    ⚠️ <strong>Demo Project Only</strong> — This is a portfolio project. 
+    No real payments are processed. Do not enter real card details.
+  </div>
+
   <!-- ── LEFT: Summary ── -->
   <div class="summary-card">
     <span class="tag">✦ Booking Summary</span>
@@ -402,17 +419,16 @@
         </div>
         <div class="field-group">
           <label>Card Number</label>
-          <input type="text" placeholder="1234  5678  9012  3456" maxlength="19" id="cardNum" oninput="formatCard(this)"/>
-        </div>
+<input type="text" placeholder="4111  1111  1111  1111  (test number)" maxlength="19" id="cardNum" oninput="formatCard(this)" value="4111  1111  1111  1111"/>        </div>
         <div class="row-2">
           <div class="field-group">
             <label>Expiry</label>
-            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/>
-          </div>
+<input type="text" placeholder="12 / 26 (demo)" maxlength="7" value="12 / 26"/>
+</div>
           <div class="field-group">
             <label>CVV</label>
-            <input type="text" placeholder="•••" maxlength="3"/>
-          </div>
+<input type="text" placeholder="123 (demo)" maxlength="3" value="123"/>
+</div>
         </div>
       </div>
 
@@ -488,15 +504,15 @@
       <!-- Pay Button -->
       <button type="submit" class="pay-btn" id="payBtn" onclick="handlePay(event)">
         <i class="fa-solid fa-lock"></i>
-        <span id="btnText">Pay ₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
+<span id="btnText">🧪 Simulate Payment ₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
         <div class="spinner" id="spinner"></div>
       </button>
     </form>
 
-    <p class="secure-note">
-      <i class="fa-solid fa-shield-halved"></i>
-      256-bit SSL encrypted &bull; 100% secure payment
-    </p>
+   <p class="secure-note">
+  <i class="fa-solid fa-flask" style="color:#ffc107"></i>
+  Demo project — No real payment is processed &bull; Safe to test
+</p>
   </div>
 
 </div>
