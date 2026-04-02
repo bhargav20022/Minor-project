@@ -348,6 +348,7 @@ body { background: #f5f1eb; }
   aspect-ratio: 4 / 3;   /* 🔥 same ratio for all */
   overflow: hidden;
   border-radius: 16px;
+  position: relative;
 }
 
 .listing-img-wrap img {
@@ -355,6 +356,8 @@ body { background: #f5f1eb; }
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: transform .45s ease;  /* ✅ ADD THIS */
+  display: block;
 }
 .listing-card:hover .listing-img-wrap img { transform:scale(1.06); }
 
