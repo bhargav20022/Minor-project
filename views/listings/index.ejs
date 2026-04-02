@@ -327,17 +327,26 @@ body { background: #f5f1eb; }
 .view-btn.active,.view-btn:hover { background:var(--ink); color:white; border-color:var(--ink); }
 .sort-select { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--ink); border:1px solid var(--border); border-radius:10px; padding:8px 28px 8px 14px; background:white; cursor:pointer; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7a8a'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; }
 
-/* ══ LISTING CARDS ══ */
-.listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:48px; }
-@media(max-width:992px) { .listings-grid { grid-template-columns:repeat(2,1fr); } }
-@media(max-width:600px)  { .listings-grid { grid-template-columns:1fr; } }
+/* ══ LISTING CARDS — GRID ONLY ══ */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+@media(max-width:992px) { .listings-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:600px)  { .listings-grid { grid-template-columns: 1fr; } }
+
 .listing-link { text-decoration:none; color:inherit; display:block; }
 .listing-link.hidden { display:none; }
 .listing-card { background:white; border-radius:20px; overflow:hidden; box-shadow:0 3px 14px rgba(26,26,46,.07); transition:all .3s cubic-bezier(.25,.8,.25,1); }
 .listing-card:hover { transform:translateY(-7px); box-shadow:0 18px 42px rgba(26,26,46,.14); }
+
+/* Image always fills fixed height, crops any size photo to fit */
 .listing-img-wrap { position:relative; overflow:hidden; height:220px; }
 .listing-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .45s ease; display:block; }
 .listing-card:hover .listing-img-wrap img { transform:scale(1.06); }
+
 .wishlist-btn { position:absolute; top:13px; right:13px; width:34px; height:34px; background:rgba(255,255,255,.92); border-radius:50%; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; box-shadow:0 2px 10px rgba(0,0,0,.12); z-index:2; font-size:14px; color:#ccc; }
 .wishlist-btn:hover { transform:scale(1.12); color:#e05c5c; }
 .wishlist-btn.liked { color:#e05c5c; }
@@ -352,6 +361,8 @@ body { background: #f5f1eb; }
 .listing-price .night { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:400; color:var(--muted); display:block; margin-top:2px; }
 .listing-rating { display:flex; align-items:center; gap:4px; font-family:'DM Sans',sans-serif; font-size:12px; color:var(--muted); }
 .listing-rating i { color:var(--gold); font-size:12px; }
+
+/* List view styles (only when toggled) */
 #allListingsGrid.list-view { grid-template-columns:1fr; }
 #allListingsGrid.list-view .listing-card { display:flex; flex-direction:row; height:140px; }
 #allListingsGrid.list-view .listing-img-wrap { width:200px; flex-shrink:0; height:100%; }
@@ -760,7 +771,6 @@ const TEMPLES_DATA = {
 };
 
 function showTemples(city) {
-  // Update active pill
   document.querySelectorAll('.temple-city-pill').forEach(p => {
     p.classList.toggle('active', p.textContent.includes(city));
   });
@@ -769,7 +779,7 @@ function showTemples(city) {
   const grid = document.getElementById('templesGrid');
 
   grid.style.animation = 'none';
-  grid.offsetHeight; // reflow
+  grid.offsetHeight;
   grid.style.animation = 'fadeUp .4s ease';
 
   grid.innerHTML = temples.map(t => `
@@ -793,7 +803,6 @@ function showTemples(city) {
   `).join('');
 }
 
-// Show Puri on load
 showTemples('Puri');
 </script>
 
@@ -882,13 +891,15 @@ showTemples('Puri');
       <option value="name-asc">Name: A–Z</option>
     </select>
     <div class="view-toggle">
-      <button class="view-btn" id="gridBtn" onclick="setView('grid')" title="Grid"><i class="fa-solid fa-grip"></i></button>
-      <button class="view-btn active" id="listBtn" onclick="setView('list')" title="List"><i class="fa-solid fa-list"></i></button>
+      <!-- ✅ CHANGE 1: gridBtn is now active by default -->
+      <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid"><i class="fa-solid fa-grip"></i></button>
+      <button class="view-btn" id="listBtn" onclick="setView('list')" title="List"><i class="fa-solid fa-list"></i></button>
     </div>
   </div>
 </div>
 
-<div class="listings-grid list-view" id="allListingsGrid">
+<!-- ✅ CHANGE 2: removed 'list-view' class — grid is now default -->
+<div class="listings-grid" id="allListingsGrid">
   <% for(let listing of allListings) { %>
   <a href="/listings/<%= listing._id %>" class="listing-link"
      data-id="<%= listing._id %>"
@@ -1135,17 +1146,27 @@ function showCityResults(city){
   if(!matched.length){container.innerHTML=`<div class="no-city-results"><i class="fa-solid fa-map-location-dot"></i><p>No stays found in <strong>${city}</strong>.</p></div>`;section.scrollIntoView({behavior:'smooth',block:'start'});return;}
   container.innerHTML=`<div class="city-cards-grid">${matched.map(l=>`<a href="/listings/${l._id}" class="city-listing-card"><div class="city-card-img-wrap"><img src="${l.image?.url||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"/><span class="city-card-badge">${getEmoji(l.location)} ${l.location}</span></div><div class="city-card-body"><div class="title">${l.title}</div><div class="location"><i class="fa-solid fa-location-dot"></i> ${l.location}, ${l.country}</div><div class="price">₹${l.price?l.price.toLocaleString('en-IN'):'N/A'}<span class="per-night">/ night</span></div></div></a>`).join('')}</div>`;
   section.scrollIntoView({behavior:'smooth',block:'start'});
+  showCityAttractions(city);
 }
 function clearSearch() {
   input.value = '';
   document.getElementById('cityResultsSection').style.display = 'none';
-  document.getElementById('cityAttractionsSection').style.display = 'none'; // ← NEW
-}document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});});
+  document.getElementById('cityAttractionsSection').style.display = 'none';
+}
+document.getElementById('flexSwitchCheckDefault').addEventListener('click',function(){document.querySelectorAll('.tax-info').forEach(el=>{el.style.display=(el.style.display!=='inline')?'inline':'none';});});
 document.querySelectorAll('#filters .filter').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#filters .filter').forEach(b=>b.classList.remove('active'));this.classList.add('active');});});
 const wishlist=new Set(JSON.parse(localStorage.getItem('wl_wishlist')||'[]'));
 function toggleWishlist(e,id){e.preventDefault();e.stopPropagation();const btn=e.currentTarget,icon=btn.querySelector('i');if(wishlist.has(id)){wishlist.delete(id);icon.className='fa-regular fa-heart';btn.classList.remove('liked');}else{wishlist.add(id);icon.className='fa-solid fa-heart';btn.classList.add('liked');btn.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:300,easing:'ease'});}localStorage.setItem('wl_wishlist',JSON.stringify([...wishlist]));}
 document.querySelectorAll('.wishlist-btn').forEach(btn=>{const id=btn.closest('.listing-link')?.dataset.id;if(id&&wishlist.has(id)){btn.querySelector('i').className='fa-solid fa-heart';btn.classList.add('liked');}});
-function setView(mode){const grid=document.getElementById('allListingsGrid');document.getElementById('gridViewBtn').classList.toggle('active',mode==='grid');document.getElementById('listViewBtn').classList.toggle('active',mode==='list');grid.classList.toggle('list-view',mode==='list');}
+
+/* ✅ CHANGE 3: fixed button IDs in setView */
+function setView(mode){
+  const grid=document.getElementById('allListingsGrid');
+  document.getElementById('gridBtn').classList.toggle('active',mode==='grid');
+  document.getElementById('listBtn').classList.toggle('active',mode==='list');
+  grid.classList.toggle('list-view',mode==='list');
+}
+
 function sortListings(){const val=document.getElementById('sortSelect').value,grid=document.getElementById('allListingsGrid'),cards=[...grid.querySelectorAll('.listing-link')];cards.sort((a,b)=>{const dA=ALL_LISTINGS.find(l=>l._id==a.dataset.id),dB=ALL_LISTINGS.find(l=>l._id==b.dataset.id);if(!dA||!dB)return 0;if(val==='price-asc')return(dA.price||0)-(dB.price||0);if(val==='price-desc')return(dB.price||0)-(dA.price||0);if(val==='name-asc')return(dA.title||'').localeCompare(dB.title||'');return 0;});cards.forEach(c=>grid.appendChild(c));}
 
 /* ═══ CAB BOOKING ═══ */
@@ -1160,7 +1181,6 @@ function openCabModal(type, icon, rate) {
   document.getElementById('cabFareEst').classList.remove('show');
   document.getElementById('cabOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  // Pre-select matching car type
   document.querySelectorAll('.cab-car-type').forEach(c => {
     c.classList.toggle('selected', c.dataset.car === (rate===8&&type==='Airport Transfer'?'Micro': rate===12?'Sedan':'SUV'));
   });
@@ -1240,6 +1260,7 @@ function shake(id){
 }
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCabModal();});
+
 /* ═══ CITY ATTRACTIONS DATA ═══ */
 const CITY_ATTRACTIONS = {
   bhubaneswar: [
@@ -1347,7 +1368,6 @@ function showCityAttractions(city) {
   const nameEl   = document.getElementById('attractionsCityName');
   const emojiEl  = document.getElementById('attractionsCityEmoji');
 
-  // Find closest matching key
   const cityLower = city.toLowerCase();
   const matchedKey = Object.keys(CITY_ATTRACTIONS).find(k =>
     cityLower.includes(k) || k.includes(cityLower)
@@ -1379,7 +1399,5 @@ function showCityAttractions(city) {
   `).join('');
 
   section.style.display = 'block';
-// At the END of showCityResults(), before the closing }
-showCityAttractions(city);   // ← ADD THIS LINE
 }
 </script>
