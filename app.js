@@ -33,6 +33,7 @@ const userRouter=require("./routes/user.js");
 const bookingRoute = require("./routes/booking");
 const paymentRoute = require("./routes/payment");
 const adminRouter = require("./routes/admin.js");
+const complaintRouter = require("./models/complaint.js");
 
 
 const dbUrl=process.env.ATLASDB_URL;
@@ -74,13 +75,11 @@ const sessionOptions = {
     store,
     secret:process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized:true,
     cookie: {
-    expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // ✅ add this
-        sameSite: "lax",   // ✅ FIXED - allows form submissions
     },
 };
 
@@ -144,6 +143,7 @@ app.use("/booking", bookingRoute);
 app.use("/payment", paymentRoute);
 
 
+
 // app.get("/testListing", async (req, res) => {
 //     let sampleListing=new Listing({
 //         title:"My new villa",
@@ -159,8 +159,8 @@ app.use("/payment", paymentRoute);
 // });
 
 
-app.all("/:any", (req, res, next) => {
-    next(new ExpressError(404, "Page not found"));
+app.all("/:any",(req, res, next) => {
+    next(new ExpressError(404,"page not found"));
 });
 
 
