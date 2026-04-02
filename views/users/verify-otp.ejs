@@ -259,14 +259,15 @@
 
     <form action="/verify-otp" method="POST" id="otpForm">
       <!-- 6 visual boxes -->
-      <div class="otp-boxes">
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b0"/>
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b1"/>
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b2"/>
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b3"/>
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b4"/>
-        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b5"/>
-      </div>
+     <!-- replace your otp-boxes div with this -->
+<div class="otp-boxes">
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b0" aria-label="OTP digit 1" autocomplete="one-time-code"/>
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b1" aria-label="OTP digit 2" autocomplete="off"/>
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b2" aria-label="OTP digit 3" autocomplete="off"/>
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b3" aria-label="OTP digit 4" autocomplete="off"/>
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b4" aria-label="OTP digit 5" autocomplete="off"/>
+  <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="b5" aria-label="OTP digit 6" autocomplete="off"/>
+</div>
 
       <!-- real hidden input that gets submitted -->
       <input type="hidden" name="otp" id="otpHidden"/>
