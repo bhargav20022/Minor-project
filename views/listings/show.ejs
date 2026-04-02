@@ -119,8 +119,8 @@
                 <input type="radio" id="first-rate4" name="review[rating]" value="4"/><label for="first-rate4" title="Very good">4 stars</label>
                 <input type="radio" id="first-rate5" name="review[rating]" value="5"/><label for="first-rate5" title="Amazing">5 stars</label>
               </fieldset>
-              <label class="bc-label">Comment</label>
-              <textarea name="review[comment]" class="review-textarea" required placeholder="Share your experience…"></textarea>
+                <label class="bc-label" for="reviewComment">Comment</label>
+                <textarea name="review[comment]" id="reviewComment" class="review-textarea" required placeholder="Share your experience…"></textarea>
               <div class="invalid-feedback">Please add a comment.</div>
               <button type="submit" class="btn-review"><i class="fa-solid fa-paper-plane me-1"></i> Submit Review</button>
             </form>
@@ -205,14 +205,14 @@
         Something wrong with this listing? Let us know — our team will review it within 24 hours.
       </p>
       <form action="/listings/<%= listing._id %>/complaint" method="POST">
-        <input type="text" name="name" class="complaint-input"
-               placeholder="Your name" value="<%= currUser.username %>" required/>
-        <input type="email" name="email" class="complaint-input"
-               placeholder="Your email" value="<%= currUser.email || '' %>" required/>
-        <input type="text" name="subject" class="complaint-input"
-               placeholder="Subject — e.g. Fake listing, Misleading photos…" required/>
-        <textarea name="message" class="complaint-textarea" required
-                  placeholder="Describe the issue in detail…"></textarea>
+        <input type="text" name="name" id="complaintName" class="complaint-input"
+       placeholder="Your name" value="<%= currUser.username %>" autocomplete="name" required/>
+        <input type="email" name="email" id="complaintEmail" class="complaint-input"
+       placeholder="Your email" value="<%= currUser.email || '' %>" autocomplete="email" required/>
+       <input type="text" name="subject" id="complaintSubject" class="complaint-input"
+       placeholder="Subject — e.g. Fake listing, Misleading photos…" autocomplete="off" required/>
+      <textarea name="message" id="complaintMessage" class="complaint-textarea" required
+          placeholder="Describe the issue in detail…"></textarea>
         <button type="submit" class="btn-complaint">
           <i class="fa-solid fa-flag me-1"></i> Submit Complaint
         </button>
@@ -230,20 +230,20 @@
             <form action="/booking/<%= listing._id %>" method="POST" id="bookingForm" novalidate>
               <div class="bc-stack">
                 <div>
-                  <label class="bc-label">Check-in</label>
-                  <input type="date" class="bc-input" id="checkIn" name="checkIn" required/>
-                  <div class="error-msg" id="checkInError">⚠ Please select a check-in date</div>
+                    <label class="bc-label" for="checkIn">Check-in</label>
+                        <input type="date" class="bc-input" id="checkIn" name="checkIn" autocomplete="off" required/>
+                        <div class="error-msg" id="checkInError">⚠ Please select a check-in date</div>
                 </div>
                 <div>
-                  <label class="bc-label">Check-out</label>
-                  <input type="date" class="bc-input" id="checkOut" name="checkOut" required/>
-                  <div class="error-msg" id="checkOutError">⚠ Please select a check-out date</div>
+                      <label class="bc-label" for="checkOut">Check-out</label>
+                      <input type="date" class="bc-input" id="checkOut" name="checkOut" autocomplete="off" required/>
+                      <div class="error-msg" id="checkOutError">⚠ Please select a check-out date</div>
                 </div>
               </div>
               <div class="bc-field">
-                <label class="bc-label">Guests</label>
-                <select class="bc-select" id="guests" name="guests" required>
-                  <option value="" disabled selected>Select guests</option>
+                    <label class="bc-label" for="guests">Guests</label>
+                    <select class="bc-select" id="guests" name="guests" autocomplete="off" required>
+                    <option value="" disabled selected>Select guests</option>
                   <option value="1">1 Guest</option><option value="2">2 Guests</option>
                   <option value="3">3 Guests</option><option value="4">4 Guests</option>
                   <option value="5">5 Guests</option><option value="6">6+ Guests</option>
@@ -287,8 +287,8 @@
     <div style="padding:24px;">
       <p style="font-size:13px;color:#6b6b7b;margin-bottom:16px;">Your message will be sent to <strong><%= listing.owner.username %></strong>. They can reply to your email <strong><%= currUser ? currUser.email : '' %></strong>.</p>
       <form action="/listings/<%= listing._id %>/contact" method="POST">
-        <label style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;display:block;margin-bottom:6px;">Your Message</label>
-        <textarea name="message" required rows="4" placeholder="Hi! I'm interested in your listing..." style="width:100%;padding:12px 14px;border:2px solid #e0d8cc;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;outline:none;background:#faf7f2;box-sizing:border-box;"></textarea>
+        <label for="contactMessage" style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6b6b7b;display:block;margin-bottom:6px;">Your Message</label>
+<textarea name="message" id="contactMessage" required rows="4" placeholder="Hi! I'm interested in your listing..." style="width:100%;padding:12px 14px;border:2px solid #e0d8cc;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;outline:none;background:#faf7f2;box-sizing:border-box;"></textarea>
         <button type="submit" style="margin-top:12px;width:100%;padding:13px;background:linear-gradient(135deg,#c9783a,#a85e28);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">
           <i class="fa-solid fa-paper-plane me-2"></i> Send Message
         </button>
