@@ -407,59 +407,47 @@
     <form action="/payment/<%= booking._id %>/success" method="POST" id="payForm">
 
       <!-- Credit Card Panel -->
-      <div class="panel active" id="panel-card">
-        <div class="card-icons">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/200px-American_Express_logo_%282018%29.svg.png" alt="Amex"/>
-        </div>
-        <div class="field-group">
-          <label>Cardholder Name</label>
-          <input type="text" placeholder="Name on card" required/>
-        </div>
-        <div class="field-group">
-          <label>Card Number</label>
-<input type="text" placeholder="4111  1111  1111  1111  (test number)" maxlength="19" id="cardNum" oninput="formatCard(this)" value="4111  1111  1111  1111"/>        </div>
-        <div class="row-2">
-          <div class="field-group">
-            <label>Expiry</label>
-<input type="text" placeholder="12 / 26 (demo)" maxlength="7" value="12 / 26"/>
+  <div class="field-group">
+  <label for="cardHolder">Cardholder Name</label>
+  <input type="text" id="cardHolder" name="cardHolder" placeholder="Name on card" autocomplete="cc-name" required/>
 </div>
-          <div class="field-group">
-            <label>CVV</label>
-<input type="text" placeholder="123 (demo)" maxlength="3" value="123"/>
+<div class="field-group">
+  <label for="cardNum">Card Number</label>
+  <input type="text" placeholder="4111  1111  1111  1111  (test number)" maxlength="19" id="cardNum" name="cardNum" autocomplete="cc-number" oninput="formatCard(this)" value="4111  1111  1111  1111"/>
 </div>
-        </div>
-      </div>
+<div class="row-2">
+  <div class="field-group">
+    <label for="cardExpiry">Expiry</label>
+    <input type="text" id="cardExpiry" name="cardExpiry" placeholder="12 / 26 (demo)" maxlength="7" autocomplete="cc-exp" value="12 / 26"/>
+  </div>
+  <div class="field-group">
+    <label for="cardCvv">CVV</label>
+    <input type="text" id="cardCvv" name="cardCvv" placeholder="123 (demo)" maxlength="3" autocomplete="cc-csc" value="123"/>
+  </div>
+</div>
 
       <!-- Debit Card Panel -->
-      <div class="panel" id="panel-debit">
-        <div class="card-icons">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/RuPay-Logo.png" alt="RuPay"/>
-        </div>
-        <div class="field-group">
-          <label>Account Holder Name</label>
-          <input type="text" placeholder="Name on card" required/>
-        </div>
-        <div class="field-group">
-          <label>Debit Card Number</label>
-          <input type="text" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)"/>
-        </div>
-        <div class="row-2">
-          <div class="field-group">
-            <label>Expiry</label>
-            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/>
-          </div>
-          <div class="field-group">
-            <label>ATM PIN</label>
-            <input type="text" placeholder="••••" maxlength="4"/>
-          </div>
-        </div>
-        <div class="field-group">
-          <label>Bank Name</label>
-          <select>
+    <div class="field-group">
+  <label for="debitHolder">Account Holder Name</label>
+  <input type="text" id="debitHolder" name="debitHolder" placeholder="Name on card" autocomplete="cc-name" required/>
+</div>
+<div class="field-group">
+  <label for="debitNum">Debit Card Number</label>
+  <input type="text" id="debitNum" name="debitNum" placeholder="1234  5678  9012  3456" maxlength="19" autocomplete="cc-number" oninput="formatCard(this)"/>
+</div>
+<div class="row-2">
+  <div class="field-group">
+    <label for="debitExpiry">Expiry</label>
+    <input type="text" id="debitExpiry" name="debitExpiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" oninput="formatExpiry(this)"/>
+  </div>
+  <div class="field-group">
+    <label for="debitPin">ATM PIN</label>
+    <input type="text" id="debitPin" name="debitPin" placeholder="••••" maxlength="4" autocomplete="off"/>
+  </div>
+</div>
+<div class="field-group">
+  <label for="bankName">Bank Name</label>
+  <select id="bankName" name="bankName" autocomplete="off">
             <option value="">Select your bank</option>
             <option>State Bank of India</option>
             <option>HDFC Bank</option>
@@ -495,10 +483,10 @@
           </div>
         </div>
         <div class="upi-divider">or enter UPI ID</div>
-        <div class="field-group">
-          <label>UPI ID</label>
-          <input type="text" id="upiId" placeholder="yourname@upi"/>
-        </div>
+       <div class="field-group">
+  <label for="upiId">UPI ID</label>
+  <input type="text" id="upiId" name="upiId" placeholder="yourname@upi" autocomplete="off"/>
+</div>
       </div>
 
       <!-- Pay Button -->
