@@ -343,22 +343,28 @@ body { background: #f5f1eb; }
 .listing-card:hover { transform:translateY(-7px); box-shadow:0 18px 42px rgba(26,26,46,.14); }
 
 /* Image always fills fixed height, crops any size photo to fit */
+/* Fixed height box — same for ALL images regardless of size */
 .listing-img-wrap {
+  position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;   /* 🔥 same ratio for all */
+  height: 220px;
   overflow: hidden;
   border-radius: 16px;
-  position: relative;
+  flex-shrink: 0;
 }
 
 .listing-img-wrap img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform .45s ease;  /* ✅ ADD THIS */
+  transition: transform .45s ease;
   display: block;
 }
+.listing-card:hover .listing-img-wrap img { transform: scale(1.06); }
 .listing-card:hover .listing-img-wrap img { transform:scale(1.06); }
 
 .wishlist-btn { position:absolute; top:13px; right:13px; width:34px; height:34px; background:rgba(255,255,255,.92); border-radius:50%; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; box-shadow:0 2px 10px rgba(0,0,0,.12); z-index:2; font-size:14px; color:#ccc; }
