@@ -46,4 +46,41 @@ router.get("/reset-password", userController.renderResetPassword);
 // ── Reset Password: save new password ──
 router.post("/reset-password", wrapAsync(userController.resetPassword));
 
+
+const Notification = require("../models/notification.js");
+
+// GET notifications for logged-in user
+router.get("/notifications", isLoggedIn, async (req, res) => {
+  try {
+    const notifications = await Notification.find({ user: req.user._id })
+      .sort({ createdAt: -1 }).limit(20);
+    const unreadCount = await Notification.countDocuments({
+      user: req.user._id, isRead: false,
+    });
+    res.json({ notifications, unreadCount });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Mark one as read
+router.put("/notifications/:id/read", isLoggedIn, async (req, res) => {
+  try {
+    await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Mark all as read
+router.put("/notifications/read-all", isLoggedIn, async (req, res) => {
+  try {
+    await Notification.updateMany({ user: req.user._id }, { isRead: true });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
