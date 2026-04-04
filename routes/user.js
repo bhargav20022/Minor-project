@@ -48,6 +48,7 @@ router.post("/reset-password", wrapAsync(userController.resetPassword));
 
 
 const Notification = require("../models/notification.js");
+const { isLoggedIn } = require("../middleware.js");
 
 // GET notifications for logged-in user
 router.get("/notifications", isLoggedIn, async (req, res) => {
@@ -63,7 +64,7 @@ router.get("/notifications", isLoggedIn, async (req, res) => {
   }
 });
 
-// Mark one as read
+// Mark one notification as read
 router.put("/notifications/:id/read", isLoggedIn, async (req, res) => {
   try {
     await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
@@ -73,7 +74,7 @@ router.put("/notifications/:id/read", isLoggedIn, async (req, res) => {
   }
 });
 
-// Mark all as read
+// Mark all notifications as read
 router.put("/notifications/read-all", isLoggedIn, async (req, res) => {
   try {
     await Notification.updateMany({ user: req.user._id }, { isRead: true });
