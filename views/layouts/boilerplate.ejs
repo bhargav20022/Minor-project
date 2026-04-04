@@ -192,8 +192,12 @@
     });
 
     // Load on page start + refresh every 30 seconds
-    loadNotifications();
-    setInterval(loadNotifications, 30000);
+   // Only load if user is logged in
+const isLoggedIn = document.getElementById("notifBadge") !== null;
+if (isLoggedIn) {
+  loadNotifications();
+  setInterval(loadNotifications, 30000);
+}
   </script>
 </body>
 </html>
