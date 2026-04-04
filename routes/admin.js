@@ -7,6 +7,7 @@ const Listing   = require("../models/listing.js");
 const Complaint = require("../models/complaint.js");
 const User      = require("../models/user.js");
 const { sendEmail } = require("../brevo");
+const Notification = require("../models/notification.js");
 
 /* ── ADMIN DASHBOARD ── */
 router.get("/", isLoggedIn, isAdmin, wrapAsync(async (req, res) => {
@@ -75,11 +76,28 @@ router.post("/listings/:id/reject", isLoggedIn, isAdmin, wrapAsync(async (req, r
 /* ── UPDATE COMPLAINT STATUS ── */
 router.post("/complaints/:id/update", isLoggedIn, isAdmin, wrapAsync(async (req, res) => {
   const { status, adminNote } = req.body;
+
+  // Fetch complaint BEFORE updating to check previous status
+  const existingComplaint = await Complaint.findById(req.params.id);
+  const wasResolved = existingComplaint.status !== "resolved" && status === "resolved";
+
   const complaint = await Complaint.findByIdAndUpdate(
     req.params.id,
-    { status, adminNote },
+    { status, adminNote, ...(wasResolved && { resolvedAt: new Date() }) },
     { new: true }
-  ).populate("listing");
+  ).populate("listing").populate("submittedBy");
+
+  // ✅ Create bell notification for customer when resolved
+  if (wasResolved && complaint.submittedBy) {
+    await Notification.create({
+      user:      complaint.submittedBy._id,
+      title:     "Your complaint has been resolved ✅",
+      message:   adminNote
+        ? `Admin message: ${adminNote}`
+        : `Your complaint "${complaint.subject}" has been reviewed and resolved by our team.`,
+      complaint: complaint._id,
+    });
+  }
 
   /* ── Send email to customer only when status changes to reviewed or resolved ── */
   if (status === "reviewed" || status === "resolved") {
