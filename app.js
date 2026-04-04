@@ -157,8 +157,7 @@ app.use("/payment", paymentRoute);
 //     res.send("successful");
 // });
 
-
-app.all("/:any",(req, res, next) => {
+app.use((req, res, next) => {
     next(new ExpressError(404,"page not found"));
 });
 
