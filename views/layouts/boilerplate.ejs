@@ -109,87 +109,92 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script src="/js/script.js"></script>
+ <script src="/js/script.js"></script>
 
-<script>
-  async function loadNotifications() {
-    try {
-      const res = await fetch("/notifications");
-      if (!res.ok) return;
-      const data = await res.json();
+  <!-- 🔔 Notification System -->
+  <script>
+    async function loadNotifications() {
+      try {
+        const res = await fetch("/notifications");
+        if (!res.ok) return;
+        const data = await res.json();
 
-      const badge = document.getElementById("notifBadge");
-      const list  = document.getElementById("notifList");
-      if (!badge || !list) return;
+        const badge = document.getElementById("notifBadge");
+        const list  = document.getElementById("notifList");
+        if (!badge || !list) return;
 
-      // Badge
-      if (data.unreadCount > 0) {
-        badge.style.display = "inline-flex";
-        badge.textContent = data.unreadCount;
-      } else {
-        badge.style.display = "none";
-      }
+        // Badge count
+        if (data.unreadCount > 0) {
+          badge.style.display = "inline-flex";
+          badge.textContent = data.unreadCount;
+        } else {
+          badge.style.display = "none";
+        }
 
-      // List
-      if (data.notifications.length === 0) {
-        list.innerHTML = `
-          <li style="padding:24px 16px;text-align:center;color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif;font-size:13px;">
-            <i class="fa-solid fa-bell-slash" style="font-size:22px;margin-bottom:8px;display:block;"></i>
-            No notifications yet
-          </li>`;
-        return;
-      }
+        // Notification list
+        if (data.notifications.length === 0) {
+          list.innerHTML = `
+            <li style="padding:24px 16px;text-align:center;color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif;font-size:13px;">
+              <i class="fa-solid fa-bell-slash" style="font-size:22px;margin-bottom:8px;display:block;"></i>
+              No notifications yet
+            </li>`;
+          return;
+        }
 
-      list.innerHTML = data.notifications.map(n => `
-        <li onclick="markRead('${n._id}', this)" style="
-          padding:13px 16px; border-bottom:1px solid rgba(255,255,255,0.06);
-          cursor:pointer; transition:background 0.15s;
-          background:${n.isRead ? 'transparent' : 'rgba(201,120,58,0.08)'};
-          border-left:${n.isRead ? '3px solid transparent' : '3px solid #c9783a'};
-        ">
-          <strong style="display:block;font-size:13px;color:white;margin-bottom:3px;font-family:'DM Sans',sans-serif;">${n.title}</strong>
-          <p style="margin:0 0 5px;font-size:12px;color:rgba(255,255,255,0.55);font-family:'DM Sans',sans-serif;line-height:1.5;">${n.message}</p>
-          <small style="color:rgba(255,255,255,0.25);font-size:11px;font-family:'DM Sans',sans-serif;">${new Date(n.createdAt).toLocaleDateString()}</small>
-        </li>
-      `).join("");
-    } catch(e) {}
-  }
-
-  async function markRead(id, el) {
-    await fetch(`/notifications/${id}/read`, { method: "PUT" });
-    el.style.background = "transparent";
-    el.style.borderLeft = "3px solid transparent";
-    loadNotifications();
-  }
-
-  async function markAllRead() {
-    await fetch("/notifications/read-all", { method: "PUT" });
-    loadNotifications();
-  }
-
-  function toggleNotifDropdown(e) {
-    e.stopPropagation();
-    const d = document.getElementById("notifDropdown");
-    if (!d) return;
-    const isOpen = d.style.display === "block";
-    // Close profile dropdown if open
-    const profileDd = document.getElementById("wlProfileDropdown");
-    if (profileDd) profileDd.classList.remove("open");
-    d.style.display = isOpen ? "none" : "block";
-    if (!isOpen) loadNotifications();
-  }
-
-  // Close notif dropdown when clicking outside
-  document.addEventListener("click", function(e) {
-    const wrap = document.getElementById("wlNotifWrap");
-    const d    = document.getElementById("notifDropdown");
-    if (d && wrap && !wrap.contains(e.target)) {
-      d.style.display = "none";
+        list.innerHTML = data.notifications.map(n => `
+          <li onclick="markRead('${n._id}', this)" style="
+            padding:13px 16px;
+            border-bottom:1px solid rgba(255,255,255,0.06);
+            cursor:pointer;
+            transition:background 0.15s;
+            background:${n.isRead ? 'transparent' : 'rgba(201,120,58,0.08)'};
+            border-left:${n.isRead ? '3px solid transparent' : '3px solid #c9783a'};
+          ">
+            <strong style="display:block;font-size:13px;color:white;margin-bottom:3px;font-family:'DM Sans',sans-serif;">${n.title}</strong>
+            <p style="margin:0 0 5px;font-size:12px;color:rgba(255,255,255,0.55);font-family:'DM Sans',sans-serif;line-height:1.5;">${n.message}</p>
+            <small style="color:rgba(255,255,255,0.25);font-size:11px;font-family:'DM Sans',sans-serif;">${new Date(n.createdAt).toLocaleDateString()}</small>
+          </li>
+        `).join("");
+      } catch(e) {}
     }
-  });
 
-  loadNotifications();
-  setInterval(loadNotifications, 30000);
-</script>
+    async function markRead(id, el) {
+      await fetch(`/notifications/${id}/read`, { method: "PUT" });
+      el.style.background = "transparent";
+      el.style.borderLeft = "3px solid transparent";
+      loadNotifications();
+    }
+
+    async function markAllRead() {
+      await fetch("/notifications/read-all", { method: "PUT" });
+      loadNotifications();
+    }
+
+    function toggleNotifDropdown(e) {
+      e.stopPropagation();
+      const d = document.getElementById("notifDropdown");
+      if (!d) return;
+      const isOpen = d.style.display === "block";
+      // Close profile dropdown if open
+      const profileDd = document.getElementById("wlProfileDropdown");
+      if (profileDd) profileDd.classList.remove("open");
+      d.style.display = isOpen ? "none" : "block";
+      if (!isOpen) loadNotifications();
+    }
+
+    // Close when clicking outside
+    document.addEventListener("click", function(e) {
+      const wrap = document.getElementById("wlNotifWrap");
+      const d    = document.getElementById("notifDropdown");
+      if (d && wrap && !wrap.contains(e.target)) {
+        d.style.display = "none";
+      }
+    });
+
+    // Load on page start + refresh every 30 seconds
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
+  </script>
 </body>
+</html>
 </html>
