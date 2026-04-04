@@ -325,6 +325,46 @@
     </div>
 
     <!-- Profile Icon (logged in only) -->
+<% if(currUser) { %>
+<!-- 🔔 Notification Bell -->
+<div id="wlNotifWrap" style="position:relative;display:inline-flex;align-items:center;margin-right:6px;flex-shrink:0;">
+  <button onclick="toggleNotifDropdown(event)" style="
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:50%; width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; position:relative; color:rgba(255,255,255,0.8);
+    font-size:15px; transition:all 0.2s;
+  ">
+    <i class="fa-solid fa-bell"></i>
+    <span id="notifBadge" style="
+      display:none; position:absolute; top:-3px; right:-3px;
+      background:#fe424d; color:white; border-radius:50%;
+      font-size:9px; width:16px; height:16px;
+      align-items:center; justify-content:center;
+      font-weight:700; border:2px solid #1a1a2e;
+    ">0</span>
+  </button>
+
+  <!-- Dropdown -->
+  <div id="notifDropdown" style="
+    display:none; position:absolute; right:0; top:48px;
+    width:320px; background:#1e1d30;
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.45);
+    z-index:9999; overflow:hidden;
+  ">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+      <strong style="font-family:'DM Sans',sans-serif;font-size:14px;color:white;">Notifications</strong>
+      <button onclick="markAllRead()" style="background:none;border:none;color:#c9783a;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;">Mark all read</button>
+    </div>
+    <ul id="notifList" style="list-style:none;padding:0;margin:0;max-height:340px;overflow-y:auto;"></ul>
+  </div>
+</div>
+<% } %>
+
+
     <% if(currUser) { %>
     <div class="wl-profile-wrap" id="wlProfileWrap">
       <button class="wl-profile-btn" id="wlProfileBtn" aria-label="Profile menu">
