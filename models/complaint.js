@@ -14,6 +14,7 @@ const complaintSchema = new Schema({
     default: "open",
   },
   adminNote:   { type: String, default: "" },
+  resolvedAt:  { type: Date, default: null },
   createdAt:   { type: Date, default: Date.now },
 });
 
