@@ -33,7 +33,6 @@ const userRouter=require("./routes/user.js");
 const bookingRoute = require("./routes/booking");
 const paymentRoute = require("./routes/payment");
 const adminRouter = require("./routes/admin.js");
-const { startCheckoutReminderJob } = require("./utils/checkoutReminder");
 
 
 
@@ -172,8 +171,7 @@ app.use((err, req, res, next) => {
 
 });
 
-startCheckoutReminderJob();
-sendCheckoutReminders(); 
+
 
 
 app.listen(port, () => {
