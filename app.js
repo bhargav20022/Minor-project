@@ -33,6 +33,8 @@ const userRouter=require("./routes/user.js");
 const bookingRoute = require("./routes/booking");
 const paymentRoute = require("./routes/payment");
 const adminRouter = require("./routes/admin.js");
+const { startCheckoutReminderJob } = require("./utils/checkoutReminder");
+
 
 
 const dbUrl=process.env.ATLASDB_URL;
@@ -169,6 +171,9 @@ app.use((err, req, res, next) => {
     // res.status(statusCode).send(message);
 
 });
+
+startCheckoutReminderJob();
+sendCheckoutReminders(); 
 
 
 app.listen(port, () => {
