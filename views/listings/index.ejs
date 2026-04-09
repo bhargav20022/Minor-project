@@ -805,13 +805,11 @@ function showTemples(city) {
 
   grid.innerHTML = temples.map(t => `
     <a class="temple-card" href="https://www.google.com/maps/search/?q=${encodeURIComponent(t.maps)}" target="_blank" rel="noopener">
-      <div class="temple-card-img-wrap">
-        <img class="temple-card-img" src="${t.img}" alt="${t.name}"
-           onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d2250)'"/>
-      <div class="temple-card-img-overlay"></div>
-        <div class="temple-card-badge">🛕 ${city}</div>
-      </div>
-      <div class="temple-card-body">
+      <div class="temple-card-body" style="padding:22px 20px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:42px;height:42px;background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🛕</div>
+          <span style="background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.25);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;">${city}</span>
+        </div>
         <div class="temple-card-name">${t.name}</div>
         <div class="temple-card-deity">🙏 ${t.deity}</div>
         <div class="temple-card-desc">${t.desc}</div>
