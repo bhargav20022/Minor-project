@@ -1,3 +1,20 @@
+<div align="center">
+
+<h1>🌍 Wanderlust</h1>
+<p><strong>A Full-Stack Travel Listing & Booking Platform</strong></p>
+<p><em>Inspired by Airbnb — Built from scratch with Node.js, Express, MongoDB & EJS</em></p>
+
+<br/>
+
+![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-5.x-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-Image_CDN-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
+![Mapbox](https://img.shields.io/badge/Mapbox-Maps-000000?style=for-the-badge&logo=mapbox&logoColor=white)
+
+</div>
+
+---
 
 ## 📌 About the Project
 
@@ -190,23 +207,7 @@ BASE_URL=http://localhost:3000
 NODE_ENV=development
 ```
 
-### 4. (Optional) Seed the database
-```bash
-node init/index.js
-```
 
-### 5. Start the server
-```bash
-npm start
-```
-
-
----
-
-
-
-
----
 
 ## 🔮 Future Improvements
 
@@ -216,7 +217,7 @@ npm start
 - [ ] Mobile app (React Native)
 - [ ] Search and filter listings by category, price, location
 
----
+
 
 ## 👨‍💻 Author
 
@@ -233,3 +234,7 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
+<div align="center">
+  <p>⭐ If you found this project helpful, please give it a star!</p>
+  <p><em>Built with ❤️ as a Minor Project — KIIT, 2024</em></p>
+</div>
