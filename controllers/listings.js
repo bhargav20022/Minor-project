@@ -9,6 +9,16 @@ module.exports.index = async (req, res) => {
   res.render("listings/index.ejs", { allListings });
 };
 
+module.exports.index = async (req, res) => {
+  const allListings = await Listing.find({ status: "approved" });
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, listings: allListings });
+  }
+
+  res.render("listings/index.ejs", { allListings });
+};
+
 // ==================== NEW FORM ====================
 module.exports.renderNewForm = (req, res) => {
   res.render("listings/new.ejs");
