@@ -1,10 +1,7 @@
 const User = require("../models/user");
 const { sendEmail } = require("../brevo");
 
-// ══════════════════════════════════════════
-//  EXISTING CONTROLLERS (unchanged)
-// ══════════════════════════════════════════
-
+// ==================== SIGNUP ====================
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
 };
@@ -13,16 +10,17 @@ module.exports.signup = async (req, res) => {
   try {
     let { username, email, password } = req.body;
 
-    // ── ✅ CHECK: email already registered ──
     const existingEmail = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingEmail) {
+      if (req.headers.accept?.includes("application/json")) {
+        return res.status(400).json({ success: false, message: "This email address is already registered." });
+      }
       req.flash("error", "This email address is already registered. Please log in or use a different email.");
       return res.redirect("/signup");
     }
 
     const newUser = new User({ email, username });
     const registeredUser = await User.register(newUser, password);
-    console.log(registeredUser);
 
     await sendEmail({
       toEmail: email,
@@ -36,53 +34,92 @@ module.exports.signup = async (req, res) => {
       `,
     });
 
+    // JSON response for Android app
+    if (req.headers.accept?.includes("application/json")) {
+      req.login(registeredUser, (err) => {
+        if (err) return res.status(500).json({ success: false, message: err.message });
+        return res.json({
+          success: true,
+          message: "Welcome to Wanderlust!",
+          user: {
+            _id: registeredUser._id,
+            username: registeredUser.username,
+            email: registeredUser.email,
+            isAdmin: registeredUser.isAdmin,
+          },
+        });
+      });
+      return;
+    }
+
     req.login(registeredUser, (err) => {
       if (err) return next(err);
       req.flash("success", "Welcome to Wanderlust..");
       res.redirect("/listings");
     });
   } catch (e) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: e.message });
+    }
     req.flash("error", e.message);
     res.redirect("/signup");
   }
 };
 
+// ==================== LOGIN ====================
 module.exports.renderLoginForm = (req, res) => {
   res.render("users/login.ejs");
 };
 
 module.exports.login = async (req, res) => {
+  // JSON response for Android app
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({
+      success: true,
+      message: "Welcome back to Wanderlust!",
+      user: {
+        _id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+        isAdmin: req.user.isAdmin,
+      },
+    });
+  }
+
   req.flash("success", "Welcome back to Wanderlust!!");
   const redirectUrl = res.locals.redirectUrl || "/listings";
   return res.redirect(redirectUrl);
 };
 
+// ==================== LOGOUT ====================
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
+
+    if (req.headers.accept?.includes("application/json")) {
+      return res.json({ success: true, message: "You are logged out!" });
+    }
+
     req.flash("success", "You are logged out!");
     res.redirect("/listings");
   });
 };
 
-// ══════════════════════════════════════════
-//  FORGOT PASSWORD — STEP 1
-//  GET /forgot-password → show email form
-// ══════════════════════════════════════════
+// ==================== FORGOT PASSWORD — STEP 1 ====================
 module.exports.renderForgotPassword = (req, res) => {
   res.render("users/forgot-password.ejs");
 };
 
-// ══════════════════════════════════════════
-//  FORGOT PASSWORD — STEP 2
-//  POST /forgot-password → generate OTP & send mail
-// ══════════════════════════════════════════
+// ==================== FORGOT PASSWORD — STEP 2 (Send OTP) ====================
 module.exports.sendOtp = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email: email.toLowerCase().trim() });
 
   if (!user) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.json({ success: true, message: "If that email exists, an OTP has been sent." });
+    }
     req.flash("success", "If that email exists, an OTP has been sent.");
     return res.redirect("/forgot-password");
   }
@@ -126,14 +163,17 @@ module.exports.sendOtp = async (req, res) => {
     `,
   });
 
+  if (req.headers.accept?.includes("application/json")) {
+    req.session.resetEmail = user.email;
+    return res.json({ success: true, message: "OTP sent! Check your inbox." });
+  }
+
   req.session.resetEmail = user.email;
   req.flash("success", "OTP sent! Check your inbox.");
   res.redirect("/verify-otp");
 };
 
-// ══════════════════════════════════════════
-//  VERIFY OTP — STEP 3
-// ══════════════════════════════════════════
+// ==================== VERIFY OTP — STEP 3 ====================
 module.exports.renderVerifyOtp = (req, res) => {
   if (!req.session.resetEmail) {
     req.flash("error", "Please start the password reset process again.");
@@ -142,14 +182,15 @@ module.exports.renderVerifyOtp = (req, res) => {
   res.render("users/verify-otp.ejs");
 };
 
-// ══════════════════════════════════════════
-//  VERIFY OTP — STEP 4
-// ══════════════════════════════════════════
+// ==================== VERIFY OTP — STEP 4 ====================
 module.exports.verifyOtp = async (req, res) => {
   const { otp } = req.body;
   const email = req.session.resetEmail;
 
   if (!email) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "Session expired. Please start again." });
+    }
     req.flash("error", "Session expired. Please start again.");
     return res.redirect("/forgot-password");
   }
@@ -157,6 +198,9 @@ module.exports.verifyOtp = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user || !user.resetOtp) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "OTP not found. Please request a new one." });
+    }
     req.flash("error", "OTP not found. Please request a new one.");
     return res.redirect("/forgot-password");
   }
@@ -165,22 +209,31 @@ module.exports.verifyOtp = async (req, res) => {
     user.resetOtp = null;
     user.resetOtpExpiry = null;
     await user.save();
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "OTP has expired. Please request a new one." });
+    }
     req.flash("error", "OTP has expired. Please request a new one.");
     return res.redirect("/forgot-password");
   }
 
   if (user.resetOtp !== otp.trim()) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "Invalid OTP. Please try again." });
+    }
     req.flash("error", "Invalid OTP. Please try again.");
     return res.redirect("/verify-otp");
   }
 
   req.session.otpVerified = true;
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, message: "OTP verified" });
+  }
+
   res.redirect("/reset-password");
 };
 
-// ══════════════════════════════════════════
-//  RESET PASSWORD — STEP 5
-// ══════════════════════════════════════════
+// ==================== RESET PASSWORD — STEP 5 ====================
 module.exports.renderResetPassword = (req, res) => {
   if (!req.session.resetEmail || !req.session.otpVerified) {
     req.flash("error", "Please verify your OTP first.");
@@ -189,30 +242,40 @@ module.exports.renderResetPassword = (req, res) => {
   res.render("users/reset-password.ejs");
 };
 
-// ══════════════════════════════════════════
-//  RESET PASSWORD — STEP 6
-// ══════════════════════════════════════════
+// ==================== RESET PASSWORD — STEP 6 ====================
 module.exports.resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
   const email = req.session.resetEmail;
 
   if (!email || !req.session.otpVerified) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(401).json({ success: false, message: "Unauthorized. Please start again." });
+    }
     req.flash("error", "Unauthorized. Please start again.");
     return res.redirect("/forgot-password");
   }
 
   if (password !== confirmPassword) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "Passwords do not match." });
+    }
     req.flash("error", "Passwords do not match.");
     return res.redirect("/reset-password");
   }
 
   if (password.length < 6) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(400).json({ success: false, message: "Password must be at least 6 characters." });
+    }
     req.flash("error", "Password must be at least 6 characters.");
     return res.redirect("/reset-password");
   }
 
   const user = await User.findOne({ email });
   if (!user) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
     req.flash("error", "User not found.");
     return res.redirect("/forgot-password");
   }
@@ -247,6 +310,10 @@ module.exports.resetPassword = async (req, res) => {
       </div>
     `,
   });
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, message: "Password reset successful! Please log in." });
+  }
 
   req.flash("success", "Password reset successful! Please log in.");
   res.redirect("/login");
