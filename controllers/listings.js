@@ -6,11 +6,6 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 // ==================== INDEX ====================
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({ status: "approved" });
-  res.render("listings/index.ejs", { allListings });
-};
-
-module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({ status: "approved" });
 
   if (req.headers.accept?.includes("application/json")) {
     return res.json({ success: true, listings: allListings });
@@ -35,10 +30,19 @@ module.exports.showListing = async (req, res) => {
       },
     })
     .populate("owner");
+
   if (!listing) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(404).json({ success: false, message: "Listing not found" });
+    }
     req.flash("error", "Listing you requested doesn't exist");
     return res.redirect("/listings");
   }
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, listing });
+  }
+
   res.render("listings/show.ejs", { listing });
 };
 
@@ -47,7 +51,6 @@ module.exports.createListing = async (req, res) => {
   const newListing = new Listing(req.body.listing);
   newListing.status = "pending";
 
-  // Image upload (Cloudinary)
   if (req.file) {
     newListing.image = {
       url: req.file.path,
@@ -55,7 +58,6 @@ module.exports.createListing = async (req, res) => {
     };
   }
 
-  // Mapbox Geocoding — wrapped in try/catch so invalid token doesn't crash the app
   try {
     const geoResponse = await geocodingClient
       .forwardGeocode({
@@ -69,23 +71,32 @@ module.exports.createListing = async (req, res) => {
     }
   } catch (err) {
     console.log("Geocoding failed (map won't show):", err.message);
-    // Listing still saves successfully, just without map coordinates
   }
 
   newListing.owner = req.user._id;
   await newListing.save();
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, listing: newListing });
+  }
+
   req.flash("success", "Listing submitted for review! You'll be notified by email once approved.");
-  res.redirect("/listings/my-listings");   // redirect to their listings, not the new listing
+  res.redirect("/listings/my-listings");
 };
 
 // ==================== EDIT FORM ====================
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
+
   if (!listing) {
+    if (req.headers.accept?.includes("application/json")) {
+      return res.status(404).json({ success: false, message: "Listing not found" });
+    }
     req.flash("error", "Listing you requested doesn't exist");
     return res.redirect("/listings");
   }
+
   let originalImageUrl = listing.image.url;
   originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
   res.render("listings/edit.ejs", { listing, originalImageUrl });
@@ -108,7 +119,6 @@ module.exports.updateListing = async (req, res) => {
     await listing.save();
   }
 
-  // Mapbox Geocoding on update — also wrapped in try/catch
   try {
     const geoResponse = await geocodingClient
       .forwardGeocode({
@@ -125,6 +135,10 @@ module.exports.updateListing = async (req, res) => {
     console.log("Geocoding failed on update:", err.message);
   }
 
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, listing });
+  }
+
   req.flash("success", "Listing updated successfully!");
   return res.redirect(`/listings/${id}`);
 };
@@ -133,6 +147,22 @@ module.exports.updateListing = async (req, res) => {
 module.exports.destroyListing = async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id);
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, message: "Listing deleted successfully!" });
+  }
+
   req.flash("success", "Listing deleted successfully!");
   return res.redirect("/listings");
+};
+
+// ==================== MY LISTINGS ====================
+module.exports.myListings = async (req, res) => {
+  const myListings = await Listing.find({ owner: req.user._id });
+
+  if (req.headers.accept?.includes("application/json")) {
+    return res.json({ success: true, listings: myListings });
+  }
+
+  res.render("listings/my-listings.ejs", { myListings });
 };
